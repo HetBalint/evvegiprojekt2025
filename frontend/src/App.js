@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home'; // Helyes import útvonal
+import Home from './home'; // Helyes import útvonal
 
 const App = () => {
   return (
