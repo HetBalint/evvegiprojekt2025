@@ -7,6 +7,7 @@ import cors from "cors"
 const app = express()
 app.use(cors());
 
+
 app.use(express.json());
 
 
@@ -25,7 +26,18 @@ app.get('/', (req, res) => {
     })
 })
 
-
+app.post('/users', (req, res) => {
+    const sql = "INSERT INTO users (`nev`,`email`) VALUES (?)";
+    console.log(req.body)
+    const values = [
+        req.body.nev,
+        req.body.email
+    ]
+    db.query(sql, [values], (err, result) => {
+       if(err) return res.json(err);
+       return res.json(result);
+    })
+})
 
 const port = process.env.PORT || 8081
 
