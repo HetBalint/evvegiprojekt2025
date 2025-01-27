@@ -33,16 +33,12 @@ function Home() {
                     <tbody>
                         {data.map((user, index) => (
                             <tr key={index}>
-                                <td>{user.ID}</td>
+                                <td>{user.id}</td>
                                 <td>{user.nev}</td>
                                 <td>{user.email}</td>
                                 <td>
-                                    <button className="btn btn-primary btn-sm me-2">
-                                        Edit
-                                    </button>
-                                    <button className="btn btn-danger btn-sm">
-                                        Delete
-                                    </button>
+                                    <Link to={`/edit/${user.id}`} className="btn btn-primary btn-sm me-2">Edit</Link>
+                                    <button className="btn btn-danger btn-sm">Delete</button>
                                 </td>
                             </tr>
                         ))}

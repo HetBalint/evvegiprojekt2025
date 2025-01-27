@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
 
 function Create() {
   const [values, setValues] = useState({
@@ -8,10 +9,15 @@ function Create() {
     email: ''
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('http://localhost:8081/users', values)
-      .then(res => console.log(res.data))
+      .then(res => {
+        console.log(res);
+        navigate(`/`)
+      })
       .catch(err => console.error(err));
   };
 
