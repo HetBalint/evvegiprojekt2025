@@ -14,7 +14,7 @@ const db = mysql.createConnection({
 });
 
 // Alapértelmezett végpont
-app.get('/', (req, res) => {
+app.get('adminlist/', (req, res) => {
     const sql = "SELECT * FROM users";
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 });
 
 // Felhasználó hozzáadása
-app.post('/users', (req, res) => {
+app.post('adminlist/users', (req, res) => {
     const sql = "INSERT INTO users (`nev`,`email`) VALUES (?)";
     const values = [req.body.nev, req.body.email];
 
@@ -34,7 +34,7 @@ app.post('/users', (req, res) => {
 });
 
 // Felhasználó szerkesztése
-app.get('/edit/:id', (req, res) => {
+app.get('adminlist/edit/:id', (req, res) => {
     const sql = "SELECT * FROM users WHERE ID = ?";
     const id = req.params.id;
 
@@ -47,7 +47,7 @@ app.get('/edit/:id', (req, res) => {
     });
 });
 
-app.put('/update/:id', (req, res) => {
+app.put('adminlist/update/:id', (req, res) => {
     const sql = "UPDATE users SET `nev`=?, `email`=?  WHERE id=?";
     const id = req.params.id;
     db.query(sql, [req.body.nev, req.body.email, id], (err, result) => {
@@ -56,7 +56,14 @@ app.put('/update/:id', (req, res) => {
     });
 });
 
-
+app.delete('adminlist/delete/:id', (req, res) => {
+    const sql = "DELETE FROM users WHERE id=?"
+    const id = req.params.id;
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+})
 
 // Szerver indítása
 const port = process.env.PORT || 8081;

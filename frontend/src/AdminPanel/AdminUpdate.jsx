@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function Update() {
+function AdminUpdate() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [values, setValues] = useState({
@@ -68,4 +68,4 @@ function Update() {
     );
 }
 
-export default Update;
+export default AdminUpdate;

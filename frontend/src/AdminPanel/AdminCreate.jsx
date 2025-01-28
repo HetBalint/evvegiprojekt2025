@@ -3,7 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 
-function Create() {
+function AdminCreate() {
   const [values, setValues] = useState({
     nev: '',
     email: ''
@@ -57,4 +57,4 @@ function Create() {
   );
 }
 
-export default Create;
+export default AdminCreate;
