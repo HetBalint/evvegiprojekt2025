@@ -6,6 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+//Adatbázis kapcsolat
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -13,8 +15,11 @@ const db = mysql.createConnection({
   database: 'evvegiprojekt2025',
 });
 
-// Alapértelmezett végpont
-app.get('adminlist/', (req, res) => {
+
+//AdminPanel
+
+// Adminlista lekérése az adatbázisból
+app.get('/adminlist/', (req, res) => {
     const sql = "SELECT * FROM users";
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
@@ -22,8 +27,8 @@ app.get('adminlist/', (req, res) => {
     });
 });
 
-// Felhasználó hozzáadása
-app.post('adminlist/users', (req, res) => {
+// Adminlistához admin hozzáadása
+app.post('/adminlist/users', (req, res) => {
     const sql = "INSERT INTO users (`nev`,`email`) VALUES (?)";
     const values = [req.body.nev, req.body.email];
 
@@ -33,8 +38,8 @@ app.post('adminlist/users', (req, res) => {
     });
 });
 
-// Felhasználó szerkesztése
-app.get('adminlist/edit/:id', (req, res) => {
+// Adminlista admin szerkesztése lista
+app.get('/adminlist/edit/:id', (req, res) => {
     const sql = "SELECT * FROM users WHERE ID = ?";
     const id = req.params.id;
 
@@ -47,7 +52,8 @@ app.get('adminlist/edit/:id', (req, res) => {
     });
 });
 
-app.put('adminlist/update/:id', (req, res) => {
+//Adminlista szerkesztett admin frissítése
+app.put('/adminlist/update/:id', (req, res) => {
     const sql = "UPDATE users SET `nev`=?, `email`=?  WHERE id=?";
     const id = req.params.id;
     db.query(sql, [req.body.nev, req.body.email, id], (err, result) => {
@@ -56,7 +62,8 @@ app.put('adminlist/update/:id', (req, res) => {
     });
 });
 
-app.delete('adminlist/delete/:id', (req, res) => {
+//Adminlista admin törlése
+app.delete('/adminlist/delete/:id', (req, res) => {
     const sql = "DELETE FROM users WHERE id=?"
     const id = req.params.id;
     db.query(sql, [id], (err, result) => {

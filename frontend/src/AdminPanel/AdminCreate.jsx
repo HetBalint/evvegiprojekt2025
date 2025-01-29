@@ -13,10 +13,10 @@ function AdminCreate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:8081/users', values)
+    axios.post('http://localhost:8081/adminlist/users', values)
       .then(res => {
         console.log(res);
-        navigate(`/`)
+        navigate(`/adminlist`)
       })
       .catch(err => console.error(err));
   };

@@ -8,23 +8,23 @@ function AdminList() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8081/")
+            .get("http://localhost:8081/adminlist/") // JAVÍTOTT API VÉGPONT
             .then((res) => {
-                console.log("API válasz:", res.data); // Debugging
+                console.log("API válasz:", res.data);
                 const responseData = Array.isArray(res.data) ? res.data : [];
                 setData(responseData);
             })
             .catch((err) => {
                 console.error("Hiba történt az API hívás során:", err);
-                setData([]); // Biztonsági üres tömb
+                setData([]);
             });
     }, []);
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:8081/delete/${id}`)
+            .delete(`http://localhost:8081/adminlist/delete/${id}`) // JAVÍTOTT API VÉGPONT
             .then(() => {
-                setData(data.filter(user => user.id !== id)); // Adat frissítése
+                setData(data.filter(user => user.id !== id));
             })
             .catch((err) => console.log(err));
     };

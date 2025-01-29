@@ -11,7 +11,7 @@ function AdminUpdate() {
     });
 
     useEffect(() => {
-        axios.get('http://localhost:8081/edit/'+id)
+        axios.get('http://localhost:8081/adminlist/edit/'+id)
             .then(res => {
                 if (res.data.length > 0) {
                     setValues({ nev: res.data[0].nev, email: res.data[0].email });
@@ -24,10 +24,10 @@ function AdminUpdate() {
 
     const handleUpdate = (event) => {
         event.preventDefault();
-        axios.put('http://localhost:8081/update/'+id, values)
+        axios.put('http://localhost:8081/adminlist/update/'+id, values)
         .then(res => {
             console.log(res)
-            navigate('/')
+            navigate('/adminlist')
         }).catch(err => console.log(err));
     }
     return (
