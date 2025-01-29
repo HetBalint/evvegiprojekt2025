@@ -15,7 +15,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AdminLogin />} />
+        <Route path="/login" element={<AdminLogin />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/create" element={<AdminCreate />} />
         <Route path="/edit/:id" element={<AdminUpdate />} />

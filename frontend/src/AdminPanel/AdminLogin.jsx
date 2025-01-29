@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import './LoginValidation';
 
 function AdminLogin() {
     const [values, setValues] = useState({
@@ -7,12 +8,13 @@ function AdminLogin() {
         password: ''
     })
 
+    const [errors, setErrors] = useState({})
     const handleInput = (event) => {
         setValues(prev => ({...prev, [event.target.name]: [event.target.value]}))
     }
     const handleSubmit =(event) => {
         event.preventDefault();
-        
+        setErrors(validation(values));
     }
 
 
@@ -23,7 +25,7 @@ function AdminLogin() {
         <form action="" onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">Email</label>
-            <input type="email" className="form-control" name="email" placeholder="Add meg az emailcímed" 
+            <input type="email" className="form-control" name="email" placeholder="Add meg az email címed" 
             onChange={handleInput}/>
           </div>
           <div className="mb-3">
