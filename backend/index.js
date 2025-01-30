@@ -1,6 +1,8 @@
 import express from "express";
 import mysql from "mysql";
 import cors from "cors";
+//import bcrypt from 'bcrypt';
+const salt = 10;
 
 const app = express();
 app.use(cors());
@@ -29,8 +31,8 @@ app.get('/adminlist/', (req, res) => {
 
 // Adminlistához admin hozzáadása
 app.post('/adminlist/users', (req, res) => {
-    const sql = "INSERT INTO users (`nev`,`email`) VALUES (?)";
-    const values = [req.body.nev, req.body.email];
+    const sql = "INSERT INTO users (`nev`,`email`,`jelszo`) VALUES (?)";
+    const values = [req.body.nev, req.body.email, req.body.jelszo];
 
     db.query(sql, [values], (err, result) => {
         if (err) return res.json(err);
@@ -54,7 +56,7 @@ app.get('/adminlist/edit/:id', (req, res) => {
 
 //Adminlista szerkesztett admin frissítése
 app.put('/adminlist/update/:id', (req, res) => {
-    const sql = "UPDATE users SET `nev`=?, `email`=?  WHERE id=?";
+    const sql = "UPDATE users SET `nev`=?, `email`=?, `jelszo`=?  WHERE id=?";
     const id = req.params.id;
     db.query(sql, [req.body.nev, req.body.email, id], (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
@@ -70,6 +72,21 @@ app.delete('/adminlist/delete/:id', (req, res) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
         return res.json(result);
     });
+})
+
+//Admin bejelentkezés
+app.post('/login', (req,res) => {
+    const sql ="SELECT * FROM users WHERE `email` = ? AND `jelszo` = ?"
+    db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
+        if (err) {
+            return res.json("Error");
+        }
+        if(data.length > 0) {
+            return res.json("Success");
+        } else {
+            return res.json("Faile");
+        }
+    }) 
 })
 
 // Szerver indítása

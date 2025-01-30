@@ -48,6 +48,16 @@ function AdminCreate() {
                   onChange={e => setValues({ ...values, email: e.target.value })}
                 />
               </div>
+              <div className="mb-3">
+                <label htmlFor="jelszo" className="form-label">Jelszó</label>
+                <input
+                  type="password"
+                  id="jelszo"
+                  placeholder="Írj be egy jelszót!"
+                  className="form-control"
+                  onChange={e => setValues({ ...values, jelszo: e.target.value })}
+                />
+              </div>
               <button type="submit" className="btn btn-primary w-100">Rögzítés</button>
             </form>
           </div>

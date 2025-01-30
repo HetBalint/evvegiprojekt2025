@@ -14,7 +14,7 @@ function AdminUpdate() {
         axios.get('http://localhost:8081/adminlist/edit/'+id)
             .then(res => {
                 if (res.data.length > 0) {
-                    setValues({ nev: res.data[0].nev, email: res.data[0].email });
+                    setValues({ nev: res.data[0].nev, email: res.data[0].email, jelszo: res.data[0].jelszo });
                 }
             })
             .catch(err => {
@@ -57,6 +57,17 @@ function AdminUpdate() {
                                     className="form-control"
                                     value={values.email}
                                     onChange={e => setValues({ ...values, email: e.target.value })}
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="jelszo" className="form-label">Jelszó</label>
+                                <input
+                                    type="password"
+                                    id="jelszo"
+                                    placeholder="Módosítsd a jelszavad!"
+                                    className="form-control"
+                                    value={values.jelszo}
+                                    onChange={e => setValues({ ...values, jelszo: e.target.value })}
                                 />
                             </div>
                             <button type="submit" className="btn btn-primary w-100">Frissítés</button>

@@ -40,8 +40,9 @@ function AdminList() {
                     <thead className="table-dark">
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Név</th>
                             <th>Email</th>
+                            <th>Jelszó</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -52,6 +53,7 @@ function AdminList() {
                                     <td>{user.id}</td>
                                     <td>{user.nev}</td>
                                     <td>{user.email}</td>
+                                    <td>{user.jelszo}</td>
                                     <td>
                                         <Link to={`/edit/${user.id}`} className="btn btn-primary btn-sm me-2">Edit</Link>
                                         <button onClick={() => handleDelete(user.id)} className="btn btn-danger btn-sm">Delete</button>
