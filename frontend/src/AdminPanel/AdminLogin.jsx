@@ -12,10 +12,11 @@ function AdminLogin() {
         jelszo: ''
     });
 
+    axios.defaults.withCredentials = true;
     const [errors, setErrors] = useState({});
     
     const handleInput = (event) => {
-        setValues(prev => ({ ...prev, [event.target.name]: event.target.value })); // ✅ Helyes állapotfrissítés
+        setValues(prev => ({ ...prev, [event.target.name]: event.target.value })); 
     };
 
     const handleSubmit = async (event) => {
@@ -26,8 +27,8 @@ function AdminLogin() {
         if (Object.keys(validationErrors).length === 0) { 
             try {
                 const res = await axios.post('http://localhost:8081/login', values);
-                if (res.data === "Success") {
-                    navigate('/adminlist');
+                if (res.data.Status === "Success") {
+                    navigate('/');
                 } else {
                     alert("Nincs felhasználó regisztrálva");
                 }
@@ -36,6 +37,16 @@ function AdminLogin() {
             }
         }
     };
+
+    const handleAuth = () => {
+        axios.get('http://localhost:8081/', {
+            headers: {
+                'access-token' : localStorage.getItem("token")
+            }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    }
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
@@ -66,7 +77,7 @@ function AdminLogin() {
                         />
                         {errors.jelszo && <span className='text-danger'>{errors.jelszo}</span>}
                     </div>
-                    <button type="submit" className="btn btn-success w-100">Bejelentkezés</button>
+                    <button onClick={handleAuth}  type="submit" className="btn btn-success w-100">Bejelentkezés</button>
                 </form>
             </div>
         </div>

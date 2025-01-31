@@ -8,7 +8,7 @@ function AdminList() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8081/adminlist/") // JAVÍTOTT API VÉGPONT
+            .get("http://localhost:8081/adminlist/") 
             .then((res) => {
                 console.log("API válasz:", res.data);
                 const responseData = Array.isArray(res.data) ? res.data : [];
@@ -48,15 +48,15 @@ function AdminList() {
                     </thead>
                     <tbody>
                         {Array.isArray(data) && data.length > 0 ? (
-                            data.map((user, index) => (
+                            data.map((admin, index) => (
                                 <tr key={index}>
-                                    <td>{user.id}</td>
-                                    <td>{user.nev}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.jelszo}</td>
+                                    <td>{admin.id}</td>
+                                    <td>{admin.nev}</td>
+                                    <td>{admin.email}</td>
+                                    <td>{admin.jelszo}</td>
                                     <td>
-                                        <Link to={`/edit/${user.id}`} className="btn btn-primary btn-sm me-2">Edit</Link>
-                                        <button onClick={() => handleDelete(user.id)} className="btn btn-danger btn-sm">Delete</button>
+                                        <Link to={`/edit/${admin.id}`} className="btn btn-primary btn-sm me-2">Edit</Link>
+                                        <button onClick={() => handleDelete(admin.id)} className="btn btn-danger btn-sm">Delete</button>
                                     </td>
                                 </tr>
                             ))

@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import AdminCreate from './AdminPanel/AdminCreate'
 import AdminUpdate from './AdminPanel/AdminUpdate'
 import AdminLogin from './AdminPanel/AdminLogin';
+import AdminHome from './AdminPanel/AdminHome';
 
 
 
@@ -15,6 +16,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<AdminHome />} />
         <Route path="/login" element={<AdminLogin />} />
         <Route path="/adminlist" element={<AdminList />} />
         <Route path="/create" element={<AdminCreate />} />
