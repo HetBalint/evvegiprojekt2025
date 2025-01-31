@@ -1,0 +1,81 @@
+/* Modern stílusok hozzáadása */
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+
+}
+
+h3 {
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50;
+}
+
+.table {
+    font-family: 'Roboto', sans-serif;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ecf0f1;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #bdc3c7;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.table-dark {
+    background-color: #34495e;
+    color: white;
+}
+
+.table-dark th, .table-dark td {
+    border: 1px solid #2c3e50;
+}
+
+/* Gombok stílusai */
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.btn-warning {
+    background-color: #535357;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #302e2d;
+}
+
+.btn-danger {
+    background-color: #242642;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #5a585e;
+}
+
+.btn-sm {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+/* FontAwesome ikonok */
+.btn i {
+    margin-right: 5px;
+}

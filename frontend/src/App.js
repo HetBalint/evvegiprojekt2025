@@ -1,29 +1,40 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AdminList from './AdminPanel/AdminList'; // Helyes import útvonal
-import 'bootstrap/dist/css/bootstrap.min.css'
-import AdminCreate from './AdminPanel/AdminCreate'
-import AdminUpdate from './AdminPanel/AdminUpdate'
+import AdminList from './AdminPanel/AdminList';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import AdminCreate from './AdminPanel/AdminCreate';
+import AdminUpdate from './AdminPanel/AdminUpdate';
 import AdminLogin from './AdminPanel/AdminLogin';
 import AdminHome from './AdminPanel/AdminHome';
-
-
-
-
-
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AdminHome />} />
+        {/* Login külön jelenik meg */}
         <Route path="/login" element={<AdminLogin />} />
-        <Route path="/adminlist" element={<AdminList />} />
-        <Route path="/create" element={<AdminCreate />} />
-        <Route path="/edit/:id" element={<AdminUpdate />} />
+        {/* Minden más oldal az AdminHome belsejében töltődik be */}
+        <Route path="/*" element={<MainLayout />} />
       </Routes>
     </BrowserRouter>
   );
 };
+
+const MainLayout = () => {
+  return (
+    <div style={{ display: 'flex' }}>
+      <AdminHome /> {/* Sidebar és navigáció mindig látható */}
+      <div style={{ marginLeft: '250px', padding: '20px', width: '100%' }}>
+        <Routes>
+          <Route path="/adminlist" element={<AdminList />} />
+          <Route path="/create" element={<AdminCreate />} />
+          <Route path="/edit/:id" element={<AdminUpdate />} />
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+
 
 export default App;

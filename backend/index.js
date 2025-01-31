@@ -68,7 +68,7 @@ app.get('/adminlist/edit/:id', (req, res) => {
 app.put('/adminlist/update/:id', (req, res) => {
     const sql = "UPDATE admin SET `nev`=?, `email`=?, `jelszo`=?  WHERE id=?";
     const id = req.params.id;
-    db.query(sql, [req.body.nev, req.body.email, id], (err, result) => {
+    db.query(sql, [req.body.nev, req.body.email, req.body.jelszo, id], (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
         return res.json(result);
     });
@@ -87,7 +87,7 @@ app.delete('/adminlist/delete/:id', (req, res) => {
 const verifyAdmin = (req, res, next) => {
     const token = req.cookies.token;
     if(!token) {
-        return res.json("Token szűkséges")
+        return res.json("Token nem egyezik")
     } else {
         jwt.verify(token, "jwtSecretKey", (err, decoded) => {
             if(err) {
