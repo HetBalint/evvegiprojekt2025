@@ -6,6 +6,11 @@ import AdminCreate from './AdminPanel/AdminCreate';
 import AdminUpdate from './AdminPanel/AdminUpdate';
 import AdminLogin from './AdminPanel/AdminLogin';
 import AdminHome from './AdminPanel/AdminHome';
+import ProductCreate from './AdminPanel/ProductCreate';
+import ProductList from './AdminPanel/ProductList';
+
+
+
 
 const App = () => {
   return (
@@ -29,6 +34,8 @@ const MainLayout = () => {
           <Route path="/adminlist" element={<AdminList />} />
           <Route path="/create" element={<AdminCreate />} />
           <Route path="/edit/:id" element={<AdminUpdate />} />
+          <Route path="/pcreate" element={<ProductCreate />} />
+          <Route path="/productlist" element={<ProductList />} />
         </Routes>
       </div>
     </div>

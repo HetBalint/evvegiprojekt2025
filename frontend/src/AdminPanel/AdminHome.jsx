@@ -43,24 +43,18 @@ function AdminHome() {
     }
 
     return (
-        <div className="admin-container">
-            {/* Top bar menü sáv */}
-            <div className="top-bar">
-                <h4>Crystal Heaven - Admin Panel</h4>
-                <div className="top-bar-actions">
-                    <span className="greeting">Üdv, {nev}!</span>
-                    <Link to="/login" className="logout-link" onClick={handleLogout}>Kilépés</Link>
-                </div>
-            </div>
+        <div className="sidebar">
+            <h5>Crystal Heaven - Admin Panel</h5>
+    
 
-            {/* Sidebar most a top-bar alatt van */}
-            <div className="sidebar">
-                <ul>
-                    <li><Link to="/adminlist">Felhasználó kezelő</Link></li>
-                    <li><Link to="/dashboard">#</Link></li>
-                </ul>
-            </div>
+        <ul>
+            <li><Link to="/adminlist">Felhasználó kezelő</Link></li>
+            <li><Link to="/productlist">Termék kezelő</Link></li>
+        </ul>
+            <span className="greeting">Üdv, {nev}!</span>
+            <Link to="/login" className="logout-link" onClick={handleLogout}>Kilépés</Link>
         </div>
+
     );
 }
 

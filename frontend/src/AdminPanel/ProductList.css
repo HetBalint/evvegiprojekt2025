@@ -1,21 +1,18 @@
-/* AdminList.css */
-.container {
-    max-width: 100%;
-    padding-top: 0;
+/* Az oldal tetejéhez rögzítjük a táblázatot */
+body {
+    padding-top: 0 !important; 
 }
-
-h3 {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
 .table-responsive {
     overflow-x: auto;
+    margin-top: 0; /* A lista kezdődhet az oldal tetejéről */
+    padding-top: 0; /* Elkerüljük a felső margót, hogy ne legyen hely a tetején */
+    border-radius: 10px;
 }
 
 .table {
     border-collapse: collapse;
     width: 100%;
+    
 }
 
 .table th, 
@@ -23,7 +20,7 @@ h3 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; /* Megakadályozza a túl hosszú szövegeket */
+    max-width: 200px; /* Megakadályozza a túl hosszú szövegeket */
 }
 
 .table td:hover {
@@ -31,7 +28,7 @@ h3 {
     white-space: normal;
     position: relative;
     z-index: 1;
-    background: #f8f9fa;
+    background: #bdbdbd;
 }
 
 .btn-sm {

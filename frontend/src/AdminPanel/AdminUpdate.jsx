@@ -6,15 +6,20 @@ function AdminUpdate() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [values, setValues] = useState({
-        nev: '',
-        email: '',
+    nev: '',
+    email: '',
+    szulev: '',
+    lakhely: '',
+    cim: '',
+    adoszam: '',
+    telszam: ''
     });
 
     useEffect(() => {
         axios.get('http://localhost:8081/adminlist/edit/'+id)
             .then(res => {
                 if (res.data.length > 0) {
-                    setValues({ nev: res.data[0].nev, email: res.data[0].email, jelszo: res.data[0].jelszo });
+                    setValues({ nev: res.data[0].nev, email: res.data[0].email, jelszo: res.data[0].jelszo, szulev: res.data[0].szulev, lakhely: res.data[0].lakhely, cim: res.data[0].cim, adoszam: res.data[0].adoszam, telszam: res.data[0].telszam});
                 }
             })
             .catch(err => {
@@ -70,6 +75,66 @@ function AdminUpdate() {
                                     onChange={e => setValues({ ...values, jelszo: e.target.value })}
                                 />
                             </div>
+
+                            <div className="mb-3">
+                <label htmlFor="szulev" className="form-label">Születési idő</label>
+                <input
+                  type="date"
+                  id="szulev"
+                  placeholder="Írd be a születési idődet"
+                  className="form-control"
+                  value={values.szulev}
+                  onChange={e => setValues({ ...values, szulev: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="lakhely" className="form-label">Lakhely</label>
+                <input
+                  type="text"
+                  id="lakhely"
+                  placeholder="Írd be a lakhelyed!"
+                  className="form-control"
+                  value={values.lakhely}
+                  onChange={e => setValues({ ...values, lakhely: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="cim" className="form-label">Cím</label>
+                <input
+                  type="text"
+                  id="cim"
+                  placeholder="Írd be a címed!"
+                  className="form-control"
+                  value={values.cim}
+                  onChange={e => setValues({ ...values, cim: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="adoszam" className="form-label">Adószám</label>
+                <input
+                  type="number"
+                  id="adoszam"
+                  placeholder="Írd be az adószámod!"
+                  className="form-control"
+                  value={values.adoszam}
+                  onChange={e => setValues({ ...values, adoszam: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="telszam" className="form-label">Telefonszám</label>
+                <input
+                  type="number"
+                  id="telszam"
+                  placeholder="Írd be a telefonszámod!"
+                  className="form-control"
+                  value={values.telszam}
+                  onChange={e => setValues({ ...values, telszam: e.target.value })}
+                />
+              </div>
                             <button type="submit" className="btn btn-primary w-100">Frissítés</button>
                         </form>
                     </div>
