@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import "./ProductList.css"; // Hozzáadott modern dizájn
+import "./ProductList.css"; 
 
 function ProductList() {
     const [data, setData] = useState([]);

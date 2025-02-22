@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import "./AdminList.css"; // Hozzáadott modern dizájn
+
 
 function AdminList() {
     const [data, setData] = useState([]);
@@ -71,7 +71,7 @@ function AdminList() {
                                     <td>{admin.nev}</td>
                                     <td>{admin.email}</td>
                                     <td>{admin.jelszo}</td>
-                                    <td>{formatDate(admin.szulev)}</td> {/* Itt formázzuk a szulev dátumot */}
+                                    <td>{formatDate(admin.szulev)}</td>
                                     <td>{admin.lakhely}</td>
                                     <td>{admin.cim}</td>
                                     <td>{admin.adoszam}</td>

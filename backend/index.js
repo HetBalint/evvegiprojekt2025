@@ -49,7 +49,7 @@ app.get('/adminlist/', (req, res) => {
 app.post('/adminlist/admin', (req, res) => {
     // Formázott dátum létrehozása
     const formattedDate = new Date(req.body.szulev).toISOString().slice(0, 10);
-    console.log("Formázott dátum a backendben:", formattedDate);  // Ellenőrzés a konzolra
+    
 
     // SQL lekérdezés az admin hozzáadására
     const sql = "INSERT INTO admin (`nev`,`email`,`jelszo`,`szulev`,`lakhely`,`cim`,`adoszam`,`telszam`) VALUES (?)";
