@@ -65,10 +65,10 @@ function ProductCreate() {
                 <label htmlFor="kategoria" className="form-label">Kategória</label>
                 <select id="kategoria" onChange={e => setValues({ ...values, kategoria: e.target.value })}>
                 <option>Válassz típust!</option>
-                    <option value="gyuru">Gyűrű</option>
-                    <option value="nyaklanc">Nyaklánc</option>
-                    <option value="karlanc">Karlánc</option>
-                    <option value="fulbevalo">Fülbevaló</option>
+                    <option value="gyűrű">Gyűrű</option>
+                    <option value="nyaklánc">Nyaklánc</option>
+                    <option value="karlánc">Karlánc</option>
+                    <option value="fülbevaló">Fülbevaló</option>
                 </select>
               </div>
               <div className="mb-3">

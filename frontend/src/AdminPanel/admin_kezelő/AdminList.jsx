@@ -4,14 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import "./ProductList.css"; // Hozzáadott modern dizájn
+import "./AdminList.css"; // Hozzáadott modern dizájn
 
-function ProductList() {
+function AdminList() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
         axios
-            .get("http://localhost:8081/productlist/") 
+            .get("http://localhost:8081/adminlist/") 
             .then((res) => {
                 console.log("API válasz:", res.data);
                 setData(Array.isArray(res.data) ? res.data : []);
@@ -24,56 +24,63 @@ function ProductList() {
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:8081/productlist/delete/${id}`) 
+            .delete(`http://localhost:8081/adminlist/delete/${id}`) 
             .then(() => {
-                setData(data.filter(product => product.id !== id));
+                setData(data.filter(user => user.id !== id));
             })
             .catch((err) => console.log(err));
+    };
+
+    // Dátum formázása
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('hu-HU', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
     };
 
     return (
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h3 className="text-left">Termék kezelő</h3>
-                <Link to="/pcreate" className="btn btn-primary shadow-sm">Új termék hozzáadása</Link>
+                <h3 className="text-left">Felhasználó kezelő</h3>
+                <Link to="/create" className="btn btn-primary shadow-sm">Új felhasználó hozzáadása</Link>
             </div>
-
-
             <div className="table-responsive">
                 <table className="table table-striped table-hover">
                     <thead className="table-light">
                         <tr>
                             <th>ID</th>
                             <th>Név</th>
-                            <th>Kategoria</th>
-                            <th>Anyag</th>
-                            <th>Súly</th>
-                            <th>Méret</th>
-                            <th>Ár</th>
-                            <th>Leírás</th>
-                            <th>Kép</th>
+                            <th>Email</th>
+                            <th>Jelszó</th>
+                            <th>Születési idő</th>
+                            <th>Lakhely</th>
+                            <th>Cím</th>
+                            <th>Adószám</th>
+                            <th>Telefonszám</th>
                             <th>Műveletek</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.length > 0 ? (
-                            data.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.id}</td>
-                                    <td>{product.nev}</td>
-                                    <td>{product.kategoria}</td>
-                                    <td>{product.anyag}</td>
-                                    <td>{product.suly}</td>
-                                    <td>{product.meret}</td>
-                                    <td>{product.ar}</td>
-                                    <td>{product.leiras}</td>
-                                    <td><img src={`http://localhost:8081/kepek/${product.kep}`} alt="Termék kép" width="80" />
-                                    </td>
+                            data.map((admin) => (
+                                <tr key={admin.id}>
+                                    <td>{admin.id}</td>
+                                    <td>{admin.nev}</td>
+                                    <td>{admin.email}</td>
+                                    <td>{admin.jelszo}</td>
+                                    <td>{formatDate(admin.szulev)}</td> {/* Itt formázzuk a szulev dátumot */}
+                                    <td>{admin.lakhely}</td>
+                                    <td>{admin.cim}</td>
+                                    <td>{admin.adoszam}</td>
+                                    <td>{admin.telszam}</td>
                                     <td>
-                                        <Link to={`/edit/${product.id}`} className="btn btn-warning btn-sm me-2">
+                                        <Link to={`/edit/${admin.id}`} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
-                                        <button onClick={() => handleDelete(product.id)} className="btn btn-danger btn-sm">
+                                        <button onClick={() => handleDelete(admin.id)} className="btn btn-danger btn-sm">
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
                                     </td>
@@ -91,4 +98,4 @@ function ProductList() {
     );
 }
 
-export default ProductList;
+export default AdminList;

@@ -1,13 +1,14 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import AdminList from './AdminPanel/AdminList';
+import AdminList from './AdminPanel/admin_kezelő/AdminList';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminCreate from './AdminPanel/AdminCreate';
-import AdminUpdate from './AdminPanel/AdminUpdate';
-import AdminLogin from './AdminPanel/AdminLogin';
-import AdminHome from './AdminPanel/AdminHome';
-import ProductCreate from './AdminPanel/ProductCreate';
-import ProductList from './AdminPanel/ProductList';
+import AdminCreate from './AdminPanel/admin_kezelő/AdminCreate';
+import AdminUpdate from './AdminPanel/admin_kezelő/AdminUpdate';
+import AdminLogin from './AdminPanel/admin_kezelő/AdminLogin';
+import AdminHome from './AdminPanel/home/AdminHome';
+import ProductCreate from './AdminPanel/termék_kezelő/ProductCreate';
+import ProductList from './AdminPanel/termék_kezelő/ProductList';
+import ProductUpdate from './AdminPanel/termék_kezelő/ProductUpdate';
 
 
 
@@ -36,6 +37,7 @@ const MainLayout = () => {
           <Route path="/edit/:id" element={<AdminUpdate />} />
           <Route path="/pcreate" element={<ProductCreate />} />
           <Route path="/productlist" element={<ProductList />} />
+          <Route path="/pedit/:id" element={<ProductUpdate />} />
         </Routes>
       </div>
     </div>

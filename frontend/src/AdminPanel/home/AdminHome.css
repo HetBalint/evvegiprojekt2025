@@ -44,7 +44,7 @@ body {
     text-decoration: none;
     color: #ffffff; /* Fekete szöveg */
     font-size: 16px;
-    background-color: #004688; /* Fehér háttérszín a linkekhez */
+    background-color: #505050; /* Fehér háttérszín a linkekhez */
     border: 1px solid #ddd; /* Szürke keret a linkek körül */
     border-radius: 5px;
     text-align: center;
@@ -52,7 +52,8 @@ body {
 }
 
 .sidebar ul li a:hover {
-    background-color: #002e49; /* Világos szürke hover állapot */
+    background-color: #414141; /* Világos szürke hover állapot */
+    
 }
 
 .sidebar-footer {
@@ -71,7 +72,7 @@ body {
 .logout-link {
     display: block;
     text-align: center;
-    background-color: #0f2450;
+    background-color: #242424;
     color: white;
     padding: 8px 15px;
     border-radius: 5px;
@@ -82,6 +83,6 @@ body {
 }
 
 .logout-link:hover {
-    background-color: #003775;
+    background-color: #181818;
     color: #ffffff;
 }
