@@ -19,7 +19,7 @@ function ProductUpdate() {
     
 
     useEffect(() => {
-        axios.get('http://localhost:8081/productlist/pedit/'+id)
+        axios.get('http://localhost:8081/admin/productlist/pedit/'+id)
             .then(res => {
                 if (res.data.length > 0) {
                     setValues({ nev: res.data[0].nev, ar: res.data[0].ar, suly: res.data[0].suly, anyag: res.data[0].anyag, leiras: res.data[0].leiras, meret: res.data[0].meret, kategoria: res.data[0].kategoria, kep: res.data[0].kep});
@@ -49,14 +49,14 @@ function ProductUpdate() {
         }
         
     
-        axios.put(`http://localhost:8081/productlist/update/${id}`, formData, {
+        axios.put(`http://localhost:8081/admin/productlist/update/${id}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         })
         .then(res => {
             console.log(res);
-            navigate('/productlist');
+            navigate('/admin/productlist');
         })
         .catch(err => console.log(err));
     };

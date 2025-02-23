@@ -9,20 +9,20 @@ function AdminHome() {
     const navigate = useNavigate(); // React Router hook az átirányításhoz
 
     useEffect(() => {
-        axios.get('http://localhost:8081')
+        axios.get('http://localhost:8081/admin')
         .then(res => {
             if (res.data.Status === "Success") {
                 setAuth(true);
                 setName(res.data.nev);
             } else {
                 setAuth(false);
-                navigate('/login'); // Ha nem sikerül az auth, átirányítás a loginra
+                navigate('/admin/login'); // Ha nem sikerül az auth, átirányítás a loginra
             }
         })
         .catch(err => {
             console.log(err);
             setAuth(false);
-            navigate('/login'); // Hiba esetén is átirányítás
+            navigate('/admin/login'); // Hiba esetén is átirányítás
         });
     }, [navigate]);
 
@@ -30,7 +30,7 @@ function AdminHome() {
         axios.get('http://localhost:8081/logout')
         .then(res => {
             if (res.data.Status === "Success") {
-                navigate('/login'); // Kijelentkezés után login oldalra dob
+                navigate('/admin/login'); // Kijelentkezés után login oldalra dob
             } else {
                 alert("Hiba a kijelentkezéskor!");
             }
@@ -48,11 +48,11 @@ function AdminHome() {
     
 
         <ul>
-            <li><Link to="/adminlist">Felhasználó kezelő</Link></li>
-            <li><Link to="/productlist">Termék kezelő</Link></li>
+            <li><Link to="/admin/adminlist">Felhasználó kezelő</Link></li>
+            <li><Link to="/admin/productlist">Termék kezelő</Link></li>
         </ul>
             <span className="greeting">Üdv, {nev}!</span>
-            <Link to="/login" className="logout-link" onClick={handleLogout}>Kilépés</Link>
+            <Link to="/admin/login" className="logout-link" onClick={handleLogout}>Kilépés</Link>
         </div>
 
     );

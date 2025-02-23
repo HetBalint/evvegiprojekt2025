@@ -11,7 +11,7 @@ function ProductList() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8081/productlist/") 
+            .get("http://localhost:8081/admin/productlist/") 
             .then((res) => {
                 console.log("API válasz:", res.data);
                 setData(Array.isArray(res.data) ? res.data : []);
@@ -24,7 +24,7 @@ function ProductList() {
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:8081/productlist/delete/${id}`) 
+            .delete(`http://localhost:8081/admin/productlist/delete/${id}`) 
             .then(() => {
                 setData(data.filter(product => product.id !== id));
             })
@@ -35,7 +35,7 @@ function ProductList() {
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-left">Termék kezelő</h3>
-                <Link to="/pcreate" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
+                <Link to="/admin/pcreate" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
             </div>
 
 
@@ -70,7 +70,7 @@ function ProductList() {
                                     <td><img src={`http://localhost:8081/kepek/${product.kep}`} alt="Termék kép" width="80" />
                                     </td>
                                     <td>
-                                        <Link to={`/pedit/${product.id}`} className="btn btn-warning btn-sm me-2">
+                                        <Link to={`/admin/pedit/${product.id}`} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
                                         <button onClick={() => handleDelete(product.id)} className="btn btn-danger btn-sm">

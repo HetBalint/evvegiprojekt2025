@@ -20,10 +20,10 @@ function AdminCreate() {
     e.preventDefault();
 
     
-    axios.post('http://localhost:8081/adminlist/admin', values)
+    axios.post('http://localhost:8081/admin/adminlist/admin', values)
       .then(res => {
         console.log(res);
-        navigate(`/adminlist`)
+        navigate(`/admin/adminlist`)
       })
       .catch(err => console.error(err));
   };

@@ -31,14 +31,14 @@ function ProductCreate() {
     formData.append("file", values.kep); // FONTOS: "file" kell legyen, mert a backend így várja
   
     axios
-      .post("http://localhost:8081/productlist/product", formData, {
+      .post("http://localhost:8081/admin/productlist/product", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         console.log(res);
-        navigate("/productlist");
+        navigate("/admin/productlist");
       })
       .catch((err) => console.error(err));
   };

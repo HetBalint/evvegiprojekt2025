@@ -26,9 +26,9 @@ function AdminLogin() {
 
         if (Object.keys(validationErrors).length === 0) { 
             try {
-                const res = await axios.post('http://localhost:8081/login', values);
+                const res = await axios.post('http://localhost:8081/admin/login', values);
                 if (res.data.Status === "Success") {
-                    navigate('/');
+                    navigate('/admin/');
                 } else {
                     alert("Nincs felhasználó regisztrálva");
                 }
@@ -39,7 +39,7 @@ function AdminLogin() {
     };
 
     const handleAuth = () => {
-        axios.get('http://localhost:8081/', {
+        axios.get('http://localhost:8081/admin/', {
             headers: {
                 'access-token' : localStorage.getItem("token")
             }

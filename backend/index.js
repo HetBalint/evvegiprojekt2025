@@ -37,7 +37,7 @@ const db = mysql.createConnection({
 //AdminPanel
 
 // Adminlista lekérése az adatbázisból
-app.get('/adminlist/', (req, res) => {
+app.get('/admin/adminlist/', (req, res) => {
     const sql = "SELECT * FROM admin";
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
@@ -46,7 +46,7 @@ app.get('/adminlist/', (req, res) => {
 });
 
 // Adminlistához admin hozzáadása
-app.post('/adminlist/admin', (req, res) => {
+app.post('/admin/adminlist/admin', (req, res) => {
     // Formázott dátum létrehozása
     const formattedDate = new Date(req.body.szulev).toISOString().slice(0, 10);
     
@@ -75,7 +75,7 @@ app.post('/adminlist/admin', (req, res) => {
 
 
 // Adminlista admin szerkesztése lista
-app.get('/adminlist/edit/:id', (req, res) => {
+app.get('/admin/adminlist/edit/:id', (req, res) => {
     const sql = "SELECT * FROM admin WHERE ID = ?";
     const id = req.params.id;
 
@@ -89,7 +89,7 @@ app.get('/adminlist/edit/:id', (req, res) => {
 });
 
 //Adminlista szerkesztett admin frissítése
-app.put('/adminlist/update/:id', (req, res) => {
+app.put('/admin/adminlist/update/:id', (req, res) => {
     const sql = "UPDATE admin SET `nev`=?, `email`=?, `jelszo`=?, `szulev`=?, `lakhely`=?, `cim`=?, `adoszam`=?, `telszam`=?  WHERE id=?";
     const id = req.params.id;
     db.query(sql, [req.body.nev, req.body.email, req.body.jelszo, req.body.szulev, req.body.lakhely, req.body.cim, req.body.adoszam, req.body.telszam, id], (err, result) => {
@@ -99,7 +99,7 @@ app.put('/adminlist/update/:id', (req, res) => {
 });
 
 //Adminlista admin törlése
-app.delete('/adminlist/delete/:id', (req, res) => {
+app.delete('/admin/adminlist/delete/:id', (req, res) => {
     const sql = "DELETE FROM admin WHERE id=?"
     const id = req.params.id;
     db.query(sql, [id], (err, result) => {
@@ -123,13 +123,13 @@ const verifyAdmin = (req, res, next) => {
         })
     }
 }
-app.get('/', verifyAdmin ,(req, res) => {
+app.get('/admin/', verifyAdmin ,(req, res) => {
     return res.json({Status: "Success", nev: req.nev})
 })
 
 
 //Admin bejelentkezés
-app.post('/login', (req,res) => {
+app.post('/admin/login', (req,res) => {
     const sql ="SELECT * FROM admin WHERE `email` = ? AND `jelszo` = ?"
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
         if (err) {
@@ -166,7 +166,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 
-app.post('/productlist/product',upload.single('file'), (req, res) => {
+app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
     const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoria`,`kep`) VALUES (?)";
     const values = [req.body.nev,
                     req.body.ar,
@@ -187,7 +187,7 @@ app.post('/productlist/product',upload.single('file'), (req, res) => {
 });
 
 // TermékLista lekérése az adatbázisból
-app.get('/productlist/', (req, res) => {
+app.get('/admin/productlist/', (req, res) => {
     const sql = "SELECT * FROM termekek";
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
@@ -197,7 +197,7 @@ app.get('/productlist/', (req, res) => {
 
 
 // Terméklista termék szerkesztése
-app.get('/productlist/pedit/:id', (req, res) => {
+app.get('/admin/productlist/pedit/:id', (req, res) => {
     const sql = "SELECT * FROM termekek WHERE ID = ?";
     const id = req.params.id;
 
@@ -213,7 +213,7 @@ app.get('/productlist/pedit/:id', (req, res) => {
 
 
 // Terméklista szerkesztett termék frissítése
-app.put('/productlist/update/:id', upload.single('file'), (req, res) => {
+app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
     const sqlSelect = "SELECT kep FROM termekek WHERE id = ?";
     
     // Először lekérdezzük az adatbázisból a régi fájl nevét
@@ -262,7 +262,7 @@ app.put('/productlist/update/:id', upload.single('file'), (req, res) => {
 
 
 //Terméklista termék törlése
-app.delete('/productlist/delete/:id', (req, res) => {
+app.delete('/admin/productlist/delete/:id', (req, res) => {
     const id = req.params.id;
     
     // Először lekérdezzük az adatbázisból a fájl nevét

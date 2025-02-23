@@ -11,7 +11,7 @@ function AdminList() {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8081/adminlist/") 
+            .get("http://localhost:8081/admin/adminlist/") 
             .then((res) => {
                 console.log("API válasz:", res.data);
                 setData(Array.isArray(res.data) ? res.data : []);
@@ -24,7 +24,7 @@ function AdminList() {
 
     const handleDelete = (id) => {
         axios
-            .delete(`http://localhost:8081/adminlist/delete/${id}`) 
+            .delete(`http://localhost:8081/admin/adminlist/delete/${id}`) 
             .then(() => {
                 setData(data.filter(user => user.id !== id));
             })
@@ -45,7 +45,7 @@ function AdminList() {
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-left">Felhasználó kezelő</h3>
-                <Link to="/create" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
+                <Link to="/admin/create" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
             </div>
             <div className="table-responsive">
                 <table className="table table-striped table-hover">
@@ -77,7 +77,7 @@ function AdminList() {
                                     <td>{admin.adoszam}</td>
                                     <td>{admin.telszam}</td>
                                     <td>
-                                        <Link to={`/edit/${admin.id}`} className="btn btn-warning btn-sm me-2">
+                                        <Link to={`/admin/edit/${admin.id}`} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
                                         <button onClick={() => handleDelete(admin.id)} className="btn btn-danger btn-sm">
