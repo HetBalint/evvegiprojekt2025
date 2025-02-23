@@ -3,7 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrashAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./ProductList.css"; 
 
 function ProductList() {
@@ -35,7 +35,7 @@ function ProductList() {
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-left">Termék kezelő</h3>
-                <Link to="/pcreate" className="btn btn-primary shadow-sm">Új termék hozzáadása</Link>
+                <Link to="/pcreate" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
             </div>
 
 

@@ -20,7 +20,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px; /* Megakadályozza a túl hosszú szövegeket */
+    max-width: 150px; /* Megakadályozza a túl hosszú szövegeket */
 }
 
 .table td:hover {
@@ -28,7 +28,7 @@ body {
     white-space: normal;
     position: relative;
     z-index: 1;
-    background: #bdbdbd;
+    background: #eeeeee;
 }
 
 .btn-sm {
