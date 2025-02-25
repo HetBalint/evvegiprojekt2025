@@ -31,6 +31,7 @@ const App = () => {
         </Route>
 
         {/* Felhasználói felület */}
+        
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/*" element={<UserLayout />}>
           <Route index path="home" element={<UserHome />} />

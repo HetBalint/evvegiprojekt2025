@@ -77,7 +77,7 @@ function AdminLogin() {
                         />
                         {errors.jelszo && <span className='text-danger'>{errors.jelszo}</span>}
                     </div>
-                    <button onClick={handleAuth}  type="submit" className="btn btn-success w-100">Bejelentkezés</button>
+                    <button onClick={handleAuth}  type="submit" className="btn btn-dark w-100">Bejelentkezés</button>
                 </form>
             </div>
         </div>
