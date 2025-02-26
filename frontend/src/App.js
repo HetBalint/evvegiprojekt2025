@@ -12,6 +12,10 @@ import UserHome from './UserPanel/UserHome.jsx';
 import AdminLayout from './layouts/AdminLayout';
 import UserLayout from './layouts/UserLayout';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import UserLogin from './UserPanel/UserLogin.jsx';
+import UserRegistration from './UserPanel/UserRegistration.jsx';
+
+
 
 const App = () => {
   return (
@@ -31,7 +35,9 @@ const App = () => {
         </Route>
 
         {/* Felhasználói felület */}
-        
+        <Route path="/user/login" element={<UserLogin />} />
+        <Route path="/user/registration" element={<UserRegistration />} />
+
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/*" element={<UserLayout />}>
           <Route index path="home" element={<UserHome />} />

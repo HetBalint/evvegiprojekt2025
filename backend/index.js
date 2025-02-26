@@ -298,6 +298,82 @@ app.delete('/admin/productlist/delete/:id', (req, res) => {
     });
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// Userlista lekérése az adatbázisból
+app.get('/admin/userlist/', (req, res) => {
+    const sql = "SELECT * FROM vasarlok";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+
+// Userlistához user hozzáadása
+app.post('/admin/userlist/user', (req, res) => {
+
+    
+
+    // SQL lekérdezés az user hozzáadására
+    const sql = "INSERT INTO vasarlok (`nev`,`email`,`jelszo`,`usertel`) VALUES (?)";
+    const values = [
+        req.body.nev, 
+        req.body.email, 
+        req.body.jelszo, 
+        req.body.usertel
+    ];
+
+    db.query(sql, [values], (err, result) => {
+        if (err) {
+            console.error("SQL Hiba:", err);
+            return res.json(err);
+        }
+        return res.json(result);
+    });
+});
+
+
+
+
+const verifyUser = (req, res, next) => {
+    const token = req.cookies.token;
+    if(!token) {
+        return res.json("Token nem egyezik")
+    } else {
+        jwt.verify(token, "jwtSecretKey", (err, decoded) => {
+            if(err) {
+                res.json("Nincs hitelesítve");
+            } else {
+                req.nev = decoded.nev;
+                next();
+            }
+        })
+    }
+}
+app.get('/user', verifyUser ,(req, res) => {
+    return res.json({Status: "Success", nev: req.nev})
+})
+
+
+//Admin bejelentkezés
+app.post('/user/login', (req,res) => {
+    const sql ="SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?"
+    db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
+        if (err) {
+            return res.json("Error");
+        }
+        if(data.length > 0) {
+            const nev = data[0].nev;
+            const token = jwt.sign({nev}, "jwtSecretKey", {expiresIn: '1d'});
+            res.cookie('token', token);
+            return res.json({Status: "Success"})
+        } else {
+            return res.json("Faile");
+        }
+    }) 
+})
+
 
 
 
