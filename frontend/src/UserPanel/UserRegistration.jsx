@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import './UserLogin.css';
 
 function UserRegistration() {
   const [values, setValues] = useState({
@@ -26,6 +27,7 @@ function UserRegistration() {
   };
 
   return (
+    <div className="hatter">
     <div className='wrapper'>
                     <form onSubmit={handleSubmit}>
                         <h1>Regisztráció</h1>
@@ -76,6 +78,7 @@ function UserRegistration() {
         
                     </form>
         
+                </div>
                 </div>
   );
 }

@@ -42,7 +42,7 @@ const navigate = useNavigate();
     };
 
     const handleAuth = () => {
-        axios.get('http://localhost:8081/', {
+        axios.get('http://localhost:8081/user', {
             headers: {
                 'access-token' : localStorage.getItem("token")
             }

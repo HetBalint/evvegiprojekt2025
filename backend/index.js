@@ -108,48 +108,65 @@ app.delete('/admin/adminlist/delete/:id', (req, res) => {
     });
 })
 
+// 🔥 Admin autentikáció Middleware
 const verifyAdmin = (req, res, next) => {
-    const token = req.cookies.token;
-    if(!token) {
-        return res.json("Token nem egyezik")
-    } else {
-        jwt.verify(token, "jwtSecretKey", (err, decoded) => {
-            if(err) {
-                res.json("Nincs hitelesítve");
-            } else {
-                req.nev = decoded.nev;
-                next();
-            }
-        })
+    const token = req.cookies.adminToken; // 🔥 Admin token elérése a sütiből
+
+    if (!token) {
+        return res.status(401).json({ message: "Token nem egyezik" });
     }
-}
-app.get('/admin/', verifyAdmin ,(req, res) => {
-    return res.json({Status: "Success", nev: req.nev})
-})
 
+    jwt.verify(token, "adminSecretKey", (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Nincs hitelesítve" });
+        }
 
-//Admin bejelentkezés
-app.post('/admin/login', (req,res) => {
-    const sql ="SELECT * FROM admin WHERE `email` = ? AND `jelszo` = ?"
+        req.nev = decoded.nev;
+        next();
+    });
+};
+
+// 🔥 Admin bejelentkezés és JWT generálás
+app.post('/admin/login', (req, res) => {
+    const sql = "SELECT * FROM admin WHERE `email` = ? AND `jelszo` = ?";
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
         if (err) {
             return res.json("Error");
         }
-        if(data.length > 0) {
+        if (data.length > 0) {
             const nev = data[0].nev;
-            const token = jwt.sign({nev}, "jwtSecretKey", {expiresIn: '1d'});
-            res.cookie('token', token);
-            return res.json({Status: "Success"})
+            const token = jwt.sign({ nev }, "adminSecretKey", { expiresIn: '1d' });
+
+            // 🔥 Beállítjuk a HTTP-only JWT sütit adminok számára
+            res.cookie('adminToken', token, {
+                httpOnly: true,
+                secure: false, // 🔥 Ha HTTPS-t használsz, állítsd true-ra
+                sameSite: "lax"
+            });
+
+            return res.json({ Status: "Success" });
         } else {
-            return res.json("Faile");
+            return res.json("Failed");
         }
-    }) 
-})
+    });
+});
 
 app.get('/logout', (req, res) => {
-    res.clearCookie('token');
-    return res.json({Status: "Success"})
-})
+    res.cookie('adminToken', '', {
+        httpOnly: true,
+        secure: false, // 🔥 Ha HTTPS-t használsz, állítsd "true"-ra
+        sameSite: "lax",
+        expires: new Date(0) // 🔥 A süti azonnali lejárata
+    });
+
+    res.clearCookie('adminToken'); // 🔥 A süti biztos törlése
+    return res.json({ Status: "Success" });
+});
+
+// 🔥 Admin védett végpont - csak bejelentkezett adminok férhetnek hozzá
+app.get('/admin', verifyAdmin, (req, res) => {
+    return res.json({ Status: "Success", nev: req.nev });
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -337,27 +354,29 @@ app.post('/admin/userlist/user', (req, res) => {
 
 
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token;
-    if(!token) {
-        return res.json("Token nem egyezik")
-    } else {
-        jwt.verify(token, "jwtSecretKey", (err, decoded) => {
-            if(err) {
-                res.json("Nincs hitelesítve");
-            } else {
-                req.nev = decoded.nev;
-                next();
-            }
-        })
-    }
-}
+    const token = req.cookies.token; // Ellenőrizzük a sütiből
+
+    if (!token) {
+        return res.status(401).json({ message: "Token nem egyezik" });
+    } 
+    
+    jwt.verify(token, "jwtSecretKey", (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Nincs hitelesítve" });
+        } 
+        
+        req.nev = decoded.nev;
+        next();
+    });
+};
+
 app.get('/user', verifyUser ,(req, res) => {
     return res.json({Status: "Success", nev: req.nev})
 })
 
 
 //Admin bejelentkezés
-app.post('/user/login', (req,res) => {
+app.post('/user/login', (req, res) => {
     const sql ="SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?"
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
         if (err) {
@@ -366,13 +385,21 @@ app.post('/user/login', (req,res) => {
         if(data.length > 0) {
             const nev = data[0].nev;
             const token = jwt.sign({nev}, "jwtSecretKey", {expiresIn: '1d'});
-            res.cookie('token', token);
-            return res.json({Status: "Success"})
+
+            // 🔥 Fontos: HTTP-only cookie beállítása!
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: false,  // Ha HTTPS-t használsz, akkor `true`
+                sameSite: "lax"
+            });
+
+            return res.json({Status: "Success"});
         } else {
-            return res.json("Faile");
+            return res.json("Failed");
         }
     }) 
-})
+});
+
 
 
 

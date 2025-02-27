@@ -9,14 +9,14 @@ function AdminHome() {
     const navigate = useNavigate(); // React Router hook az átirányításhoz
 
     useEffect(() => {
-        axios.get('http://localhost:8081/admin')
+        axios.get('http://localhost:8081/admin', { withCredentials: true })
         .then(res => {
             if (res.data.Status === "Success") {
                 setAuth(true);
                 setName(res.data.nev);
             } else {
                 setAuth(false);
-                navigate('/admin/login'); // Ha nem sikerül az auth, átirányítás a loginra
+                navigate('/user/login'); // Ha nem sikerül az auth, átirányítás a loginra
             }
         })
         .catch(err => {
@@ -25,18 +25,20 @@ function AdminHome() {
             navigate('/admin/login'); // Hiba esetén is átirányítás
         });
     }, [navigate]);
+    
 
     const handleLogout = () => {
-        axios.get('http://localhost:8081/logout')
-        .then(res => {
-            if (res.data.Status === "Success") {
-                navigate('/admin/login'); // Kijelentkezés után login oldalra dob
-            } else {
-                alert("Hiba a kijelentkezéskor!");
-            }
-        })
-        .catch(err => console.log(err));
+        axios.get('http://localhost:8081/logout', { withCredentials: true })
+            .then(res => {
+                if (res.data.Status === "Success") {
+                    localStorage.removeItem("adminToken"); // 🔥 Eltávolítjuk a helyi tárolóból is
+                    setAuth(false); // 🔥 Az állapot törlése, hogy az UI is frissüljön
+                    navigate('/admin/login'); // 🔥 Átirányítás a login oldalra
+                }
+            })
+            .catch(err => console.log("Kijelentkezési hiba:", err));
     };
+    
 
     if (!auth) {
         return null; // UI nem jelenik meg, amíg az átirányítás folyamatban van

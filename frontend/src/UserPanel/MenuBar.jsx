@@ -10,22 +10,23 @@ function MenuBar() {
     const navigate = useNavigate(); // React Router hook az átirányításhoz
 
     useEffect(() => {
-        axios.get('http://localhost:8081/user')
-        .then(res => {
-            if (res.data.Status === "Success") {
-                setAuth(true);
-                setName(res.data.nev);
-            } else {
-                setAuth(false);
-                navigate('/user/login'); // Ha nem sikerül az auth, átirányítás a loginra
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            setAuth(false);
-            navigate('/user/login'); // Hiba esetén is átirányítás
-        });
-    }, [navigate]);
+      axios.get('http://localhost:8081/user', { withCredentials: true })
+      .then(res => {
+          if (res.data.Status === "Success") {
+              setAuth(true);
+              setName(res.data.nev);
+          } else {
+              setAuth(false);
+              navigate('/user/login'); // Ha nem sikerül az auth, átirányítás a loginra
+          }
+      })
+      .catch(err => {
+          console.log(err);
+          setAuth(false);
+          navigate('/user/login'); // Hiba esetén is átirányítás
+      });
+  }, [navigate]);
+  
 
     const handleLogout = () => {
         axios.get('http://localhost:8081/logout')
@@ -62,6 +63,7 @@ function MenuBar() {
                 </ul>
               </div>
               <div className="d-flex align-items-center">
+              <span className="greeting">Üdv, {nev}!</span>
                 <a href="#cart" className="me-3 text-dark"><FaShoppingCart size={24} /></a>
                 <a href="#profile" className="text-dark"><FaUser size={24} /></a>
               </div>
