@@ -1,5 +1,5 @@
 import express from "express";
-import mysql from "mysql";
+import mysql from "mysql2";
 import cors from "cors";
 //import bcrypt from 'bcrypt';
 const salt = 10;
@@ -27,12 +27,11 @@ app.use("/kepek", express.static(path.join(__dirname, "kepek")));
 
 //Adatbázis kapcsolat
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'evvegiprojekt2025',
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'evvegiprojekt2025',
 });
-
 
 //AdminPanel
 
