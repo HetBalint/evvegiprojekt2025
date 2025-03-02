@@ -16,7 +16,7 @@ function AdminHome() {
                 setName(res.data.nev);
             } else {
                 setAuth(false);
-                navigate('/user/login'); // Ha nem sikerül az auth, átirányítás a loginra
+                navigate('/admin/login'); // Ha nem sikerül az auth, átirányítás a loginra
             }
         })
         .catch(err => {

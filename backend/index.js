@@ -29,7 +29,7 @@ app.use("/kepek", express.static(path.join(__dirname, "kepek")));
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'evvegiprojekt2025',
 });
 
@@ -107,7 +107,7 @@ app.delete('/admin/adminlist/delete/:id', (req, res) => {
     });
 })
 
-// 🔥 Admin autentikáció Middleware
+// Admin autentikáció Middleware
 const verifyAdmin = (req, res, next) => {
     const token = req.cookies.adminToken; // 🔥 Admin token elérése a sütiből
 
@@ -136,7 +136,7 @@ app.post('/admin/login', (req, res) => {
             const nev = data[0].nev;
             const token = jwt.sign({ nev }, "adminSecretKey", { expiresIn: '1d' });
 
-            // 🔥 Beállítjuk a HTTP-only JWT sütit adminok számára
+            // Beállítjuk a HTTP-only JWT sütit adminok számára
             res.cookie('adminToken', token, {
                 httpOnly: true,
                 secure: false, // 🔥 Ha HTTPS-t használsz, állítsd true-ra
@@ -153,12 +153,12 @@ app.post('/admin/login', (req, res) => {
 app.get('/logout', (req, res) => {
     res.cookie('adminToken', '', {
         httpOnly: true,
-        secure: false, // 🔥 Ha HTTPS-t használsz, állítsd "true"-ra
+        secure: false, //  Ha HTTPS-t használsz, állítsd "true"-ra
         sameSite: "lax",
-        expires: new Date(0) // 🔥 A süti azonnali lejárata
+        expires: new Date(0) //  A süti azonnali lejárata
     });
 
-    res.clearCookie('adminToken'); // 🔥 A süti biztos törlése
+    res.clearCookie('adminToken'); //  A süti biztos törlése
     return res.json({ Status: "Success" });
 });
 
@@ -351,15 +351,15 @@ app.post('/admin/userlist/user', (req, res) => {
 
 
 
-
+// User autentikáció Middleware
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token; // Ellenőrizzük a sütiből
+    const token = req.cookies.userToken; // Ellenőrizzük a sütiből
 
     if (!token) {
         return res.status(401).json({ message: "Token nem egyezik" });
     } 
     
-    jwt.verify(token, "jwtSecretKey", (err, decoded) => {
+    jwt.verify(token, "userSecretKey", (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: "Nincs hitelesítve" });
         } 
@@ -369,12 +369,10 @@ const verifyUser = (req, res, next) => {
     });
 };
 
-app.get('/user', verifyUser ,(req, res) => {
-    return res.json({Status: "Success", nev: req.nev})
-})
 
 
-//Admin bejelentkezés
+
+//User bejelentkezés
 app.post('/user/login', (req, res) => {
     const sql ="SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?"
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
@@ -383,10 +381,10 @@ app.post('/user/login', (req, res) => {
         }
         if(data.length > 0) {
             const nev = data[0].nev;
-            const token = jwt.sign({nev}, "jwtSecretKey", {expiresIn: '1d'});
+            const token = jwt.sign({nev}, "userSecretKey", {expiresIn: '1d'});
 
-            // 🔥 Fontos: HTTP-only cookie beállítása!
-            res.cookie('token', token, {
+            // Fontos: HTTP-only cookie beállítása!
+            res.cookie('userToken', token, {
                 httpOnly: true,
                 secure: false,  // Ha HTTPS-t használsz, akkor `true`
                 sameSite: "lax"
@@ -399,9 +397,22 @@ app.post('/user/login', (req, res) => {
     }) 
 });
 
+// User kijelentkezés
+app.get('/user/logout', (req, res) => {
+    res.cookie('userToken', '', {
+        httpOnly: true,
+        secure: false, //  Ha HTTPS-t használsz, állítsd "true"-ra
+        sameSite: "lax",
+        expires: new Date(0) //  A süti azonnali lejárata
+    });
 
+    res.clearCookie('userToken'); //  A süti biztos törlése
+    return res.json({ Status: "Success" });
+});
 
-
+app.get('/user', verifyUser ,(req, res) => {
+    return res.json({Status: "Success", nev: req.nev})
+})
 
 
 

@@ -14,6 +14,10 @@ import UserLayout from './layouts/UserLayout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserLogin from './UserPanel/UserLogin.jsx';
 import UserRegistration from './UserPanel/UserRegistration.jsx';
+import GyuruOldal from './UserPanel/GyuruOldal.jsx';
+import NyaklancOldal from './UserPanel/NyaklancOldal.jsx';
+import KarlancOldal from './UserPanel/KarlancOldal.jsx';
+import FulbevaloOldal from './UserPanel/FulbevaloOldal.jsx';
 
 
 
@@ -41,6 +45,10 @@ const App = () => {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/*" element={<UserLayout />}>
           <Route index path="home" element={<UserHome />} />
+          <Route index path="gyuru" element={<GyuruOldal />} />
+          <Route index path="nyaklanc" element={<NyaklancOldal />} />
+          <Route index path="karlanc" element={<KarlancOldal />} />
+          <Route index path="fulbevalo" element={<FulbevaloOldal />} />
           {/* Ide jönnek majd a user oldalak */}
         </Route>
       </Routes>

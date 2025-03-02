@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import './MenuBar.css';
 
 
 function MenuBar() {
@@ -28,21 +29,22 @@ function MenuBar() {
   }, [navigate]);
   
 
-    const handleLogout = () => {
-        axios.get('http://localhost:8081/logout')
+  const handleLogout = () => {
+    axios.get('http://localhost:8081/user/logout', { withCredentials: true })
         .then(res => {
             if (res.data.Status === "Success") {
-                navigate('/user/login'); // Kijelentkezés után login oldalra dob
-            } else {
-                alert("Hiba a kijelentkezéskor!");
+                localStorage.removeItem("userToken"); // 🔥 Eltávolítjuk a helyi tárolóból is
+                setAuth(false); // 🔥 Az állapot törlése, hogy az UI is frissüljön
+                navigate('/user/login'); // 🔥 Átirányítás a login oldalra
             }
         })
-        .catch(err => console.log(err));
-    };
+        .catch(err => console.log("Kijelentkezési hiba:", err));
+};
 
-    if (!auth) {
-        return null; // UI nem jelenik meg, amíg az átirányítás folyamatban van
-    }
+
+if (!auth) {
+    return null; // UI nem jelenik meg, amíg az átirányítás folyamatban van
+}
 
 
   return (
@@ -55,18 +57,26 @@ function MenuBar() {
               </button>
               <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><a className="nav-link" href="#">Főoldal</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#">Gyűrű</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#">Nyaklánc</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#">Karlánc</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#">Fülbevaló</a></li>
+                  <li className="nav-item"><a className="nav-link" href="home">Főoldal</a></li>
+                  <li className="nav-item"><a className="nav-link" href="gyuru">Gyűrű</a></li>
+                  <li className="nav-item"><a className="nav-link" href="nyaklanc">Nyaklánc</a></li>
+                  <li className="nav-item"><a className="nav-link" href="karlanc">Karlánc</a></li>
+                  <li className="nav-item"><a className="nav-link" href="fulbevalo">Fülbevaló</a></li>
                 </ul>
               </div>
               <div className="d-flex align-items-center">
-              <span className="greeting">Üdv, {nev}!</span>
+             
                 <a href="#cart" className="me-3 text-dark"><FaShoppingCart size={24} /></a>
-                <a href="#profile" className="text-dark"><FaUser size={24} /></a>
+                <div class="dropdown" style={{float: "right"}}>
+                <a class="dropbtn"><FaUser size={24}/></a>
+                <div class="dropdown-content">
+                <p className="greeting">Üdv, {nev}!</p>
+                <a href="#">Fiók</a>
+                <a href="#">Rendeléseim</a>
+                <a to="/user/login" className="logout" onClick={handleLogout}>Kilépés</a>
+                </div>
               </div>
+                </div>
             </nav>
           </header>
   )
