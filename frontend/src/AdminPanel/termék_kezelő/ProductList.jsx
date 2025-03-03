@@ -61,7 +61,7 @@ function ProductList() {
                                 <tr key={product.id}>
                                     <td>{product.id}</td>
                                     <td>{product.nev}</td>
-                                    <td>{product.kategoria}</td>
+                                    <td>{product.kategoriaID}</td>
                                     <td>{product.anyag}</td>
                                     <td>{product.suly}</td>
                                     <td>{product.meret}</td>

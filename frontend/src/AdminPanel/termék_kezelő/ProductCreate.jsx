@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,15 @@ function ProductCreate() {
     kep: ''
   });
 
+  const [kategoriak, setKategoriak] = useState([]); // Kategóriák tárolása
   const navigate = useNavigate();
+
+  // Kategóriák betöltése a backendből
+  useEffect(() => {
+    axios.get("http://localhost:8081/admin/kategoriak")
+      .then(response => setKategoriak(response.data))
+      .catch(error => console.error("Hiba a kategóriák lekérési során:", error));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,8 +35,8 @@ function ProductCreate() {
     formData.append("anyag", values.anyag);
     formData.append("leiras", values.leiras);
     formData.append("meret", values.meret);
-    formData.append("kategoria", values.kategoria);
-    formData.append("file", values.kep); // FONTOS: "file" kell legyen, mert a backend így várja
+    formData.append("kategoria", values.kategoria); // ID kerül ide
+    formData.append("file", values.kep);
   
     axios
       .post("http://localhost:8081/admin/productlist/product", formData, {
@@ -42,7 +50,6 @@ function ProductCreate() {
       })
       .catch((err) => console.error(err));
   };
-  
 
   return (
     <div className="container mt-5">
@@ -61,24 +68,36 @@ function ProductCreate() {
                   onChange={e => setValues({ ...values, nev: e.target.value })}
                 />
               </div>
+
+              {/* Dinamikus kategória választó */}
               <div className="mb-3">
                 <label htmlFor="kategoria" className="form-label">Kategória</label>
-                <select id="kategoria" onChange={e => setValues({ ...values, kategoria: e.target.value })}>
-                <option>Válassz típust!</option>
-                    <option value="gyűrű">Gyűrű</option>
-                    <option value="nyaklánc">Nyaklánc</option>
-                    <option value="karlánc">Karlánc</option>
-                    <option value="fülbevaló">Fülbevaló</option>
+                <select
+                  id="kategoria"
+                  className="form-control"
+                  value={values.kategoria}
+                  onChange={e => setValues({ ...values, kategoria: e.target.value })}
+                  required
+                >
+                  <option value="">Válassz kategóriát</option>
+                  {kategoriak.map(kat => (
+                    <option key={kat.id} value={kat.id}>{kat.nev}</option>
+                  ))}
                 </select>
               </div>
+
               <div className="mb-3">
                 <label htmlFor="anyag" className="form-label">Anyag</label>
-                <select id="anyag" onChange={e => setValues({ ...values, anyag: e.target.value })}>
-                <option>Válassz anyagot!</option>
-                    <option value="sárgaarany">Sárga arany</option>
-                    <option value="fehérarany">Fehér arany</option>
-                    <option value="vörösarany">Vörös arany</option>
-                    <option value="ezüst">Ezüst</option>
+                <select
+                  id="anyag"
+                  className="form-control"
+                  onChange={e => setValues({ ...values, anyag: e.target.value })}
+                >
+                  <option>Válassz anyagot!</option>
+                  <option value="sárgaarany">Sárga arany</option>
+                  <option value="fehérarany">Fehér arany</option>
+                  <option value="vörösarany">Vörös arany</option>
+                  <option value="ezüst">Ezüst</option>
                 </select>
               </div>
 
@@ -131,11 +150,11 @@ function ProductCreate() {
                 <input
                   type="file"
                   id="file"
-                  placeholder="Tölts fel egy képet!"
                   className="form-control"
                   onChange={e => setValues({ ...values, kep: e.target.files[0] })}
                 />
               </div>
+
               <button type="submit" className="btn btn-primary w-100">Rögzítés</button>
             </form>
           </div>

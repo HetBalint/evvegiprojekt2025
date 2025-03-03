@@ -16,7 +16,7 @@ function ProductUpdate() {
         kep: ''
     });
 
-    
+     const [kategoriak, setKategoriak] = useState([]); // Kategóriák tárolása
 
     useEffect(() => {
         axios.get('http://localhost:8081/admin/productlist/pedit/'+id)
@@ -28,6 +28,12 @@ function ProductUpdate() {
             .catch(err => {
                 console.error('Error fetching data:', err);
             });
+
+            
+              axios.get("http://localhost:8081/admin/kategoriak")
+                .then(response => setKategoriak(response.data))
+                .catch(error => console.error("Hiba a kategóriák lekérési során:", error));
+            
     }, [id]);
 
     const handleUpdate = (event) => {
@@ -79,24 +85,38 @@ function ProductUpdate() {
                   onChange={e => setValues({ ...values, nev: e.target.value })}
                 />
               </div>
+              
+              {/* Dinamikus kategória választó */}
               <div className="mb-3">
                 <label htmlFor="kategoria" className="form-label">Kategória</label>
-                <select id="kategoria" value={values.kategoria} onChange={e => setValues({ ...values, kategoria: e.target.value })}>
-                <option>Válassz típust!</option>
-                    <option value="gyuru">Gyűrű</option>
-                    <option value="nyaklanc">Nyaklánc</option>
-                    <option value="karlanc">Karlánc</option>
-                    <option value="fulbevalo">Fülbevaló</option>
+                <select
+                  id="kategoria"
+                  className="form-control"
+                  value={values.kategoria}
+                  onChange={e => setValues({ ...values, kategoria: e.target.value })}
+                  required
+                >
+                  <option value="">Válassz kategóriát</option>
+                  {kategoriak.map(kat => (
+                    <option key={kat.id} value={kat.id}>{kat.nev}</option>
+                  ))}
                 </select>
               </div>
-              <div className="mb-3">
+
+
+                 <div className="mb-3">
                 <label htmlFor="anyag" className="form-label">Anyag</label>
-                <select id="anyag" value={values.anyag} onChange={e => setValues({ ...values, anyag: e.target.value })}>
-                <option>Válassz anyagot!</option>
-                    <option value="sárgaarany">Sárga arany</option>
-                    <option value="fehérarany">Fehér arany</option>
-                    <option value="vörösarany">Vörös arany</option>
-                    <option value="ezüst">Ezüst</option>
+                <select
+                  id="anyag"
+                  className="form-control"
+                  onChange={e => setValues({ ...values, anyag: e.target.value })}
+                  value={values.anyag}
+                >
+                  <option>Válassz anyagot!</option>
+                  <option value="sárgaarany">Sárga arany</option>
+                  <option value="fehérarany">Fehér arany</option>
+                  <option value="vörösarany">Vörös arany</option>
+                  <option value="ezüst">Ezüst</option>
                 </select>
               </div>
 

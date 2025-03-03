@@ -183,7 +183,7 @@ const upload = multer({storage})
 
 
 app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
-    const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoria`,`kep`) VALUES (?)";
+    const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoriaID`,`kep`) VALUES (?)";
     const values = [req.body.nev,
                     req.body.ar,
                     req.body.suly,
@@ -201,6 +201,21 @@ app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
                         return res.json({ Status: "Success", InsertedID: result.insertId });
                     });
 });
+
+
+app.get('/admin/kategoriak/', (req, res) => {
+    const sql = "SELECT id, nev FROM kategoria";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+  
+
+
+
+
+
 
 // TermékLista lekérése az adatbázisból
 app.get('/admin/productlist/', (req, res) => {
@@ -255,7 +270,7 @@ app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
         }
 
         // Frissítjük a terméket az új vagy régi képpel
-        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoria` = ?, `kep` = ? WHERE id=?";
+        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoriaID` = ?, `kep` = ? WHERE id=?";
         db.query(sqlUpdate, [
             req.body.nev,
             req.body.ar,
