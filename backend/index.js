@@ -430,6 +430,16 @@ app.get('/user', verifyUser ,(req, res) => {
 })
 
 
+//Gyűrű oldal gyűrű lista
+app.get('/gyuruk', (req, res) => {
+    const sql = "SELECT * FROM termekek WHERE kategoriaID = 1";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+
+
 
 
 // Szerver indítása

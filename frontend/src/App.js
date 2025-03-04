@@ -46,6 +46,7 @@ const App = () => {
         <Route path="/*" element={<UserLayout />}>
           <Route index path="home" element={<UserHome />} />
           <Route index path="gyuru" element={<GyuruOldal />} />
+          
           <Route index path="nyaklanc" element={<NyaklancOldal />} />
           <Route index path="karlanc" element={<KarlancOldal />} />
           <Route index path="fulbevalo" element={<FulbevaloOldal />} />

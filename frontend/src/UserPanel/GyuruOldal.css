@@ -1,0 +1,67 @@
+/* GyuruOldal.css */
+
+.gyuru-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    padding-bottom: 50px;
+}
+
+
+
+.gyuru-banner {
+    position: relative;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+}
+
+.banner-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.gyuru-card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.gyuru-card:hover {
+    transform: scale(1.05);
+}
+
+.gyuru-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.gyuru-card .card-body {
+    text-align: center;
+   
+}
+
+.gyuru-card .btn-primary {
+    background-color: #646464;
+    border: none;
+}
+
+.gyuru-card .btn-primary:hover {
+    background-color: #333333;
+}
