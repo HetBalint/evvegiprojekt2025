@@ -57,18 +57,18 @@ if (!auth) {
               </button>
               <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><a className="nav-link" href="home">Főoldal</a></li>
-                  <li className="nav-item"><a className="nav-link" href="gyuru">Gyűrű</a></li>
-                  <li className="nav-item"><a className="nav-link" href="nyaklanc">Nyaklánc</a></li>
-                  <li className="nav-item"><a className="nav-link" href="karlanc">Karlánc</a></li>
-                  <li className="nav-item"><a className="nav-link" href="fulbevalo">Fülbevaló</a></li>
+                  <li className="nav-item"><Link to="/home">Főoldal</Link></li>
+                  <li className="nav-item"><Link to="/gyuru">Gyűrű</Link></li>
+                  <li className="nav-item"><Link to="/nyaklanc">Nyaklánc</Link></li>
+                  <li className="nav-item"><Link to="/karlanc">Karlánc</Link></li>
+                  <li className="nav-item"><Link to="/fulbevalo">Fülbevaló</Link></li>
                 </ul>
               </div>
               <div className="d-flex align-items-center">
              
-                <a href="#cart" className="me-3 text-dark"><FaShoppingCart size={24} /></a>
+                <a href="#cart" className=" me-3 text-dark"><FaShoppingCart size={24} /></a>
                 <div class="dropdown" style={{float: "right"}}>
-                <a class="dropbtn"><FaUser size={24}/></a>
+                <a className="user" class="dropbtn"><FaUser size={24}/></a>
                 <div class="dropdown-content">
                 <p className="greeting">Üdv, {nev}!</p>
                 <a href="#">Fiók</a>

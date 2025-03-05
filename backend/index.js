@@ -440,6 +440,35 @@ app.get('/gyuruk', (req, res) => {
 });
 
 
+//Nyaklánc oldal nyaklánc lista
+app.get('/nyaklancok', (req, res) => {
+    const sql = "SELECT * FROM termekek WHERE kategoriaID = 2";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+
+
+//Karlánc oldal karlánc lista
+app.get('/karlancok', (req, res) => {
+    const sql = "SELECT * FROM termekek WHERE kategoriaID = 3";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+
+
+//Fülbevaló oldal fülbevaló lista
+app.get('/fulbevalok', (req, res) => {
+    const sql = "SELECT * FROM termekek WHERE kategoriaID = 4";
+    db.query(sql, (err, result) => {
+        if (err) return res.json({ Message: "Hiba van a szerverben!" });
+        return res.json(result);
+    });
+});
+
 
 
 // Szerver indítása
