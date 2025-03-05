@@ -44,7 +44,7 @@ function GyuruOldal() {
                                     <div className="card-body">
                                         <h5 className="card-title">{product.nev}</h5>
                                         <p className="card-text">{product.ar} Ft</p>
-                                        <Link to={`/gyuru/${product.id}`} className="btn btn-primary">Részletek</Link>
+                                        <Link to={`/termek/${product.id}`} className="btn btn-primary">Részletek</Link>
                                     </div>
                                 </div>
                             </div>

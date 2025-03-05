@@ -469,6 +469,34 @@ app.get('/fulbevalok', (req, res) => {
     });
 });
 
+//Kiválasztott termék megtekintése
+app.get('/termek/:id', (req, res) => {
+    const sql = `
+        SELECT 
+            termekek.id AS termekID, 
+            termekek.nev AS termekNev, 
+            termekek.ar, 
+            termekek.suly, 
+            termekek.anyag, 
+            termekek.leiras, 
+            termekek.meret, 
+            termekek.kep, 
+            kategoria.nev AS kategoriaNev
+        FROM termekek
+        JOIN kategoria ON termekek.kategoriaID = kategoria.id
+        WHERE termekek.id = ?`;
+
+    db.query(sql, [req.params.id], (err, result) => {
+        if (err) {
+            console.error("Hiba történt a termék lekérdezésekor:", err);
+            return res.status(500).json({ message: "Hiba a szerveren!", error: err.sqlMessage });
+        }
+        return res.json(result);
+    });
+});
+
+
+
 
 
 // Szerver indítása
