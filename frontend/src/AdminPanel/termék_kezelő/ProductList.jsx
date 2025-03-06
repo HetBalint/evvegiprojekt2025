@@ -8,6 +8,7 @@ import "./ProductList.css";
 
 function ProductList() {
     const [data, setData] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         axios
@@ -31,6 +32,21 @@ function ProductList() {
             .catch((err) => console.log(err));
     };
 
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const filteredData = data.filter(product =>
+        product.nev.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.kategoriaID.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.anyag.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.suly.toString().includes(searchTerm) ||
+        product.meret.toString().includes(searchTerm) ||
+        product.ar.toString().includes(searchTerm) ||
+        product.keszlet.toString().includes(searchTerm) ||
+        product.leiras.toLowerCase().includes(searchTerm)
+    );
+
     return (
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
@@ -38,6 +54,16 @@ function ProductList() {
                 <Link to="/admin/pcreate" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
             </div>
 
+            {/* Keresőmező */}
+            <div className="mb-3">
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Keresés termékek között..."
+                    value={searchTerm}
+                    onChange={handleSearch} /* Azonnal frissíti a keresést */
+                />
+            </div>
 
             <div className="table-responsive">
                 <table className="table table-striped table-hover">
@@ -50,14 +76,15 @@ function ProductList() {
                             <th>Súly</th>
                             <th>Méret</th>
                             <th>Ár</th>
+                            <th>Készlet</th>
                             <th>Leírás</th>
                             <th>Kép</th>
                             <th>Műveletek</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {data.length > 0 ? (
-                            data.map((product) => (
+                        {filteredData.length > 0 ? (
+                            filteredData.map((product) => (
                                 <tr key={product.id}>
                                     <td>{product.id}</td>
                                     <td>{product.nev}</td>
@@ -66,9 +93,9 @@ function ProductList() {
                                     <td>{product.suly}</td>
                                     <td>{product.meret}</td>
                                     <td>{product.ar}</td>
+                                    <td>{product.keszlet}</td>
                                     <td>{product.leiras}</td>
-                                    <td><img src={`http://localhost:8081/kepek/${product.kep}`} alt="Termék kép" width="80" />
-                                    </td>
+                                    <td><img className="kiskep" src={`http://localhost:8081/kepek/${product.kep}`} alt="Termék kép" width="80" /></td>
                                     <td>
                                         <Link to={`/admin/pedit/${product.id}`} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
@@ -81,7 +108,7 @@ function ProductList() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="10" className="text-center">Nincsenek adatok</td>
+                                <td colSpan="10" className="text-center">Nincsenek találatok</td>
                             </tr>
                         )}
                     </tbody>

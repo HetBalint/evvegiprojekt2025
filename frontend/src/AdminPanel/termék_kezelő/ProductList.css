@@ -65,3 +65,7 @@ body {
     background-color: #585858;
     border: none;
 }
+
+.kiskep {
+    width: 60px !important;
+}

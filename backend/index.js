@@ -125,7 +125,7 @@ const verifyAdmin = (req, res, next) => {
     });
 };
 
-// 🔥 Admin bejelentkezés és JWT generálás
+// Admin bejelentkezés és JWT generálás
 app.post('/admin/login', (req, res) => {
     const sql = "SELECT * FROM admin WHERE `email` = ? AND `jelszo` = ?";
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
@@ -150,6 +150,7 @@ app.post('/admin/login', (req, res) => {
     });
 });
 
+//Admin kijelentkezés
 app.get('/logout', (req, res) => {
     res.cookie('adminToken', '', {
         httpOnly: true,
@@ -169,7 +170,7 @@ app.get('/admin', verifyAdmin, (req, res) => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Terméklistához termék hozzáadása
+// Terméklistához kép hozzáadása
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         return cb(null, "./kepek")
@@ -181,9 +182,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage})
 
-
+//Termék hozzáadása
 app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
-    const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoriaID`,`kep`) VALUES (?)";
+    const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoriaID`,`kep`,`keszlet`) VALUES (?)";
     const values = [req.body.nev,
                     req.body.ar,
                     req.body.suly,
@@ -191,7 +192,8 @@ app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
                     req.body.leiras,
                     req.body.meret,
                     req.body.kategoria,
-                    req.file.filename];
+                    req.file.filename,
+                    req.body.keszlet];
 
                     db.query(sql, [values], (err, result) => {
                         if (err) {
@@ -202,7 +204,7 @@ app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
                     });
 });
 
-
+//Termék kategóriák lekérése
 app.get('/admin/kategoriak/', (req, res) => {
     const sql = "SELECT id, nev FROM kategoria";
     db.query(sql, (err, result) => {
@@ -219,7 +221,7 @@ app.get('/admin/kategoriak/', (req, res) => {
 
 // TermékLista lekérése az adatbázisból
 app.get('/admin/productlist/', (req, res) => {
-    const sql = "SELECT * FROM termekek";
+    const sql = "SELECT * FROM termekek ORDER BY id DESC";
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: "Hiba van a szerverben!" });
         return res.json(result);
@@ -270,7 +272,7 @@ app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
         }
 
         // Frissítjük a terméket az új vagy régi képpel
-        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoriaID` = ?, `kep` = ? WHERE id=?";
+        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoriaID` = ?, `kep` = ?, `keszlet` = ? WHERE id=?";
         db.query(sqlUpdate, [
             req.body.nev,
             req.body.ar,
@@ -280,6 +282,7 @@ app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
             req.body.meret,
             req.body.kategoria,
             newFile,  // Az új fájl vagy a régi fájl
+            req.body.keszlet,
             req.params.id
         ], (err, result) => {
             if (err) {
@@ -430,6 +433,11 @@ app.get('/user', verifyUser ,(req, res) => {
 })
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 //Gyűrű oldal gyűrű lista
 app.get('/gyuruk', (req, res) => {
     const sql = "SELECT * FROM termekek WHERE kategoriaID = 1";
@@ -475,6 +483,7 @@ app.get('/termek/:id', (req, res) => {
         SELECT 
             termekek.id AS termekID, 
             termekek.nev AS termekNev, 
+            termekek.keszlet,
             termekek.ar, 
             termekek.suly, 
             termekek.anyag, 
@@ -494,6 +503,73 @@ app.get('/termek/:id', (req, res) => {
         return res.json(result);
     });
 });
+
+
+// Kosárhoz adás végpont
+app.post("/kosar/termek", (req, res) => {
+    const { termekId, nev, meret, mennyiseg, ar, kep, anyag } = req.body;
+
+    if (!termekId || !nev || !meret || !mennyiseg || !ar || !kep || !anyag) {
+        return res.status(400).json({ error: "Minden mező kötelező!" });
+    }
+
+    // Végösszeg kiszámítása (ár * darabszám)
+    const vegosszeg = ar * mennyiseg;
+
+    // SQL INSERT lekérdezés
+    const sql = `
+        INSERT INTO kosar (termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [termekId, nev, meret, mennyiseg, ar, kep, vegosszeg, anyag];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Hiba a termék kosárba helyezésekor:", err);
+            return res.status(500).json({ error: "Szerverhiba a termék kosárba helyezésekor." });
+        }
+        res.json({ message: "Termék sikeresen hozzáadva a kosárhoz!", termekId: result.insertId });
+    });
+});
+
+
+
+// Kosár lekérdezése (GET)
+app.get("/kosar", (req, res) => {
+    const sql = "SELECT termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag FROM kosar";
+    
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("Hiba a kosár lekérdezésekor:", err);
+            return res.status(500).json({ error: "Hiba történt a kosár lekérdezésekor" });
+        }
+        res.json(result);
+    });
+});
+
+
+//Kosárból termék törlése
+app.delete('/kosar/delete/:id', (req, res) => {
+    const sql = "DELETE FROM kosar WHERE termekID = ?";
+    const id = req.params.id;
+    
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Hiba a termék törlésekor:", err);
+            return res.status(500).json({ message: "Hiba van a szerverben!" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "A termék nem található a kosárban!" });
+        }
+
+        return res.json({ message: "Termék sikeresen törölve a kosárból!" });
+    });
+});
+
+
+
 
 
 

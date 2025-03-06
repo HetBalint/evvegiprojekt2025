@@ -1,84 +1,115 @@
-/* Alap konténer */
 .termek-container {
-    width: 80%;
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
-    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Termék neve */
-.termek-nev {
-    text-align: left;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-/* Termék tartalom */
 .termek-tartalom {
     display: flex;
-    align-items: flex-start;
+    flex-direction: row; /* Kép és infó egymás mellett */
     gap: 20px;
+    align-items: flex-start;
 }
 
-/* Termék kép */
-.termek-kep img {
+/* Képdoboz */
+.termek-kep-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
     width: 400px;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Termék információk */
-.termek-info {
-    flex: 1;
-    font-size: 1.1rem;
-    text-align: left;
+img {
+    width: 20%;
+    border-radius: 8px;
 }
 
-/* Ár kiemelése */
+/* Termékinformációs doboz */
+.termek-info-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+.termek-nev {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-family: 'Georgia';
+}
+
 .termek-ar {
-    font-size: 1.5rem;
-    color: #d9534f;
+    color: #000000;
+    margin-bottom: 10px;
     
 }
 
-/* Kosárba gomb */
+.termek-leiras {
+    color: #535353;
+}
+
+.termek-keszlet {
+    color: #969696;
+}
+
 .kosarba-gomb {
-    background-color: #28a745;
-    color: white;
     padding: 10px 15px;
+    background-color: #424242;
+    color: white;
+    font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
     margin-top: 10px;
+    transition: background 0.3s;
 }
+
 .kosarba-gomb:hover {
-    background-color: #218838;
+    background-color: #bdbdbd;
+    color: #000000;
 }
 
-/* További képek */
-.tovabbi-kepek {
-    margin-top: 30px;
-    text-align: center;
+/* Mobilbarát nézet */
+@media (max-width: 768px) {
+    .termek-tartalom {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .termek-kep-box, .termek-info-box {
+        width: 100%;
+        text-align: center;
+    }
 }
-.kepek-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-.kepek-container img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+.termek-keszlet::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: #ddd;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
-/* Betöltési üzenet */
-.loading-container {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 1.5rem;
+.termek-ar::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: #ddd;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+

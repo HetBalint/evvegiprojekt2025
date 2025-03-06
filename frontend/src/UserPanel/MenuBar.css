@@ -12,6 +12,11 @@
     text-decoration: none;
 }
 
+.logo {
+    width: 60px;
+    filter: drop-shadow(3px 2px 2px rgba(0.5, 0.5, 0.5, 0.5));
+}
+
 /* Menü lista stílusok */
 .navbar-nav {
     list-style: none;
@@ -91,4 +96,20 @@
     font-weight: bold;
     color: #333;
     border-bottom: 1px solid #eee;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: rgb(170, 170, 170);
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

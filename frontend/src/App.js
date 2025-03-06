@@ -19,6 +19,7 @@ import NyaklancOldal from './UserPanel/NyaklancOldal.jsx';
 import KarlancOldal from './UserPanel/KarlancOldal.jsx';
 import FulbevaloOldal from './UserPanel/FulbevaloOldal.jsx';
 import TermekMegtekinto from './UserPanel/TermekMegtekinto.jsx';
+import Kosar from './UserPanel/Kosar.jsx';
 
 
 
@@ -54,6 +55,7 @@ const App = () => {
           <Route index path="karlanc" element={<KarlancOldal />} />
           <Route index path="fulbevalo" element={<FulbevaloOldal />} />
           <Route index path="termek/:id" element={<TermekMegtekinto />} />
+          <Route index path="kosar" element={<Kosar />} />
           {/* Ide jönnek majd a user oldalak */}
         </Route>
       </Routes>

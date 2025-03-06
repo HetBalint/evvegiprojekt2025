@@ -12,7 +12,8 @@ function ProductCreate() {
     meret: '',
     nev: '',
     kategoria: '',
-    kep: ''
+    kep: '',
+    keszlet: ''
   });
 
   const [kategoriak, setKategoriak] = useState([]); // Kategóriák tárolása
@@ -37,6 +38,8 @@ function ProductCreate() {
     formData.append("meret", values.meret);
     formData.append("kategoria", values.kategoria); // ID kerül ide
     formData.append("file", values.kep);
+    formData.append("keszlet", values.keszlet);
+
   
     axios
       .post("http://localhost:8081/admin/productlist/product", formData, {
@@ -131,6 +134,17 @@ function ProductCreate() {
                   placeholder="Írd be az árát"
                   className="form-control"
                   onChange={e => setValues({ ...values, ar: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="keszlet" className="form-label">Készlet</label>
+                <input
+                  type="text"
+                  id="keszlet"
+                  placeholder="Hány db van raktáron?"
+                  className="form-control"
+                  onChange={e => setValues({ ...values, keszlet: e.target.value })}
                 />
               </div>
 

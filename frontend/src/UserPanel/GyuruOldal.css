@@ -50,6 +50,8 @@
 .gyuru-card img {
     height: 200px;
     object-fit: cover;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .gyuru-card .card-body {
@@ -59,7 +61,7 @@
 
 .gyuru-card .btn-primary {
     background-color: #646464;
-    border: none;
+    border: none ;
 }
 
 .gyuru-card .btn-primary:hover {

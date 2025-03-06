@@ -13,7 +13,8 @@ function ProductUpdate() {
         meret: '',
         nev: '',
         kategoria: '',
-        kep: ''
+        kep: '',
+        keszlet: ''
     });
 
      const [kategoriak, setKategoriak] = useState([]); // Kategóriák tárolása
@@ -22,7 +23,7 @@ function ProductUpdate() {
         axios.get('http://localhost:8081/admin/productlist/pedit/'+id)
             .then(res => {
                 if (res.data.length > 0) {
-                    setValues({ nev: res.data[0].nev, ar: res.data[0].ar, suly: res.data[0].suly, anyag: res.data[0].anyag, leiras: res.data[0].leiras, meret: res.data[0].meret, kategoria: res.data[0].kategoria, kep: res.data[0].kep});
+                    setValues({ nev: res.data[0].nev, ar: res.data[0].ar, suly: res.data[0].suly, anyag: res.data[0].anyag, leiras: res.data[0].leiras, meret: res.data[0].meret, kategoria: res.data[0].kategoria, kep: res.data[0].kep, keszlet: res.data[0].keszlet});
                 }
             })
             .catch(err => {
@@ -47,6 +48,7 @@ function ProductUpdate() {
         formData.append("leiras", values.leiras);
         formData.append("meret", values.meret);
         formData.append("kategoria", values.kategoria);
+        formData.append("keszlet", values.keszlet);
         
         if (values.kep instanceof File) {
             formData.append("file", values.kep); // Csak ha tényleg van új kép
@@ -153,6 +155,18 @@ function ProductUpdate() {
                   className="form-control"
                   value={values.ar}
                   onChange={e => setValues({ ...values, ar: e.target.value })}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="keszlet" className="form-label">Készlet</label>
+                <input
+                  type="text"
+                  id="keszlet"
+                  placeholder="Hány darab van készleten?"
+                  className="form-control"
+                  value={values.keszlet}
+                  onChange={e => setValues({ ...values, keszlet: e.target.value })}
                 />
               </div>
 

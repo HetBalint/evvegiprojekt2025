@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./TermekMegtekinto.css";
 
 function TermekMegtekinto() {
-    const { id } = useParams(); // Termék ID lekérése az URL-ből
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
 
     useEffect(() => {
@@ -17,36 +17,70 @@ function TermekMegtekinto() {
             .catch(err => console.error("Hiba a termék lekérdezésekor:", err));
     }, [id]);
 
+
+   
+    
+    const handleAddToCart = () => {
+        if (!product) return;
+
+        
+            // Ellenőrzés: Logoljuk a küldött adatokat
+            console.log("Elküldött adatok:", {
+                termekId: product.termekID,
+                nev: product.termekNev,
+                meret: product.meret,
+                mennyiseg: 1,
+                ar: product.ar,
+                kep: product.kep,
+                anyag: product.anyag || "N/A"
+            });
+        
+    
+        axios.post("http://localhost:8081/kosar/termek", {
+            termekId: product.termekID,      // Termék azonosítója
+            nev: product.termekNev,    // Termék neve
+            ar: product.ar,            // Termék ára
+            meret: product.meret,      // Termék mérete
+            anyag: product.anyag || "N/A", // Ha az anyag nincs megadva, akkor "N/A"
+            kep: product.kep,          // Termék képe
+            mennyiseg: 1               // Alapértelmezett mennyiség
+        }, { withCredentials: true })
+        .then((res) => {
+            console.log("Termék hozzáadva a kosárhoz:", res.data);
+            
+        })
+        .catch((err) => console.error("Hiba a termék kosárba helyezésekor:", err));
+    };
+    
+
     if (!product) {
         return <div className="loading-container"><h3>Termék betöltése...</h3></div>;
     }
 
     return (
         <div className="termek-container">
-            <h2 className="termek-nev">{product.termekNev}</h2>
             <div className="termek-tartalom">
-                <div className="termek-kep">
-                    <img 
-                        src={`http://localhost:8081/kepek/${product.kep}`} 
-                        alt={product.termekNev} 
-                    />
-                </div>
-                <div className="termek-info">
-                    <h4 className="termek-ar">Ár: {product.ar} Ft</h4>
-                    <p><strong>Kategória:</strong> {product.kategoriaNev}</p>
-                    <p><strong>Anyag:</strong> {product.anyag}</p>
-                    <p><strong>Súly:</strong> {product.suly} g</p>
-                    <p><strong>Méret:</strong> {product.meret} mm</p>
-                    <p><strong>Készlet:</strong> {product.keszlet > 0 ? `Raktáron (${product.keszlet} db)` : "Nincs raktáron"}</p>
-                    <p><strong>Leírás:</strong> {product.leiras}</p>
-                    <button className="kosarba-gomb">Kosárba rakás</button>
+                
+                {/* Kép külön dobozban */}
+                <img className="termek-kep-box"
+                    src={`http://localhost:8081/kepek/${product.kep}`} 
+                    alt={product.termekNev} 
+                />
+                
+                {/* Termék információ külön dobozban */}
+                <div className="termek-info-box">
+                    <h2 className="termek-nev">{product.termekNev}</h2>
+                    <h5 className="termek-ar"> {product.ar} Ft</h5>
+                    <p className="termek-meret">
+                    <strong>Méret:</strong> {product.kategoriaNev === "gyűrű" ? ` (${product.meret} mm)` : `(${product.meret} cm)`}</p>
+                    <p className="termek-keszlet"> {product.keszlet > 0 ? `Raktáron (${product.keszlet} db)` : "Nincs raktáron"}</p>
+                    <p className="termek-leiras"> {product.leiras}</p>
+                    
+                    {/* Kosárba gomb - kattintásra elküldi az adatokat a backendnek */}
+                    <button className="kosarba-gomb" disabled={product.keszlet <= 0} onClick={handleAddToCart}>Kosárba</button>
                 </div>
             </div>
-            
-                
-                </div>
-            
-        
+        </div>
     );
 }
 
