@@ -11,6 +11,9 @@ import { fileURLToPath } from "url";
 import fs from 'fs';
 
 
+
+
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
@@ -24,6 +27,7 @@ app.use(cors(
 ));
 app.use(express.json());
 app.use("/kepek", express.static(path.join(__dirname, "kepek")));
+app.use("/3D", express.static(path.join(__dirname, "3D")));
 
 //Adatbázis kapcsolat
 const db = mysql.createConnection({
@@ -170,39 +174,58 @@ app.get('/admin', verifyAdmin, (req, res) => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Terméklistához kép hozzáadása
+//Kép és 3D hozzáadása
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        return cb(null, "./kepek")
+    destination: function (req, file, cb) {
+        if (file.fieldname === "kep") {
+            cb(null, "./kepek"); // Kép mentése a "kepek" mappába
+        } else if (file.fieldname === "haromD") {
+            cb(null, "./3D"); // 3D fájl mentése a "3D" mappába
+        } else {
+            cb(new Error("Invalid file fieldname")); // Hiba, ha más mezőnevet használ
+        }
     },
     filename: function (req, file, cb) {
-        return cb(null, `${Date.now()}_${file.originalname}`)
+        cb(null, `${Date.now()}_${file.originalname}`);
     }
-})
+});
 
-const upload = multer({storage})
+// Egyetlen `upload` middleware, ami több fájlt is kezel
+const upload = multer({ storage });
+
+
 
 //Termék hozzáadása
-app.post('/admin/productlist/product',upload.single('file'), (req, res) => {
-    const sql = "INSERT INTO termekek (`nev`,`ar`,`suly`,`anyag`,`leiras`,`meret`,`kategoriaID`,`kep`,`keszlet`) VALUES (?)";
-    const values = [req.body.nev,
-                    req.body.ar,
-                    req.body.suly,
-                    req.body.anyag,
-                    req.body.leiras,
-                    req.body.meret,
-                    req.body.kategoria,
-                    req.file.filename,
-                    req.body.keszlet];
+app.post('/admin/productlist/product', upload.fields([
+    { name: 'kep', maxCount: 1 },
+    { name: 'haromD', maxCount: 1 }
+]), (req, res) => {
+    const sql = "INSERT INTO termekek (`nev`, `ar`, `suly`, `anyag`, `leiras`, `meret`, `kategoriaID`, `kep`, `keszlet`, `haromD`) VALUES (?)";
 
-                    db.query(sql, [values], (err, result) => {
-                        if (err) {
-                            console.error("SQL Hiba:", err);
-                            return res.status(500).json({ Error: "Hiba a feltöltés során", Details: err.sqlMessage });
-                        }
-                        return res.json({ Status: "Success", InsertedID: result.insertId });
-                    });
+    const values = [
+        req.body.nev,
+        req.body.ar,
+        req.body.suly,
+        req.body.anyag,
+        req.body.leiras,
+        req.body.meret,
+        req.body.kategoria,
+        req.files['kep'] ? req.files['kep'][0].filename : null,  // Kép mentése
+        req.body.keszlet,
+        req.files['haromD'] ? req.files['haromD'][0].filename : null  // 3D fájl mentése
+    ];
+
+    db.query(sql, [values], (err, result) => {
+        if (err) {
+            console.error("SQL Hiba:", err);
+            return res.status(500).json({ Error: "Hiba a feltöltés során", Details: err.sqlMessage });
+        }
+        return res.json({ Status: "Success", InsertedID: result.insertId });
+    });
 });
+
+
+                  
 
 //Termék kategóriák lekérése
 app.get('/admin/kategoriak/', (req, res) => {
@@ -245,34 +268,47 @@ app.get('/admin/productlist/pedit/:id', (req, res) => {
 
 
 
-// Terméklista szerkesztett termék frissítése
-app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
-    const sqlSelect = "SELECT kep FROM termekek WHERE id = ?";
-    
-    // Először lekérdezzük az adatbázisból a régi fájl nevét
+// Terméklista szerkesztett termék frissítése (Kép + 3D fájl támogatás)
+app.put('/admin/productlist/update/:id', upload.fields([
+    { name: 'kep', maxCount: 1 },
+    { name: 'haromD', maxCount: 1 }
+]), (req, res) => {
+    const sqlSelect = "SELECT kep, haromD FROM termekek WHERE id = ?";
+
+    // Először lekérdezzük az adatbázisból a régi fájlok nevét
     db.query(sqlSelect, [req.params.id], (err, result) => {
         if (err) {
             console.error("SQL Hiba:", err);
             return res.status(500).json({ Message: "Hiba a lekérdezés során", Error: err.sqlMessage });
         }
 
-        const oldFile = result.length > 0 ? result[0].kep : null;
-        const newFile = req.file ? req.file.filename : req.body.regikep;
+        // Ha van eredmény, lekérjük a meglévő fájlok neveit
+        const oldKep = result.length > 0 ? result[0].kep : null;
+        const oldHaromD = result.length > 0 ? result[0].haromD : null;
 
-        // Ha van új fájl, töröljük a régit
-        if (req.file && oldFile) {
-            const filePath = path.join(__dirname, 'kepek', oldFile);
+        // Új fájlok mentése (ha vannak), különben marad a régi
+        const newKep = req.files['kep'] ? req.files['kep'][0].filename : req.body.regikep;
+        const newHaromD = req.files['haromD'] ? req.files['haromD'][0].filename : req.body.regiharomD;
+
+        // Ha van új kép, töröljük a régit
+        if (req.files['kep'] && oldKep) {
+            const filePath = path.join(__dirname, 'kepek', oldKep);
             fs.unlink(filePath, (err) => {
-                if (err) {
-                    console.error("Fájl törlés hiba:", err);
-                    return res.status(500).json({ Message: "Hiba a régi fájl törlésénél", Error: err });
-                }
-                
+                if (err) console.error("Kép törlés hiba:", err);
             });
         }
 
-        // Frissítjük a terméket az új vagy régi képpel
-        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoriaID` = ?, `kep` = ?, `keszlet` = ? WHERE id=?";
+        // Ha van új 3D fájl, töröljük a régit
+        if (req.files['haromD'] && oldHaromD) {
+            const filePath3D = path.join(__dirname, '3D', oldHaromD);
+            fs.unlink(filePath3D, (err) => {
+                if (err) console.error("3D fájl törlés hiba:", err);
+            });
+        }
+
+        // Frissítjük az adatbázist az új vagy régi fájlokkal
+        const sqlUpdate = "UPDATE termekek SET `nev` = ?, `ar` = ?, `suly` = ?, `anyag` = ?, `leiras` = ?, `meret` = ?, `kategoriaID` = ?, `kep` = ?, `keszlet` = ?, `haromD` = ? WHERE id = ?";
+
         db.query(sqlUpdate, [
             req.body.nev,
             req.body.ar,
@@ -281,8 +317,9 @@ app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
             req.body.leiras,
             req.body.meret,
             req.body.kategoria,
-            newFile,  // Az új fájl vagy a régi fájl
+            newKep,      // Kép (új vagy régi)
             req.body.keszlet,
+            newHaromD,   // 3D fájl (új vagy régi)
             req.params.id
         ], (err, result) => {
             if (err) {
@@ -293,6 +330,7 @@ app.put('/admin/productlist/update/:id', upload.single('file'), (req, res) => {
         });
     });
 });
+
 
 
 //Terméklista termék törlése
@@ -568,7 +606,43 @@ app.delete('/kosar/delete/:id', (req, res) => {
     });
 });
 
+//Kosárban a termék darabszámának növelése vagy csökkentése és mentése az adatbázisba
+app.put("/kosar/update/:id", (req, res) => {
+    const { id } = req.params;
+    const { action } = req.body;
 
+    let query = "";
+    if (action === "increase") {
+        query = "UPDATE kosar SET dbszam = dbszam + 1 WHERE termekID = ?";
+    } else if (action === "decrease") {
+        query = "UPDATE kosar SET dbszam = GREATEST(dbszam - 1, 1) WHERE termekID = ?";
+    } else {
+        return res.status(400).json({ error: "Érvénytelen művelet!" });
+    }
+
+    db.query(query, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: "Hiba a frissítés során!" });
+        res.json({ message: "Mennyiség frissítve!", updatedId: id });
+    });
+});
+
+
+//3D megjelenítése a termékmegtekintőbe
+app.get('/termek/:id/3D', (req, res) => {
+    const sql = "SELECT haromD FROM termekek WHERE id = ?";
+    db.query(sql, [req.params.id], (err, result) => {
+        if (err) {
+            console.error("Hiba a 3D fájl lekérésekor:", err);
+            return res.status(500).json({ error: "Hiba a szerveren!" });
+        }
+
+        if (result.length > 0 && result[0].haromD) {
+            return res.json({ haromD: `http://localhost:8081/3D/${result[0].haromD}` }); // 🔹 Küldjük az elérési útvonalat
+        } else {
+            return res.status(404).json({ error: "Nincs 3D fájl!" });
+        }
+    });
+});
 
 
 

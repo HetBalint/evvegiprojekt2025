@@ -113,7 +113,7 @@ function AdminCreate() {
               <div className="mb-3">
                 <label htmlFor="telszam" className="form-label">Telefonszám</label>
                 <input
-                  type="tel"
+                  type="text"
                   id="telszam"
                   placeholder="Írd be a telefonszámod!"
                   className="form-control"

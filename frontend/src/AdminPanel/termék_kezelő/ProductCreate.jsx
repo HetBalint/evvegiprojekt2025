@@ -13,7 +13,8 @@ function ProductCreate() {
     nev: '',
     kategoria: '',
     kep: '',
-    keszlet: ''
+    keszlet: '',
+    haromD: '',
   });
 
   const [kategoriak, setKategoriak] = useState([]); // Kategóriák tárolása
@@ -37,8 +38,12 @@ function ProductCreate() {
     formData.append("leiras", values.leiras);
     formData.append("meret", values.meret);
     formData.append("kategoria", values.kategoria); // ID kerül ide
-    formData.append("file", values.kep);
     formData.append("keszlet", values.keszlet);
+    formData.append("kep", values.kep);
+    formData.append("haromD", values.haromD);
+
+    
+
 
   
     axios
@@ -160,12 +165,23 @@ function ProductCreate() {
               </div>
 
               <div className="mb-3">
-                <label htmlFor="file" className="form-label">Kép</label>
+                <label htmlFor="kep" className="form-label">Kép</label>
                 <input
                   type="file"
-                  id="file"
+                  id="kep"
                   className="form-control"
                   onChange={e => setValues({ ...values, kep: e.target.files[0] })}
+                />
+              </div>
+
+
+              <div className="mb-3">
+                <label htmlFor="haromD" className="form-label">3D fájl</label>
+                <input
+                  type="file"
+                  id="haromD"
+                  className="form-control"
+                  onChange={e => setValues({ ...values, haromD: e.target.files[0] })}
                 />
               </div>
 

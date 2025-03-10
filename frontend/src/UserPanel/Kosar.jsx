@@ -18,18 +18,27 @@ function Kosar() {
   
 
     const mennyisegnoveles = (id) => {
-        setCartItems(cartItems.map(product => 
-            product.termekID === id ? { ...product, dbszam: product.dbszam + 1 } : product
-        ));
+        axios.put(`http://localhost:8081/kosar/update/${id}`, { action: "increase" }, { withCredentials: true })
+            .then(res => {
+                setCartItems(cartItems.map(product => 
+                    product.termekID === id ? { ...product, dbszam: product.dbszam + 1 } : product
+                ));
+            })
+            .catch(err => console.error("Hiba a mennyiség növelésekor:", err));
     };
-
+    
     const mennyisegcsokkentes = (id) => {
-        setCartItems(cartItems.map(product => 
-            product.termekID === id && product.dbszam > 1 
-                ? { ...product, dbszam: product.dbszam - 1 } 
-                : product
-        ));
+        axios.put(`http://localhost:8081/kosar/update/${id}`, { action: "decrease" }, { withCredentials: true })
+            .then(res => {
+                setCartItems(cartItems.map(product => 
+                    product.termekID === id && product.dbszam > 1 
+                        ? { ...product, dbszam: product.dbszam - 1 } 
+                        : product
+                ));
+            })
+            .catch(err => console.error("Hiba a mennyiség csökkentésekor:", err));
     };
+    
 
     const handleDelete = (id) => {
         axios
