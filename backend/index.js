@@ -92,14 +92,35 @@ app.get('/admin/adminlist/edit/:id', (req, res) => {
 });
 
 //Adminlista szerkesztett admin frissítése
+// Adminlista szerkesztett admin frissítése
 app.put('/admin/adminlist/update/:id', (req, res) => {
-    const sql = "UPDATE admin SET `nev`=?, `email`=?, `jelszo`=?, `szulev`=?, `lakhely`=?, `cim`=?, `adoszam`=?, `telszam`=?  WHERE id=?";
+    const sql = "UPDATE admin SET `nev`=?, `email`=?, `jelszo`=?, `szulev`=?, `lakhely`=?, `cim`=?, `adoszam`=?, `telszam`=? WHERE id=?";
     const id = req.params.id;
-    db.query(sql, [req.body.nev, req.body.email, req.body.jelszo, req.body.szulev, req.body.lakhely, req.body.cim, req.body.adoszam, req.body.telszam, id], (err, result) => {
-        if (err) return res.json({ Message: "Hiba van a szerverben!" });
-        return res.json(result);
+    
+    // Ellenőrzés a beérkező adatokra
+    if (!req.body.nev || !req.body.email || !req.body.jelszo || !req.body.szulev || !req.body.lakhely || !req.body.cim || !req.body.adoszam || !req.body.telszam) {
+        return res.status(400).json({ Message: "Hiányzó mezők az űrlapban!" });
+    }
+
+    db.query(sql, [
+        req.body.nev,
+        req.body.email,
+        req.body.jelszo,
+        req.body.szulev,
+        req.body.lakhely,
+        req.body.cim,
+        req.body.adoszam,
+        req.body.telszam,
+        id
+    ], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ Message: "Hiba van a szerverben!", Error: err });
+        }
+        return res.json({ Message: "Sikeres frissítés!", result });
     });
 });
+
 
 //Adminlista admin törlése
 app.delete('/admin/adminlist/delete/:id', (req, res) => {
