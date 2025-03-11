@@ -31,7 +31,7 @@ function RendelesVeglegesito() {
 
     return (
         <div className="rendeles-container">
-            <CheckoutProgress currentStep={2} />
+            <CheckoutProgress currentStep={3} />
             {cartItems.length === 0 ? (
                 <p className="empty-cart">A kosár üres.</p>
             ) : (
@@ -65,7 +65,7 @@ function RendelesVeglegesito() {
                         </tbody>
                     </table>
                     <h3 className="total-price">Összesen: {totalPrice} Ft</h3>
-                    <Link to={`/kosar`} className="kosar-btn">Kosár</Link>
+                    <Link to={`/adatok`} className="kosar-btn">Rendelési adatok</Link>
                     <Link to={`/rendeles`} className="leadas-btn">Rendelés leadása</Link>
                 </div>
             )}

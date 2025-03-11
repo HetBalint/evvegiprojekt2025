@@ -3,8 +3,8 @@ import React from "react"
 const CheckoutProgress = ({ currentStep }) => {
   const steps = [
     { id: 1, name: "Kosár" },
-    { id: 2, name: "Rendelés áttekintése" },
-    { id: 3, name: "Cím megadása" },
+    { id: 2, name: "Rendelési adatok" },
+    { id: 3, name: "Rendelés áttekintése" },
   ]
 
   return (

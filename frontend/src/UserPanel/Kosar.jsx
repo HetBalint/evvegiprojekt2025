@@ -92,7 +92,7 @@ function Kosar() {
               </div>
             ))}
             <h3 className="total-price">Összesen: {totalPrice} Ft</h3>
-            <Link to={`/rendeles`} className="checkout-btn">
+            <Link to={`/adatok`} className="checkout-btn">
               Tovább a megrendeléshez
             </Link>
           </div>
