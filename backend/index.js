@@ -442,6 +442,8 @@ const verifyUser = (req, res, next) => {
         } 
         
         req.nev = decoded.nev;
+        req.email = decoded.email;
+        req.usertel = decoded.usertel;
         next();
     });
 };
@@ -458,7 +460,9 @@ app.post('/user/login', (req, res) => {
         }
         if(data.length > 0) {
             const nev = data[0].nev;
-            const token = jwt.sign({nev}, "userSecretKey", {expiresIn: '1d'});
+            const email = data[0].email;
+            const usertel = data[0].usertel;
+            const token = jwt.sign({nev,email,usertel}, "userSecretKey", {expiresIn: '1d'});
 
             // Fontos: HTTP-only cookie beállítása!
             res.cookie('userToken', token, {
@@ -488,7 +492,7 @@ app.get('/user/logout', (req, res) => {
 });
 
 app.get('/user', verifyUser ,(req, res) => {
-    return res.json({Status: "Success", nev: req.nev})
+    return res.json({Status: "Success", nev: req.nev, email: req.email, usertel: req.usertel})
 })
 
 
