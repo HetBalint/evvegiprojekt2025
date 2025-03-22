@@ -3,6 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import fulbevalo_banner from "../UserPanel/fulbevalo_banner.jpg";
+import "../UserPanel/GyuruOldal.css";
 
 
 function FulbevaloOldal() {

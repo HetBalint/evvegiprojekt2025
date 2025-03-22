@@ -3,6 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import karlanc_banner from "../UserPanel/karlanc_banner.jpg";
+import "../UserPanel/GyuruOldal.css";
 
 
 function KarlancOldal() {

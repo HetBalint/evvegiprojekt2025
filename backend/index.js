@@ -165,7 +165,8 @@ app.post('/admin/login', (req, res) => {
             res.cookie('adminToken', token, {
                 httpOnly: true,
                 secure: false, // 🔥 Ha HTTPS-t használsz, állítsd true-ra
-                sameSite: "lax"
+                sameSite: "lax",
+                path: "/",
             });
 
             return res.json({ Status: "Success" });
@@ -441,6 +442,7 @@ const verifyUser = (req, res, next) => {
             return res.status(403).json({ message: "Nincs hitelesítve" });
         } 
         
+        req.id = decoded.id
         req.nev = decoded.nev;
         req.email = decoded.email;
         req.usertel = decoded.usertel;
@@ -453,30 +455,28 @@ const verifyUser = (req, res, next) => {
 
 //User bejelentkezés
 app.post('/user/login', (req, res) => {
-    const sql ="SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?"
+    const sql = "SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?";
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
         if (err) {
             return res.json("Error");
         }
-        if(data.length > 0) {
-            const nev = data[0].nev;
-            const email = data[0].email;
-            const usertel = data[0].usertel;
-            const token = jwt.sign({nev,email,usertel}, "userSecretKey", {expiresIn: '1d'});
+        if (data.length > 0) {
+            const { id, nev, email, usertel } = data[0]; // 🔥 Hozzáadjuk az emailt és telefonszámot is
+            const token = jwt.sign({ id, nev, email, usertel }, "userSecretKey", { expiresIn: '1d' });
 
-            // Fontos: HTTP-only cookie beállítása!
             res.cookie('userToken', token, {
                 httpOnly: true,
-                secure: false,  // Ha HTTPS-t használsz, akkor `true`
+                secure: false, // 🔥 Ha HTTPS-t használsz, állítsd true-ra
                 sameSite: "lax"
             });
 
-            return res.json({Status: "Success"});
+            return res.json({ Status: "Success" });
         } else {
             return res.json("Failed");
         }
-    }) 
+    });
 });
+
 
 // User kijelentkezés
 app.get('/user/logout', (req, res) => {
@@ -484,7 +484,8 @@ app.get('/user/logout', (req, res) => {
         httpOnly: true,
         secure: false, //  Ha HTTPS-t használsz, állítsd "true"-ra
         sameSite: "lax",
-        expires: new Date(0) //  A süti azonnali lejárata
+        expires: new Date(0), //  A süti azonnali lejárata
+        path: "/",
     });
 
     res.clearCookie('userToken'); //  A süti biztos törlése
@@ -492,7 +493,7 @@ app.get('/user/logout', (req, res) => {
 });
 
 app.get('/user', verifyUser ,(req, res) => {
-    return res.json({Status: "Success", nev: req.nev, email: req.email, usertel: req.usertel})
+    return res.json({Status: "Success", id: req.id, nev: req.nev, email: req.email, usertel: req.usertel})
 })
 
 
@@ -670,6 +671,122 @@ app.get('/termek/:id/3D', (req, res) => {
 });
 
 
+//Rendelés leadása
+
+app.post("/rendeles", verifyUser, (req, res) => {
+    const vasarloId = req.id;
+
+    
+    const token = req.cookies.userToken;
+    if (!token) return res.status(401).json({ error: "Nincs bejelentkezve!" });
+
+    jwt.verify(token, "userSecretKey", (err, decoded) => {
+        if (err) return res.status(403).json({ error: "Érvénytelen token!" });
+
+        
+
+        if (!req.body.items || req.body.items.length === 0) {
+            return res.status(400).json({ error: "A kosár üres!" });
+        }
+
+        const totalPrice = req.body.total;
+
+        // 🔹 1. LÉPÉS: Új rendelés beszúrása
+        const insertOrderQuery = `
+            INSERT INTO rendelesek (statusz, osszeg, ido, vasarlo_id) 
+            VALUES (?, ?, NOW(), ?)
+        `;
+
+        db.query(insertOrderQuery, ["feldolgozás alatt", totalPrice, vasarloId], (err, result) => {
+            if (err) {
+                console.error("❌ Hiba a rendelés létrehozásakor:", err);
+                return res.status(500).json({ error: "Hiba a rendelés létrehozásakor!" });
+            }
+
+            const rendelesId = result.insertId; // 🔹 Az új rendelés ID-ja
+
+            // 🔹 2. LÉPÉS: Kosár tartalmának átmásolása a `rendeles_tetelek` táblába
+            const insertOrderItemsQuery = `
+                INSERT INTO rendeles_tetelek (rendeles_id, termek_id, dbszam, termekAr, vegosszeg)
+                VALUES ?
+            `;
+
+            const orderItems = req.body.items.map(item => [
+                rendelesId,        // 🔹 Az új rendelés ID-ja
+                item.termekID,     // 🔹 Termék ID
+                item.dbszam,       // 🔹 Darabszám
+                item.termekAr,     // 🔹 Egységár
+                item.dbszam * item.termekAr // 🔹 Végösszeg
+            ]);
+
+            db.query(insertOrderItemsQuery, [orderItems], (err) => {
+                if (err) {
+                    console.error("❌ Hiba a rendelés tételek mentésekor:", err);
+                    return res.status(500).json({ error: "Hiba a rendelés tételek mentésekor!" });
+                }
+
+                // 🔹 3. LÉPÉS: Kosár törlése a rendelés után
+                const deleteCartQuery = "DELETE FROM kosar WHERE 1";
+                db.query(deleteCartQuery, (err) => {
+                    if (err) {
+                        console.error("❌ Hiba a kosár törlésekor:", err);
+                        return res.status(500).json({ error: "Hiba a kosár törlésekor!" });
+                    }
+                    
+                });
+            });
+        });
+    });
+});
+
+
+// Rendelések lekérdezése (egy adott felhasználóhoz)
+app.get("/rendelesek", verifyUser, (req, res) => {
+    const vasarloId = req.id;
+  
+    const rendelesekQuery = `
+      SELECT * FROM rendelesek
+      WHERE vasarlo_id = ?
+      ORDER BY ido DESC
+    `;
+  
+    db.query(rendelesekQuery, [vasarloId], (err, rendelesek) => {
+      if (err) {
+        console.error("Hiba a rendelesek lekerese soran:", err);
+        return res.status(500).json({ message: "Hiba a rendelesek lekérésekor!" });
+      }
+  
+      // Ha nincs rendelés
+      if (rendelesek.length === 0) {
+        return res.json([]);
+      }
+  
+      // Rendelések ID-k kigyűjtése
+      const rendelesIds = rendelesek.map(r => r.id);
+  
+      // Tételek lekérdezése
+      const tetelekQuery = `
+        SELECT rt.*, t.nev AS termekNev FROM rendeles_tetelek rt
+        JOIN termekek t ON rt.termek_id = t.id
+        WHERE rt.rendeles_id IN (?)
+      `;
+  
+      db.query(tetelekQuery, [rendelesIds], (err, tetelek) => {
+        if (err) {
+          console.error("Hiba a rendeles_tetelek lekerese soran:", err);
+          return res.status(500).json({ message: "Hiba a rendeles tételek lekérésekor!" });
+        }
+  
+        // Rendelésekhez hozzákapcsoljuk a tételeket
+        const rendelesekWithTetelek = rendelesek.map(r => ({
+          ...r,
+          tetelek: tetelek.filter(t => t.rendeles_id === r.id)
+        }));
+  
+        res.json(rendelesekWithTetelek);
+      });
+    });
+  });
 
 
 

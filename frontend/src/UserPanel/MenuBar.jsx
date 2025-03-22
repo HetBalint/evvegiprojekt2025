@@ -91,7 +91,7 @@ function MenuBar() {
             <div className="dropdown-content">
               <p className="greeting">Üdv, {nev}!</p>
               <a href="#">Fiók</a>
-              <a href="#">Rendeléseim</a>
+              <a href="/rendelesek">Rendeléseim</a>
               <a to="/user/login" className="logout" onClick={handleLogout}>Kilépés</a>
             </div>
           </div>

@@ -1,44 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { useGLTF, MeshRefractionMaterial, AccumulativeShadows, RandomizedLight, Html, Environment, Center, PresentationControls } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { useGLTF, Environment, OrbitControls } from "@react-three/drei";
 import { RGBELoader } from "three-stdlib";
-import { HexColorPicker } from "react-colorful";
 import * as THREE from "three";
 import axios from "axios";
 
-// 🔹 Gyűrű komponens
-function Ring({ map, url, ...props }) {
-    const [color, setColor] = useState("white");
-    const { scene, nodes, materials } = useGLTF(url);
-
-    return (
-        <group {...props} dispose={null}>
-            {/* Gyémánt anyag fénytöréssel */}
-            <mesh geometry={nodes.diamonds.geometry}>
-                <MeshRefractionMaterial envMap={map} aberrationStrength={0.02} toneMapped={false} />
-            </mesh>
-
-            {/* Gyűrű fő anyaga színváltoztatással */}
-            <mesh castShadow receiveShadow geometry={nodes.ring.geometry} material={materials.ring} material-color={color} material-envMapIntensity={4} />
-
-            {/* Színválasztó UI */}
-            <Html position={[0.25, 0.1, 2.75]} scale={0.15} rotation={[Math.PI / 2, 0, 0]} transform>
-                <HexColorPicker className="picker" color={color} onChange={setColor} />
-            </Html>
-        </group>
-    );
+function Model({ url }) {
+    const { scene } = useGLTF(url);
+    
+    scene.traverse((child) => {
+        if (child.isMesh) {
+            if (child.name.toLowerCase().includes("diamond")) {
+                child.material = new THREE.MeshPhysicalMaterial({
+                    metalness: 1,
+                    roughness: 0,
+                    transmission: 1,
+                    thickness: 2,
+                    envMapIntensity: 2,
+                    clearcoat: 1,
+                    reflectivity: 1
+                });
+            }
+        }
+    });
+    
+    return <primitive object={scene} scale={1.5} />;
 }
 
-// 🔹 3D megjelenítő
 function Product3D({ productId }) {
     const [modelUrl, setModelUrl] = useState(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/termek/${productId}`)
+        axios.get(`http://localhost:8081/termek/${productId}/3d`)
             .then(response => {
-                if (response.data.length > 0 && response.data[0].haromD) {
-                    setModelUrl(`http://localhost:8081/3D/${response.data[0].haromD}`);
+                if (response.data && response.data.haromD) {
+                    const fileName = response.data.haromD;
+                    const url = fileName.startsWith("http") ? fileName : `http://localhost:8081/3D/${fileName}`;
+                    setModelUrl(url);
                 }
             })
             .catch(error => console.error("❌ Hiba a 3D fájl betöltésekor:", error));
@@ -48,39 +46,14 @@ function Product3D({ productId }) {
     texture.mapping = THREE.EquirectangularReflectionMapping;
 
     return (
-        <div className="termek-3d-container">
+        <div className="termek-3d-container" style={{ width: "100%", height: "600px", overflow: "hidden", position: "relative" }}>
             <h3>3D Megtekintés</h3>
             {modelUrl ? (
-                <Canvas shadows camera={{ position: [0, 0, 15], fov: 35, near: 1, far: 30 }}>
-                    <color attach="background" args={["#f0f0f0"]} />
-                    <ambientLight />
+                <Canvas shadows camera={{ position: [0, 0, 10], fov: 35 }} style={{ width: "100%", height: "100%" }}>
+                    <ambientLight intensity={0.5} />
                     <Environment map={texture} />
-
-                    <PresentationControls
-                        global
-                        config={{ mass: 1, tension: 250, friction: 25 }}
-                        snap={{ mass: 2, tension: 250, friction: 50 }}
-                        zoom={1.25}
-                        rotation={[0.5, 0.5, 0]}
-                        polar={[-Math.PI / 5, Math.PI / 4]}
-                        azimuth={[-Math.PI / 1.75, Math.PI / 4]}
-                    >
-                        <group position={[0, -3, 0]}>
-                            <Center top>
-                                <Ring map={texture} url={modelUrl} rotation={[-Math.PI / 2.05, 0, 0]} scale={3} />
-                            </Center>
-
-                            {/* Árnyékok hozzáadása */}
-                            <AccumulativeShadows temporal frames={100} alphaTest={0.95} opacity={1} scale={20}>
-                                <RandomizedLight amount={8} radius={10} ambient={0.5} position={[0, 10, -2.5]} bias={0.001} size={3} />
-                            </AccumulativeShadows>
-                        </group>
-                    </PresentationControls>
-
-                    {/* Bloom effektus */}
-                    <EffectComposer>
-                        <Bloom luminanceThreshold={1} intensity={0.85} levels={9} mipmapBlur />
-                    </EffectComposer>
+                    <OrbitControls />
+                    <Model url={modelUrl} />
                 </Canvas>
             ) : (
                 <p>Ehhez a termékhez nincs 3D modell.</p>

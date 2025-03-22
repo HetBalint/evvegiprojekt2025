@@ -1,0 +1,127 @@
+
+  
+  .rendelesek-container {
+    max-width: 900px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .rendeles-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    text-align: left;
+    position: relative;
+  }
+  
+  .rendeles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .rendeles-header h3 {
+    margin: 0;
+  }
+  
+  /* Általános státusz szöveg */
+.rendeles-statusz {
+    font-weight: bold;
+  }
+  
+  /* Különböző státusz színek */
+  .rendeles-statusz.feldolgozas {
+    color: rgb(130, 130, 130);
+    
+
+  }
+  
+  .rendeles-statusz.elkeszult {
+    color: rgb(0, 255, 55);
+  }
+  
+  .rendeles-statusz.elutasitva {
+    color: red;
+  }
+  
+  
+  .rendeles-ossz {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .rendeles-tetelek table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* ✅ térköz az oszlopok között */
+  }
+  
+  .rendeles-tetelek th,
+  .rendeles-tetelek td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    background: #fff;
+  }
+  
+  .rendeles-tetelek th {
+    background-color: #efefef;
+  }
+  
+  .toggle-icon {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 4px 10px;
+    background: #ddd;
+    border-radius: 20px;
+    transition: transform 0.2s;
+  }
+  
+  .toggle-icon.rotate {
+    transform: rotate(180deg);
+  }
+  
+  @media (max-width: 768px) {
+    .rendelesek-container {
+      padding: 10px;
+    }
+  
+    .rendeles-tetelek th,
+    .rendeles-tetelek td {
+      font-size: 14px;
+      padding: 6px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .rendeles-tetelek th,
+    .rendeles-tetelek td {
+      font-size: 12px;
+      padding: 4px;
+    }
+  }
+  
+  .fooldal {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #383838;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .fooldal:hover {
+    background-color: #b3b3b3;
+    color: #000;
+  }
+  

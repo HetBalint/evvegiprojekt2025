@@ -66,7 +66,7 @@ function RendelesVeglegesito() {
                     </table>
                     <h3 className="total-price">Összesen: {totalPrice} Ft</h3>
                     <Link to={`/adatok`} className="kosar-btn">Rendelési adatok</Link>
-                    <Link to={`/rendeles`} className="leadas-btn">Rendelés leadása</Link>
+                    <Link to={`/leadva`} className="leadas-btn" onClick={handleOrderSubmit}>Rendelés leadása</Link>
                 </div>
             )}
         </div>

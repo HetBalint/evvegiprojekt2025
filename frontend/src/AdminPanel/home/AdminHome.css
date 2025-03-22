@@ -1,88 +1,130 @@
 /* Betűtípus hozzáadása */
 body {
-    font-family: 'Roboto', sans-serif; /* Roboto betűtípus */
+    font-family: 'Roboto', sans-serif;
     margin-top: 0 !important;
 }
 
 .sidebar {
-    width: 250px;
+    width: 70px;
     height: 100vh;
-    background-color: #ffffff; /* Fehér háttérszín */
-    color: #000000; /* Fekete szöveg */
-    padding: 20px;
+    background-color: #ffffff;
+    color: #000000;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     position: fixed;
     left: 0;
     top: 0;
-    border-right: 2px solid #ddd; /* Kisebb szürke keret a jobb oldalon */
+    border-right: 2px solid #ddd;
+    padding: 20px 0;
 }
 
-.sidebar h5 {
-    font-size: 18px;
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 1px solid #ddd; /* Világos szürke vonal alul */
-    padding-bottom: 10px;
-    font-weight: bold; /* Tisztább, kiemelő betűstílus */
+.logo {
+    width: 60px;
+    margin-bottom: 30px;
+    filter: drop-shadow(3px 2px 2px rgba(0.5, 0.5, 0.5, 0.5));
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
     flex-grow: 1;
 }
 
-.sidebar ul li {
-    margin: 10px 0;
-}
-
 .sidebar ul li a {
-    display: block;
-    padding: 10px;
+    color: #383838;
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-decoration: none;
-    color: #ffffff; /* Fekete szöveg */
-    font-size: 16px;
-    background-color: #505050; /* Fehér háttérszín a linkekhez */
-    border: 1px solid #ddd; /* Szürke keret a linkek körül */
-    border-radius: 5px;
-    text-align: center;
-    font-weight: 500; /* Könnyed, de olvasható betűstílus */
+    padding: 12px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    transition: background 0.3s;
 }
 
 .sidebar ul li a:hover {
-    background-color: #414141; /* Világos szürke hover állapot */
-    
+    background-color: #f0f0f0;
 }
 
 .sidebar-footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;
+    position: relative;
 }
 
-.greeting {
-    font-size: 16px;
-    color: #333; /* Sötét szürke szöveg */
-    margin-bottom: 5px;
+.user-icon-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.logout-link {
-    display: block;
-    text-align: center;
-    background-color: #242424;
+.user-icon {
+    font-size: 28px;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 50%;
+    transition: background 0.3s;
+    z-index: 2;
+    background-color: transparent;
+}
+
+.user-icon:hover {
+    background-color: #f0f0f0;
+}
+
+.user-info {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    position: absolute;
+    left: 70px;
+    bottom: 0;
+    width: 180px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.user-info.visible {
+    display: flex;
+}
+
+.user-info .greeting {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.user-info .logout-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    background: #5f5f5f;
     color: white;
-    padding: 8px 15px;
     border-radius: 5px;
     text-decoration: none;
+    font-size: 20px;
+    width: 50%; /* vagy auto */
     font-weight: bold;
-    width: 100%;
-    border: 1px solid #ddd; /* Keret a kilépés gomb körül */
+    margin: 10px auto 0; /* ez hozza középre */
 }
 
-.logout-link:hover {
-    background-color: #181818;
-    color: #ffffff;
+
+.user-info .logout-link:hover {
+    background: #313131;
 }

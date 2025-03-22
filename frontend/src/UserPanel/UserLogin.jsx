@@ -26,12 +26,13 @@ const navigate = useNavigate();
         event.preventDefault();
         const validationErrors = Validation(values);
         setErrors(validationErrors);
-
+    
         if (Object.keys(validationErrors).length === 0) { 
             try {
-                const res = await axios.post('http://localhost:8081/user/login', values);
+                const res = await axios.post('http://localhost:8081/user/login', values, { withCredentials: true });
                 if (res.data.Status === "Success") {
-                    navigate('/');
+                    // VÁRJ egy pillanatot a sütibeállításra
+                    
                 } else {
                     alert("Nincs felhasználó regisztrálva");
                 }
@@ -40,15 +41,18 @@ const navigate = useNavigate();
             }
         }
     };
+    
 
     const handleAuth = () => {
-        axios.get('http://localhost:8081/user', {
-            headers: {
-                'access-token' : localStorage.getItem("token")
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+        setTimeout(() => {
+            axios.get("http://localhost:8081/user", { withCredentials: true })
+                .then(res => {
+                    console.log("✅ Bejelentkezett felhasználó:", res.data);
+                    navigate('/');
+                })
+                .catch(err => console.error("❌ Auth hiba:", err));
+        }, 300); // kb. 300ms elég szokott lenni
+        
     }
     
         return (

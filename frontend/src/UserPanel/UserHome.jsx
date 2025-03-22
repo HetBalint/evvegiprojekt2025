@@ -40,7 +40,7 @@ function UserHome() {
               <div className="category-card" 
                    style={{ backgroundImage: `url(${category.image})` }}
                    onClick={() => navigate(`/${category.path}`)}>
-                <div className="overlay">
+                <div className="overlay-home">
                   <h4>{category.name}</h4>
                 </div>
               </div>
