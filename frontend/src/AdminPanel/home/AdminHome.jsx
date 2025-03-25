@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaUsers, FaGem, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUsers, FaGem, FaUser, FaSignOutAlt, FaDolly } from 'react-icons/fa';
 import './AdminHome.css';
 
 function AdminHome() {
@@ -73,11 +73,13 @@ function AdminHome() {
 
     return (
         <div className="sidebar">
-            <img className='logo' src="/logonevvel(fekete).svg" alt="Logo" />
+            <img className='logo-admin' src="/logonevvel(fekete).svg" alt="Logo" />
 
             <ul>
                 <li><Link to="/admin/adminlist"><FaUsers /></Link></li>
                 <li><Link to="/admin/productlist"><FaGem /></Link></li>
+                <li><Link to="/admin/orders"><FaDolly /></Link></li>
+
             </ul>
 
             <div className="sidebar-footer">

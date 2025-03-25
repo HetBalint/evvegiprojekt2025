@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RendelesVeglegesito.css";
 import CheckoutProgress from "./checkout-progress";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function RendelesVeglegesito() {
     const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:8081/kosar", { withCredentials: true })
@@ -14,19 +15,30 @@ function RendelesVeglegesito() {
                     setCartItems(res.data);
                 }
             })
-            .catch(err => console.error("Hiba a kosár lekérdezésekor:", err));
+            .catch(err => console.error("❌ Hiba a kosár lekérdezésekor:", err));
     }, []);
 
     const totalPrice = cartItems.reduce((acc, product) => acc + product.dbszam * product.termekAr, 0);
 
-    const handleOrderSubmit = () => {
-        axios.post("http://localhost:8081/rendeles", { items: cartItems, total: totalPrice }, { withCredentials: true })
-            .then(res => {
-                console.log("✅ Rendelés sikeresen elküldve:", res.data);
-                alert("Rendelés sikeresen leadva!");
-                setCartItems([]); 
-            })
-            .catch(err => console.error("Hiba a rendelés véglegesítésekor:", err));
+    const handleOrderSubmit = async () => {
+        console.log("🟡 Rendelés gombra kattintottál!");
+        console.log("🛒 Kosár tartalma:", cartItems);
+
+        try {
+            const res = await axios.post("http://localhost:8081/rendeles", {
+                items: cartItems,
+                total: totalPrice
+            }, { withCredentials: true });
+
+            console.log("✅ Rendelés siker:", res.data);
+
+            setCartItems([]);
+            navigate("/leadva");
+
+        } catch (err) {
+            console.error("❌ Rendelés hiba:", err?.response?.data || err.message || err);
+            alert("Hiba történt a rendelés közben.");
+        }
     };
 
     return (
@@ -52,7 +64,11 @@ function RendelesVeglegesito() {
                             {cartItems.map(product => (
                                 <tr key={product.termekID}>
                                     <td>
-                                        <img src={`http://localhost:8081/kepek/${product.termekKep}`} alt={product.termekNev} className="product-img" />
+                                        <img
+                                            src={`http://localhost:8081/kepek/${product.termekKep}`}
+                                            alt={product.termekNev}
+                                            className="product-img"
+                                        />
                                     </td>
                                     <td>{product.termekNev}</td>
                                     <td>{product.termekAnyag}</td>
@@ -65,8 +81,10 @@ function RendelesVeglegesito() {
                         </tbody>
                     </table>
                     <h3 className="total-price">Összesen: {totalPrice} Ft</h3>
-                    <Link to={`/adatok`} className="kosar-btn">Rendelési adatok</Link>
-                    <Link to={`/leadva`} className="leadas-btn" onClick={handleOrderSubmit}>Rendelés leadása</Link>
+                    <Link to="/adatok" className="kosar-btn">Rendelési adatok</Link>
+                    <button className="leadas-btn" onClick={handleOrderSubmit}>
+                        Rendelés leadása
+                    </button>
                 </div>
             )}
         </div>

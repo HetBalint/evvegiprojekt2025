@@ -33,16 +33,21 @@ function Rendelesek() {
                                 <strong>Rendelés dátuma:</strong> {new Date(rendeles.ido).toLocaleString()} <br />
                                 <strong>Státusz:</strong>{" "}
                                 <span
-                                className={`rendeles-statusz ${
-                                    rendeles.statusz === "feldolgozás alatt"
-                                    ? "feldolgozas"
-                                    : rendeles.statusz === "elkészült"
-                                    ? "elkeszult"
-                                    : "elutasitva"
-                                }`}
-                                >
-                                {rendeles.statusz}
-                                </span>
+    className={`rendeles-statusz`}
+    style={{
+        color:
+            rendeles.statusz === "feldolgozás alatt"
+                ? "#8b8b8b"
+                : rendeles.statusz === "szállítás alatt"
+                ? "#c3c600"
+                : rendeles.statusz === "átvehető"
+                ? "#0dc200"
+                : "black"
+    }}
+>
+    {rendeles.statusz}
+</span>
+
 
                                 <br /><strong>Összeg:</strong> {rendeles.osszeg} Ft
                             </div>

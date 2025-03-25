@@ -14,7 +14,6 @@ function ProductList() {
         axios
             .get("http://localhost:8081/admin/productlist/") 
             .then((res) => {
-                console.log("API válasz:", res.data);
                 setData(Array.isArray(res.data) ? res.data : []);
             })
             .catch((err) => {
@@ -51,17 +50,18 @@ function ProductList() {
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-left">Termék kezelő</h3>
-                <Link to="/admin/pcreate" className="btn btn-primary shadow-sm"><FontAwesomeIcon icon={faPlus} /></Link>
+                <Link to="/admin/pcreate" className="btn btn-primary shadow-sm">
+                    <FontAwesomeIcon icon={faPlus} />
+                </Link>
             </div>
 
-            {/* Keresőmező */}
             <div className="mb-3">
                 <input
                     type="text"
                     className="form-control"
                     placeholder="Keresés termékek között..."
                     value={searchTerm}
-                    onChange={handleSearch} /* Azonnal frissíti a keresést */
+                    onChange={handleSearch}
                 />
             </div>
 
@@ -71,7 +71,7 @@ function ProductList() {
                         <tr>
                             <th>ID</th>
                             <th>Név</th>
-                            <th>Kategoria</th>
+                            <th>Kategória</th>
                             <th>Anyag</th>
                             <th>Súly</th>
                             <th>Méret</th>
@@ -93,9 +93,18 @@ function ProductList() {
                                     <td>{product.suly}</td>
                                     <td>{product.meret}</td>
                                     <td>{product.ar}</td>
-                                    <td>{product.keszlet}</td>
+                                    <td style={{ color: product.keszlet === 0 ? 'red' : 'inherit' }}>
+                                        {product.keszlet === 0 ? "Nincs raktáron" : product.keszlet}
+                                    </td>
                                     <td>{product.leiras}</td>
-                                    <td><img className="kiskep" src={`http://localhost:8081/kepek/${product.kep}`} alt="Termék kép" width="80" /></td>
+                                    <td>
+                                        <img
+                                            className="kiskep"
+                                            src={`http://localhost:8081/kepek/${product.kep}`}
+                                            alt="Termék kép"
+                                            width="80"
+                                        />
+                                    </td>
                                     <td>
                                         <Link to={`/admin/pedit/${product.id}`} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
@@ -108,7 +117,7 @@ function ProductList() {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="10" className="text-center">Nincsenek találatok</td>
+                                <td colSpan="11" className="text-center">Nincsenek találatok</td>
                             </tr>
                         )}
                     </tbody>

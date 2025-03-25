@@ -42,7 +42,7 @@ function Product3D({ productId }) {
             .catch(error => console.error("❌ Hiba a 3D fájl betöltésekor:", error));
     }, [productId]);
 
-    const texture = useLoader(RGBELoader, "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/peppermint_powerplant_2_1k.hdr");
+    const texture = useLoader(RGBELoader, "/hdr/3dhatter2.hdr");
     texture.mapping = THREE.EquirectangularReflectionMapping;
 
     return (

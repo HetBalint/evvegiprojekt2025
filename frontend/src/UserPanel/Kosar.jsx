@@ -21,6 +21,12 @@ function Kosar() {
   }, [])
 
   const mennyisegnoveles = (id) => {
+    const product = cartItems.find(p => p.termekID === id);
+    if (product && product.keszlet && product.dbszam >= product.keszlet) {
+      alert("Nem tudsz többet hozzáadni, mint amennyi a készleten van!");
+      return;
+    }
+
     axios
       .put(`http://localhost:8081/kosar/update/${id}`, { action: "increase" }, { withCredentials: true })
       .then((res) => {
@@ -57,9 +63,8 @@ function Kosar() {
 
   return (
     <div>
-      
       <div className="kosar-container">
-      <CheckoutProgress currentStep={1} />
+        <CheckoutProgress currentStep={1} />
         {cartItems.length === 0 ? (
           <p className="empty-cart">A kosár üres.</p>
         ) : (
@@ -103,4 +108,3 @@ function Kosar() {
 }
 
 export default Kosar
-

@@ -1,17 +1,16 @@
 .category-card {
-    height: 200px; /* Magasabb kártya (eredeti: 200px) */
-    width: 100%; /* Kitölti a szülő konténer szélességét */
+    height: 200px;
+    width: 100%;
     background-size: cover;
     background-position: center;
     position: relative;
     cursor: pointer;
-    border-radius: 15px ; /* Enyhén lekerekített sarkok */
+    border-radius: 15px;
     transition: transform 0.3s ease-in-out;
+    overflow: hidden;
 }
 
-.category-card:hover {
-    transform: scale(1.12); /* Enyhén nagyobb növekedés */
-}
+
 
 .overlay-home {
     position: absolute;
@@ -24,11 +23,14 @@
     justify-content: center;
     color: white;
     font-weight: bold;
-    font-size: 1.5rem; /* Nagyobb betűméret */
-    border-radius: 15px !important;
-    transition: background 0.3s ease-in-out;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
 }
 
 .category-card:hover .overlay-home {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0); /* eltűnik az overlay sötétítése */
+    opacity: 0; /* a szöveg is eltűnik */
 }
+

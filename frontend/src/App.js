@@ -24,6 +24,8 @@ import RendelesVeglegesito from './UserPanel/RendelesVeglegesito.jsx';
 import RendelesiAdatok from './UserPanel/RendelesiAdatok.jsx';
 import LeadottRendeles from './UserPanel/LeadottRendeles.jsx';
 import Rendelesek from './UserPanel/Renedelesek.jsx';
+import RendelesKezelo from './AdminPanel/RendelesKezelo.jsx';
+
 
 
 
@@ -48,6 +50,8 @@ const App = () => {
           <Route path="pcreate" element={<ProductCreate />} />
           <Route path="productlist" element={<ProductList />} />
           <Route path="pedit/:id" element={<ProductUpdate />} />
+          <Route path="orders" element={<RendelesKezelo/>} />
+
         </Route>
 
         {/* Felhasználói felület */}

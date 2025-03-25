@@ -392,6 +392,66 @@ app.delete('/admin/productlist/delete/:id', (req, res) => {
     });
 });
 
+
+
+// Minden rendelés lekérdezése admin oldalra
+app.get("/rendeleskezeles", (req, res) => {
+    const rendelesekQuery = `
+      SELECT * FROM rendelesek
+      ORDER BY ido DESC
+    `;
+  
+    db.query(rendelesekQuery, (err, rendelesek) => {
+      if (err) {
+        console.error("Hiba a rendelesek lekerese soran:", err);
+        return res.status(500).json({ message: "Hiba a rendelesek lekérésekor!" });
+      }
+  
+      if (rendelesek.length === 0) {
+        return res.json([]);
+      }
+  
+      const rendelesIds = rendelesek.map(r => r.id);
+  
+      const tetelekQuery = `
+        SELECT rt.*, t.nev AS termekNev FROM rendeles_tetelek rt
+        JOIN termekek t ON rt.termek_id = t.id
+        WHERE rt.rendeles_id IN (?)
+      `;
+  
+      db.query(tetelekQuery, [rendelesIds], (err, tetelek) => {
+        if (err) {
+          console.error("Hiba a rendeles_tetelek lekerese soran:", err);
+          return res.status(500).json({ message: "Hiba a rendeles tételek lekérésekor!" });
+        }
+  
+        const rendelesekWithTetelek = rendelesek.map(r => ({
+          ...r,
+          tetelek: tetelek.filter(t => t.rendeles_id === r.id)
+        }));
+  
+        res.json(rendelesekWithTetelek);
+      });
+    });
+  });
+  
+  // Rendelés statusz frissítése
+  app.put("/admin/rendelesek/frissit/:id", (req, res) => {
+    const { id } = req.params;
+    const { statusz } = req.body;
+  
+    const updateQuery = "UPDATE rendelesek SET statusz = ? WHERE id = ?";
+    db.query(updateQuery, [statusz, id], (err, result) => {
+      if (err) {
+        console.error("Hiba a rendelés statusz frissítésekor:", err);
+        return res.status(500).json({ error: "Statusz frissítési hiba" });
+      }
+  
+      res.json({ message: "Statusz sikeresen frissítve!" });
+    });
+  });
+  
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -601,7 +661,20 @@ app.post("/kosar/termek", (req, res) => {
 
 // Kosár lekérdezése (GET)
 app.get("/kosar", (req, res) => {
-    const sql = "SELECT termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag FROM kosar";
+    const sql = `
+        SELECT 
+            k.termekID, 
+            k.termekNev, 
+            k.termekMeret, 
+            k.dbszam, 
+            k.termekAr, 
+            k.termekKep, 
+            k.vegosszeg, 
+            k.termekAnyag,
+            t.keszlet
+        FROM kosar k
+        JOIN termekek t ON k.termekID = t.id
+    `;
     
     db.query(sql, (err, result) => {
         if (err) {
@@ -611,6 +684,7 @@ app.get("/kosar", (req, res) => {
         res.json(result);
     });
 });
+
 
 
 //Kosárból termék törlése
@@ -671,70 +745,86 @@ app.get('/termek/:id/3D', (req, res) => {
 });
 
 
-//Rendelés leadása
-
+// Rendelés leadása (készletfrissítéssel)
 app.post("/rendeles", verifyUser, (req, res) => {
+    console.log("📩 Bejövő rendelés érkezett!");
+
     const vasarloId = req.id;
+    const items = req.body.items;
+    const totalPrice = req.body.total;
 
-    
-    const token = req.cookies.userToken;
-    if (!token) return res.status(401).json({ error: "Nincs bejelentkezve!" });
+    if (!items || items.length === 0) {
+        return res.status(400).json({ error: "A kosár üres!" });
+    }
 
-    jwt.verify(token, "userSecretKey", (err, decoded) => {
-        if (err) return res.status(403).json({ error: "Érvénytelen token!" });
+    const insertOrderQuery = `
+        INSERT INTO rendelesek (statusz, osszeg, ido, vasarlo_id)
+        VALUES (?, ?, NOW(), ?)
+    `;
 
-        
-
-        if (!req.body.items || req.body.items.length === 0) {
-            return res.status(400).json({ error: "A kosár üres!" });
+    db.query(insertOrderQuery, ["feldolgozás alatt", totalPrice, vasarloId], (err, result) => {
+        if (err) {
+            console.error("❌ Rendelés beszúrási hiba:", err);
+            return res.status(500).json({ error: "Rendelés beszúrási hiba" });
         }
 
-        const totalPrice = req.body.total;
+        const rendelesId = result.insertId;
+        console.log("📝 Rendelés ID:", rendelesId);
 
-        // 🔹 1. LÉPÉS: Új rendelés beszúrása
-        const insertOrderQuery = `
-            INSERT INTO rendelesek (statusz, osszeg, ido, vasarlo_id) 
-            VALUES (?, ?, NOW(), ?)
+        const orderItems = items.map(item => [
+            rendelesId,
+            item.termekID,
+            item.dbszam,
+            item.termekAr,
+            item.dbszam * item.termekAr
+        ]);
+
+        const insertItemsQuery = `
+            INSERT INTO rendeles_tetelek (rendeles_id, termek_id, dbszam, termekAr, vegosszeg)
+            VALUES ?
         `;
 
-        db.query(insertOrderQuery, ["feldolgozás alatt", totalPrice, vasarloId], (err, result) => {
+        db.query(insertItemsQuery, [orderItems], (err) => {
             if (err) {
-                console.error("❌ Hiba a rendelés létrehozásakor:", err);
-                return res.status(500).json({ error: "Hiba a rendelés létrehozásakor!" });
+                console.error("❌ Tételek beszúrási hiba:", err);
+                return res.status(500).json({ error: "Tételek beszúrási hiba" });
             }
 
-            const rendelesId = result.insertId; // 🔹 Az új rendelés ID-ja
-
-            // 🔹 2. LÉPÉS: Kosár tartalmának átmásolása a `rendeles_tetelek` táblába
-            const insertOrderItemsQuery = `
-                INSERT INTO rendeles_tetelek (rendeles_id, termek_id, dbszam, termekAr, vegosszeg)
-                VALUES ?
-            `;
-
-            const orderItems = req.body.items.map(item => [
-                rendelesId,        // 🔹 Az új rendelés ID-ja
-                item.termekID,     // 🔹 Termék ID
-                item.dbszam,       // 🔹 Darabszám
-                item.termekAr,     // 🔹 Egységár
-                item.dbszam * item.termekAr // 🔹 Végösszeg
-            ]);
-
-            db.query(insertOrderItemsQuery, [orderItems], (err) => {
-                if (err) {
-                    console.error("❌ Hiba a rendelés tételek mentésekor:", err);
-                    return res.status(500).json({ error: "Hiba a rendelés tételek mentésekor!" });
-                }
-
-                // 🔹 3. LÉPÉS: Kosár törlése a rendelés után
-                const deleteCartQuery = "DELETE FROM kosar WHERE 1";
-                db.query(deleteCartQuery, (err) => {
-                    if (err) {
-                        console.error("❌ Hiba a kosár törlésekor:", err);
-                        return res.status(500).json({ error: "Hiba a kosár törlésekor!" });
-                    }
-                    
+            // Készlet frissítés minden termékre
+            const frissitesek = items.map(item => {
+                return new Promise((resolve, reject) => {
+                    const updateQuery = `
+                        UPDATE termekek 
+                        SET keszlet = CASE 
+                            WHEN keszlet >= ? THEN keszlet - ? 
+                            ELSE 0 
+                        END 
+                        WHERE id = ?
+                    `;
+                    db.query(updateQuery, [item.dbszam, item.dbszam, item.termekID], (err, result) => {
+                        if (err) return reject(err);
+                        resolve(result);
+                    });
                 });
             });
+
+            Promise.all(frissitesek)
+                .then(() => {
+                    // Kosár ürítése
+                    db.query("DELETE FROM kosar", (err) => {
+                        if (err) {
+                            console.error("❌ Kosár törlés hiba:", err);
+                            return res.status(500).json({ error: "Kosár törlés hiba" });
+                        }
+
+                        console.log("✅ Rendelés és készlet frissítve!");
+                        return res.json({ message: "Rendelés sikeres!" });
+                    });
+                })
+                .catch(err => {
+                    console.error("❌ Készletfrissítés hiba:", err);
+                    return res.status(500).json({ error: "Készletfrissítési hiba" });
+                });
         });
     });
 });
@@ -787,7 +877,6 @@ app.get("/rendelesek", verifyUser, (req, res) => {
       });
     });
   });
-
 
 
 

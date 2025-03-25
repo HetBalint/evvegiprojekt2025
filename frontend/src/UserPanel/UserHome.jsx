@@ -49,7 +49,7 @@ function UserHome() {
         </div>
       </section>
 
-      <section className="position-relative text-center text-white" 
+      <section className="ekszerkeszites position-relative text-center text-white" 
         style={{ backgroundImage: `url(${ekszerkeszites})`, backgroundSize: 'cover', backgroundPosition: 'center center', height: '500px' }}>
         <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
         <div className="position-absolute top-50 start-50 translate-middle">

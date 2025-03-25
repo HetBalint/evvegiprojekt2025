@@ -20,9 +20,9 @@ body {
     padding: 20px 0;
 }
 
-.logo {
+.logo-admin {
     width: 60px;
-    margin-bottom: 30px;
+    margin-bottom: 70px;
     filter: drop-shadow(3px 2px 2px rgba(0.5, 0.5, 0.5, 0.5));
 }
 
