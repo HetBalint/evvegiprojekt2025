@@ -43,7 +43,7 @@ function AdminHome() {
     }, []);
 
     const handleLogout = () => {
-        axios.get('http://localhost:8081/logout', { withCredentials: true })
+        axios.get('http://localhost:8081/admin/logout', { withCredentials: true })
             .then(res => {
                 if (res.data.Status === "Success") {
                     localStorage.removeItem("adminToken");

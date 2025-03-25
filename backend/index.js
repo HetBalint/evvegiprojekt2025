@@ -177,7 +177,7 @@ app.post('/admin/login', (req, res) => {
 });
 
 //Admin kijelentkezés
-app.get('/logout', (req, res) => {
+app.get('/admin/logout', (req, res) => {
     res.cookie('adminToken', '', {
         httpOnly: true,
         secure: false, //  Ha HTTPS-t használsz, állítsd "true"-ra
@@ -394,11 +394,13 @@ app.delete('/admin/productlist/delete/:id', (req, res) => {
 
 
 
-// Minden rendelés lekérdezése admin oldalra
+// Minden rendelés lekérdezése admin oldalra, vásárló névvel
 app.get("/rendeleskezeles", (req, res) => {
     const rendelesekQuery = `
-      SELECT * FROM rendelesek
-      ORDER BY ido DESC
+      SELECT r.*, v.nev AS vasarloNev
+      FROM rendelesek r
+      JOIN vasarlok v ON r.vasarlo_id = v.id
+      ORDER BY r.ido DESC
     `;
   
     db.query(rendelesekQuery, (err, rendelesek) => {
@@ -414,7 +416,8 @@ app.get("/rendeleskezeles", (req, res) => {
       const rendelesIds = rendelesek.map(r => r.id);
   
       const tetelekQuery = `
-        SELECT rt.*, t.nev AS termekNev FROM rendeles_tetelek rt
+        SELECT rt.*, t.nev AS termekNev 
+        FROM rendeles_tetelek rt
         JOIN termekek t ON rt.termek_id = t.id
         WHERE rt.rendeles_id IN (?)
       `;
@@ -434,6 +437,7 @@ app.get("/rendeleskezeles", (req, res) => {
       });
     });
   });
+  
   
   // Rendelés statusz frissítése
   app.put("/admin/rendelesek/frissit/:id", (req, res) => {
@@ -514,7 +518,7 @@ const verifyUser = (req, res, next) => {
 
 
 //User bejelentkezés
-app.post('/user/login', (req, res) => {
+app.post('/login', (req, res) => {
     const sql = "SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?";
     db.query(sql, [req.body.email, req.body.jelszo], (err, data) => {
         if (err) {
@@ -539,7 +543,7 @@ app.post('/user/login', (req, res) => {
 
 
 // User kijelentkezés
-app.get('/user/logout', (req, res) => {
+app.get('/logout', (req, res) => {
     res.cookie('userToken', '', {
         httpOnly: true,
         secure: false, //  Ha HTTPS-t használsz, állítsd "true"-ra

@@ -24,7 +24,7 @@ import RendelesVeglegesito from './UserPanel/RendelesVeglegesito.jsx';
 import RendelesiAdatok from './UserPanel/RendelesiAdatok.jsx';
 import LeadottRendeles from './UserPanel/LeadottRendeles.jsx';
 import Rendelesek from './UserPanel/Renedelesek.jsx';
-import RendelesKezelo from './AdminPanel/RendelesKezelo.jsx';
+import RendelesKezelo from './AdminPanel/rendelés_kezelő/RendelesKezelo.jsx';
 
 
 
@@ -55,11 +55,12 @@ const App = () => {
         </Route>
 
         {/* Felhasználói felület */}
-        <Route path="/user/login" element={<UserLogin />} />
-        <Route path="/user/registration" element={<UserRegistration />} />
+        
 
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/*" element={<UserLayout />}>
+          <Route path="login" element={<UserLogin />} />
+          <Route path="registration" element={<UserRegistration />} />
           <Route index path="home" element={<UserHome />} />
           <Route index path="gyuru" element={<GyuruOldal />} />
           
