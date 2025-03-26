@@ -9,6 +9,7 @@ import UserRegistration from './UserRegistration';
 function MenuBar() {
   const [auth, setAuth] = useState(false);
   const [nev, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [cartCount, setCartCount] = useState(0);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -20,6 +21,7 @@ function MenuBar() {
         if (res.data.Status === "Success") {
           setAuth(true);
           setName(res.data.nev);
+          setEmail(res.data.email);
         } else {
           setAuth(false);
         }
@@ -88,6 +90,7 @@ function MenuBar() {
                 {auth ? (
                   <>
                     <p className="greeting">Üdv, {nev}!</p>
+                    <p className="email">{email}</p>
                     <Link to="#">Fiók</Link>
                     <Link to="/rendelesek">Rendeléseim</Link>
                     <button className="logout" onClick={handleLogout}>Kilépés</button>

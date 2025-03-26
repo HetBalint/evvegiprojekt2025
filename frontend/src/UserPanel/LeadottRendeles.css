@@ -13,7 +13,7 @@
   flex-direction: column; /* Az elemek egymás alá kerülnek */
   align-items: center; /* Horizontálisan középre igazítás */
   justify-content: center; /* Vertikálisan középre igazítás */
-  height: 50vh; /* A teljes képernyő magasságának a fele */
+  height: 70vh; /* A teljes képernyő magasságának a fele */
 }
 
 .leadva-box h1{
@@ -39,4 +39,8 @@
   border-radius: 5px;
   text-decoration: none;
   text-align: center;
+}
+
+.leadva-box .logo{
+  width: 200px;
 }

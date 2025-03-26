@@ -3,20 +3,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Validation from './LoginValidation';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import './AdminLogin.css';
+import hatter from './hatter_admin.jpg';
+
 
 
 function AdminLogin() {
     const navigate = useNavigate();
-    const [values, setValues] = useState({
-        email: '',
-        jelszo: ''
-    });
-
-    axios.defaults.withCredentials = true;
+    const [values, setValues] = useState({ email: '', jelszo: '' });
     const [errors, setErrors] = useState({});
-    
+    axios.defaults.withCredentials = true;
+
     const handleInput = (event) => {
-        setValues(prev => ({ ...prev, [event.target.name]: event.target.value })); 
+        setValues(prev => ({ ...prev, [event.target.name]: event.target.value }));
     };
 
     const handleSubmit = async (event) => {
@@ -24,11 +23,11 @@ function AdminLogin() {
         const validationErrors = Validation(values);
         setErrors(validationErrors);
 
-        if (Object.keys(validationErrors).length === 0) { 
+        if (Object.keys(validationErrors).length === 0) {
             try {
                 const res = await axios.post('http://localhost:8081/admin/login', values);
                 if (res.data.Status === "Success") {
-                    navigate('/admin/');
+                    navigate('/admin/adminlist/');
                 } else {
                     alert("Nincs felhasználó regisztrálva");
                 }
@@ -38,49 +37,39 @@ function AdminLogin() {
         }
     };
 
-    const handleAuth = () => {
-        axios.get('http://localhost:8081/admin/', {
-            headers: {
-                'access-token' : localStorage.getItem("token")
-            }
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-    }
-
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-            <div className="card shadow p-4" style={{ width: "400px" }}>
-                <h2 className="text-center mb-4">Admin Bejelentkezés</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="email" className="form-label">Email</label>
-                        <input 
-                            type="text" 
-                            className="form-control" 
-                            name="email" 
-                            placeholder="Add meg az email címed"
-                            value={values.email} 
-                            onChange={handleInput}
-                        />
-                        {errors.email && <span className='text-danger'>{errors.email}</span>}
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="jelszo" className="form-label">Jelszó</label>
-                        <input 
-                            type="password" 
-                            className="form-control" 
-                            name="jelszo" 
-                            placeholder="Add meg a jelszavad" 
-                            value={values.jelszo} 
-                            onChange={handleInput}
-                        />
-                        {errors.jelszo && <span className='text-danger'>{errors.jelszo}</span>}
-                    </div>
-                    <button onClick={handleAuth}  type="submit" className="btn btn-dark w-100">Bejelentkezés</button>
-                </form>
-            </div>
+        <div className="background" style={{ backgroundImage: `url(${hatter})` }}>
+
+        <div className="wrapper">
+            <h1>Admin Bejelentkezés</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="input-box">
+                    <input
+                        type="text"
+                        name="email"
+                        placeholder="Email cím"
+                        value={values.email}
+                        onChange={handleInput}
+                    />
+                </div>
+                {errors.email && <span className="text-danger">{errors.email}</span>}
+
+                <div className="input-box">
+                    <input
+                        type="password"
+                        name="jelszo"
+                        placeholder="Jelszó"
+                        value={values.jelszo}
+                        onChange={handleInput}
+                    />
+                </div>
+                {errors.jelszo && <span className="text-danger">{errors.jelszo}</span>}
+
+                <button type="submit">Bejelentkezés</button>
+            </form>
         </div>
+        </div>
+        
     );
 }
 
