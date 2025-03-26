@@ -68,3 +68,12 @@
 .gyuru-card .btn-primary:hover {
     background-color: #333333;
 }
+
+.gyuru-card h5{
+    font-family: 'Georgia';
+    text-align: left;
+}
+
+.gyuru-card p{
+    text-align: left;
+}

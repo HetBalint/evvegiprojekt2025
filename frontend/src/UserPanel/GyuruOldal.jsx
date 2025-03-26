@@ -4,9 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import gyuru_banner from "../UserPanel/gyuru_banner.jpg";
 import "../UserPanel/GyuruOldal.css";
+import { useNavigate } from "react-router-dom";
+
 
 function GyuruOldal() {
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -32,30 +35,27 @@ function GyuruOldal() {
                 </div>
             </section>
 
-            {/* Terméklista */}
             <div className="container mt-4">
-               
-                <div className="row">
-                    {data.length > 0 ? (
-                        data.map((product) => (
-                            <div key={product.id} className="col-md-3 mb-2s">
-                                <div className="card gyuru-card">
-                                    <img src={`http://localhost:8081/kepek/${product.kep}`} className="card-img-top" alt={product.nev} />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.nev}</h5>
-                                        <p className="card-text">{product.ar} Ft</p>
-                                        <Link to={`/termek/${product.id}`} className="btn btn-primary">Részletek</Link>
-                                    </div>
+            <div className="row">
+                {data.length > 0 ? (
+                    data.map((product) => (
+                        <div key={product.id} className="col-md-3 mb-2" onClick={() => navigate(`/termek/${product.id}`)}>
+                            <div className="card gyuru-card" style={{ cursor: "pointer" }}>
+                                <img src={`http://localhost:8081/kepek/${product.kep}`} className="card-img-top" alt={product.nev} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{product.nev}</h5>
+                                    <p className="card-text">{product.ar} Ft</p>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-                        <div className="text-center w-100">Nincsenek elérhető gyűrűk</div>
-                    )}
-                </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center w-100">Nincsenek elérhető gyűrűk</div>
+                )}
             </div>
         </div>
+        </div>
     );
-}
-
+};
+            
 export default GyuruOldal;
