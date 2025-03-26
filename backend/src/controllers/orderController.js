@@ -17,7 +17,7 @@ export const createOrder = async (req, res) => {
     // Rendelés létrehozása
     const orderResult = await OrderModel.createOrder(vasarloId, totalPrice)
     const rendelesId = orderResult.insertId
-    
+   
 
     // Rendelési tételek létrehozása
     const orderItems = items.map((item) => [
