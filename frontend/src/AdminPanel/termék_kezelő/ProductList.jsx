@@ -4,15 +4,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
-import "./ProductList.css"; 
+import ProductCreate from "./ProductCreate";
+import ProductUpdate from "./ProductUpdate"; // importáljuk az Update komponenst
+import { Modal, Button } from "react-bootstrap";
+import "./ProductList.css";
 
 function ProductList() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [showModal, setShowModal] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false); // az Update modál állapota
+    const [productIdToUpdate, setProductIdToUpdate] = useState(null); // tároljuk az aktuális termék id-ját
 
     useEffect(() => {
-        axios
-            .get("http://localhost:8081/admin/productlist/") 
+        axios.get("http://localhost:8081/admin/productlist/")
             .then((res) => {
                 setData(Array.isArray(res.data) ? res.data : []);
             })
@@ -23,8 +28,7 @@ function ProductList() {
     }, []);
 
     const handleDelete = (id) => {
-        axios
-            .delete(`http://localhost:8081/admin/productlist/delete/${id}`) 
+        axios.delete(`http://localhost:8081/admin/productlist/delete/${id}`)
             .then(() => {
                 setData(data.filter(product => product.id !== id));
             })
@@ -46,13 +50,18 @@ function ProductList() {
         product.leiras.toLowerCase().includes(searchTerm)
     );
 
+    const handleEdit = (id) => {
+        setProductIdToUpdate(id); // beállítjuk az id-t az Update modálhoz
+        setShowUpdateModal(true); // megjelenítjük az Update modált
+    };
+
     return (
         <div className="container">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h3 className="text-left">Termék kezelő</h3>
-                <Link to="/admin/pcreate" className="btn btn-primary shadow-sm">
+                <Button variant="primary" onClick={() => setShowModal(true)}>
                     <FontAwesomeIcon icon={faPlus} />
-                </Link>
+                </Button>
             </div>
 
             <div className="mb-3">
@@ -106,9 +115,9 @@ function ProductList() {
                                         />
                                     </td>
                                     <td>
-                                        <Link to={`/admin/pedit/${product.id}`} className="btn btn-warning btn-sm me-2">
+                                        <button onClick={() => handleEdit(product.id)} className="btn btn-warning btn-sm me-2">
                                             <FontAwesomeIcon icon={faEdit} />
-                                        </Link>
+                                        </button>
                                         <button onClick={() => handleDelete(product.id)} className="btn btn-danger btn-sm">
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
@@ -123,6 +132,29 @@ function ProductList() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Create Product Modal */}
+            <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>Új termék hozzáadása</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ProductCreate setShowModal={setShowModal} />
+                </Modal.Body>
+            </Modal>
+
+            {/* Update Product Modal */}
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)} centered size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Termék módosítása</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {productIdToUpdate && (
+                <ProductUpdate id={productIdToUpdate} setShowModal={setShowUpdateModal} />
+                )}
+            </Modal.Body>
+            </Modal>
+
         </div>
     );
 }

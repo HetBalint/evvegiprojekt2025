@@ -20,6 +20,8 @@ function Kosar() {
       .catch((err) => console.error("Hiba a kosár lekérdezésekor:", err))
   }, [])
 
+  
+
   const mennyisegnoveles = (id) => {
     const product = cartItems.find(p => p.termekID === id);
     if (product && product.keszlet && product.dbszam >= product.keszlet) {

@@ -2,22 +2,38 @@ import db from "../config/database.js"
 
 export const addToCart = (cartItem) => {
   return new Promise((resolve, reject) => {
-    const { termekId, nev, meret, mennyiseg, ar, kep, anyag } = cartItem
-    const vegosszeg = ar * mennyiseg
+    const { termekId, nev, meret, mennyiseg, ar, kep, anyag } = cartItem;
+    const vegosszeg = ar * mennyiseg;
 
-    const sql = `
-            INSERT INTO kosar (termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `
+    // Ellenőrizzük, hogy van-e már ilyen termék a kosárban
+    const checkSql = `SELECT dbszam FROM kosar WHERE termekID = ?`;
 
-    const values = [termekId, nev, meret, mennyiseg, ar, kep, vegosszeg, anyag]
+    db.query(checkSql, [termekId], (err, results) => {
+      if (err) return reject(err);
 
-    db.query(sql, values, (err, result) => {
-      if (err) reject(err)
-      resolve(result)
-    })
-  })
-}
+      if (results.length > 0) {
+        // Ha már bent van, növeljük a dbszámot
+        const updateSql = `UPDATE kosar SET dbszam = dbszam + ?, vegosszeg = vegosszeg + ? WHERE termekID = ?`;
+        db.query(updateSql, [mennyiseg, vegosszeg, termekId], (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      } else {
+        // Ha nincs bent, újként adjuk hozzá
+        const insertSql = `
+          INSERT INTO kosar (termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const values = [termekId, nev, meret, mennyiseg, ar, kep, vegosszeg, anyag];
+
+        db.query(insertSql, values, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      }
+    });
+  });
+};
+
 
 export const getCart = () => {
   return new Promise((resolve, reject) => {

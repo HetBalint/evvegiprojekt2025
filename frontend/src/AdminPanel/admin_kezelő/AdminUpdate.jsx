@@ -1,10 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
-function AdminUpdate() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+function AdminUpdate({ showModal, setShowModal, adminId }) {
   const [values, setValues] = useState({
     nev: '',
     email: '',
@@ -17,46 +14,36 @@ function AdminUpdate() {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/admin/adminlist/edit/${id}`)
-      .then(res => {
-        if (res.data.length > 0) {
-          setValues({
-            nev: res.data[0].nev,
-            email: res.data[0].email,
-            jelszo: res.data[0].jelszo,
-            szulev: res.data[0].szulev,
-            lakhely: res.data[0].lakhely,
-            cim: res.data[0].cim,
-            adoszam: res.data[0].adoszam,
-            telszam: res.data[0].telszam
-          });
-        }
-      })
-      .catch(err => console.error('Error fetching data:', err));
-  }, [id]);
+    if (adminId) {
+      axios.get(`http://localhost:8081/admin/adminlist/edit/${adminId}`)
+        .then(res => {
+          if (res.data.length > 0) {
+            setValues(res.data[0]);
+          }
+        })
+        .catch(err => console.error('Error fetching data:', err));
+    }
+  }, [adminId]);
 
   const handleUpdate = async (event) => {
     event.preventDefault();
-    const formattedDate = values.szulev ? values.szulev.split('T')[0] : '';
-
     try {
-      const res = await axios.put(`http://localhost:8081/admin/adminlist/update/${id}`, {
-        ...values,
-        szulev: formattedDate
-      });
-      console.log(res.data);
-      navigate('/admin/adminlist');
+      await axios.put(`http://localhost:8081/admin/adminlist/update/${adminId}`, values);
+      setShowModal(false); // Bezárja a modált frissítés után
     } catch (error) {
       console.error('Error updating admin:', error.response ? error.response.data : error.message);
     }
   };
 
-  return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-lg-10">
-          <div className="card shadow-lg p-4">
-            <h2 className="text-center mb-4">Felhasználó módosítása</h2>
+  return showModal ? (
+    <div className="modal d-block" tabIndex="-1">
+      <div className="modal-dialog modal-lg">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Felhasználó módosítása</h5>
+            <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+          </div>
+          <div className="modal-body">
             <form onSubmit={handleUpdate} className="row g-4">
               <div className="col-md-6">
                 <label htmlFor="nev" className="form-label">Név</label>
@@ -106,7 +93,7 @@ function AdminUpdate() {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default AdminUpdate;
