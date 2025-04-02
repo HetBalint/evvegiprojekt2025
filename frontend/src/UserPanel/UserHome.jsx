@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import hatter from '../UserPanel/hatter.jpg';
 import './UserHome.css';
-import ekszerkeszites from '../UserPanel/ékszerkeszites.jpg'
+import ekszerkeszites from '../UserPanel/ékszerkeszites.jpg';
 
 function UserHome() {
   const navigate = useNavigate();
@@ -20,18 +20,15 @@ function UserHome() {
         </div>
       </section>
 
-      
-
       {/* Navigation Cards */}
-      <section className="container my-5 ">
+      <section className="container my-5">
         <div className="row">
-          {[
-            { name: "Gyűrűk", image: "/hatterkepek/gyuru.jpg", path: "gyuru" },
+          {[{ name: "Gyűrűk", image: "/hatterkepek/gyuru.jpg", path: "gyuru" },
             { name: "Nyakláncok", image: "/hatterkepek/nyaklanc.jpg", path: "nyaklanc" },
             { name: "Karkötők", image: "/hatterkepek/karlanc.jpg", path: "karlanc" },
             { name: "Fülbevalók", image: "/hatterkepek/fulbevalo.jpg", path: "fulbevalo" }
           ].map((category, index) => (
-            <div key={index} className="col-md-3">
+            <div key={index} className="col-6 col-md-3 mb-3">
               <div className="category-card" 
                    style={{ backgroundImage: `url(${category.image})` }}
                    onClick={() => navigate(`/${category.path}`)}>
@@ -49,10 +46,8 @@ function UserHome() {
         <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
         <div className="position-absolute top-50 start-50 translate-middle">
           <h1 className="display-4 fw-bold">Egyedi, kézzel készült ékszerek</h1>
-          
         </div>
       </section>
-
     </div>
   );
 }

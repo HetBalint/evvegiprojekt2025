@@ -3,7 +3,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import { FaShoppingCart, FaUser, FaBars } from "react-icons/fa"
+import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa"
 import "./MenuBar.css"
 import UserLogin from "./UserLogin"
 import UserRegistration from "./UserRegistration"
@@ -83,17 +83,18 @@ function MenuBar() {
             <img className="logo" src="/logo(fekete).svg" alt="Logo" /> Crystal Heaven
           </Link>
           <button
-            className="navbar-toggler"
+            className={`navbar-toggler ${menuOpen ? "open" : ""}`}
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            <FaBars size={24} />
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
+
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`} id="navbarNav">
-            {/* Changed from mx-auto text-center to mx-0 text-lg-center for left alignment on mobile */}
-            <ul className="navbar-nav mx-0 text-start text-lg-center">
+           
+            <ul className="navbar-nav w-100">
               <li className="nav-item">
                 <Link to="/gyuru" onClick={handleNavLinkClick} className="mobile-nav-link">
                   Gyűrű
@@ -116,9 +117,9 @@ function MenuBar() {
               </li>
             </ul>
 
-            {/* Mobile profile section in hamburger menu */}
-            <div className="d-lg-none mt-3 border-top pt-3">
-              <div className="user-mobile-section">
+            {/* Mobile profile section in hamburger menu - moved fully left */}
+            <div className="d-lg-none w-100 mt-3 border-top pt-3">
+              <div className="user-mobile-section ps-0">
                 {auth ? (
                   <>
                     <div className="d-flex align-items-center mb-2">
@@ -128,27 +129,28 @@ function MenuBar() {
                         <p className="mb-0 small text-muted">{email}</p>
                       </div>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column align-items-start">
                       <Link to="#" className="mb-2 text-decoration-none mobile-profile-link" onClick={handleNavLinkClick}>
                         Fiók
                       </Link>
                       <Link to="/rendelesek" className="mb-2 text-decoration-none mobile-profile-link" onClick={handleNavLinkClick}>
                         Rendeléseim
                       </Link>
-                      <button className="btn btn-outline-danger btn-sm mobile-logout-btn" onClick={handleLogout}>
+                      <button className="btn-outline-danger btn-sm mobile-logout-btn" onClick={handleLogout}>
                         Kilépés
                       </button>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="d-flex align-items-center mb-2">
+                    <div className="d-flex mb-2">
                       <FaUser size={20} className="me-2" />
                       <p className="mb-0">Vendég vagy!</p>
                     </div>
-                    <div className="d-flex flex-column">
+                    
+                    <div className="d-flex  align-items-start">
                       <button
-                        className="btn btn-primary btn-sm mb-2"
+                        className="btn-login btn-primary btn-sm mb-2"
                         onClick={(e) => {
                           e.preventDefault()
                           setShowLoginModal(true)
@@ -158,7 +160,7 @@ function MenuBar() {
                         Bejelentkezés
                       </button>
                       <button
-                        className="btn btn-outline-primary btn-sm"
+                        className="btn-regist btn-outline-primary btn-sm mb-2"
                         onClick={(e) => {
                           e.preventDefault()
                           setShowRegisterModal(true)
@@ -167,7 +169,9 @@ function MenuBar() {
                       >
                         Regisztráció
                       </button>
-                    </div>
+                      </div>
+                      
+                    
                   </>
                 )}
               </div>

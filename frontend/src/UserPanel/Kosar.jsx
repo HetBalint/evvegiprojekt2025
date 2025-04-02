@@ -93,9 +93,11 @@ function Kosar() {
                     <button className="torles" onClick={() => handleDelete(product.termekID)}>
                       Termék törlése
                     </button>
+                    <p className="ar">{product.termekAr} Ft</p>
                   </div>
+                  
                 </div>
-                <p className="ar">{product.termekAr} Ft</p>
+                
               </div>
             ))}
             <h3 className="total-price">Összesen: {totalPrice} Ft</h3>

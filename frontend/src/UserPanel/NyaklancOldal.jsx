@@ -6,11 +6,9 @@ import nyaklanc_banner from "../UserPanel/nyaklanc_banner.jpg";
 import "../UserPanel/GyuruOldal.css";
 import { useNavigate } from "react-router-dom";
 
-
 function NyaklancOldal() {
     const [data, setData] = useState([]);
     const navigate = useNavigate();
-
 
     useEffect(() => {
         axios
@@ -38,28 +36,26 @@ function NyaklancOldal() {
 
             {/* Terméklista */}
             <div className="container mt-4">
-            <div className="row">
-                {data.length > 0 ? (
-                    data.map((product) => (
-                        <div key={product.id} className="col-md-3 mb-2" onClick={() => navigate(`/termek/${product.id}`)}>
-                            <div className="card gyuru-card" style={{ cursor: "pointer" }}>
-                                <img src={`http://localhost:8081/kepek/${product.kep}`} className="card-img-top" alt={product.nev} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.nev}</h5>
-                                    <p className="card-text">{product.ar} Ft</p>
+                <div className="row">
+                    {data.length > 0 ? (
+                        data.map((product) => (
+                            <div key={product.id} className="col-6 col-md-3 mb-3" onClick={() => navigate(`/termek/${product.id}`)}>
+                                <div className="card gyuru-card h-100" style={{ cursor: "pointer" }}>
+                                    <img src={`http://localhost:8081/kepek/${product.kep}`} className="card-img-top" alt={product.nev} />
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.nev}</h5>
+                                        <p className="card-text">{product.ar} Ft</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="text-center w-100">Nincsenek elérhető nyakláncok</div>
-                )}
+                        ))
+                    ) : (
+                        <div className="text-center w-100">Nincsenek elérhető nyakláncok</div>
+                    )}
+                </div>
             </div>
-        </div>
         </div>
     );
 };
-
-            
 
 export default NyaklancOldal;

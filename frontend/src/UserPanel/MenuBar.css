@@ -38,7 +38,7 @@
     gap: 20px;
     padding: 0;
     margin: 0;
-    align-items: center;
+    justify-content: center;
   }
   
   .nav-item {
@@ -97,7 +97,7 @@
     .mobile-nav-link {
       display: block;
       width: 100%;
-      text-align: left;
+      text-align: left ;
       padding: 12px 20px !important;
       margin: 0;
       border-radius: 0 !important;
@@ -108,26 +108,83 @@
       width: 100%;
       text-align: left;
       padding: 8px 0;
+      color: #333;
+    }
+    .user-mobile-section .mobile-profile-link:hover {
+      color: #969696;
+      
     }
   
     /* Mobile user section styling */
     .user-mobile-section {
-      padding: 0 20px;
-      text-align: left;
+      padding:0 20px;
       width: 100%;
+      margin-left: 20px;
+      
+      
+      
     }
   
     .mobile-logout-btn {
-      width: auto;
       display: inline-block;
-      margin-left: 0;
-    }
+        width: auto;
+        background-color: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 8px 16px;
+        margin: 12px auto;
+        margin-left: 0;
+        text-align: center;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .btn-login {
+        display: inline-block;
+        width: auto;
+        background-color: #424242;
+        color: #ffffff;
+        border: none;
+        padding: 8px 16px;
+        margin-right: 10px !important;
+        margin: 12px auto;
+        margin-left: 0;
+        text-align: center;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .btn-regist{
+        display: inline-block;
+        width: auto;
+        background-color: #c2c2c2;
+        color: #000000;
+        border: none;
+        padding: 8px 16px;
+        margin: 12px auto;
+        margin-left: 0;
+        text-align: center;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      
+      
+    
   }
   
   /* Ikonok és felhasználói rész */
   .dropdown {
     position: relative;
     display: inline-block;
+    
   }
   
   .dropbtn {
@@ -146,7 +203,7 @@
     position: absolute;
     right: 0;
     background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.3);
     min-width: 250px;
     border-radius: 5px;
     overflow: hidden;
@@ -211,9 +268,9 @@
   /* Cart badge for the menu bar cart icon */
   .cart-badge {
     position: absolute;
-    top: -10px;
+    top: -13px;
     right: -12px;
-    background-color: #474747;
+    background-color: #6e6e6e;
     color: white;
     border-radius: 50%;
     min-width: 18px;
@@ -271,4 +328,25 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
+  .navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none;
+  box-shadow: none;
   
+}
+
+.navbar-toggler {
+  border: none;
+  background: transparent;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler svg {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler.open svg {
+  transform: rotate(180deg); /* vagy akár 90deg, ha kevésbé drasztikus animációt akarsz */
+  opacity: 0.8;
+}
+

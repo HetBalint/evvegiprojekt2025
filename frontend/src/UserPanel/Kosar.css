@@ -154,9 +154,12 @@
   }
   
   .ar {
-    padding-top: 130px;
+    padding-top: 0px;
+    padding-left: 200px;
     font-size: 20px;
-    margin-bottom: 0 !important;
+    margin-bottom: 5px !important;
+    color: #000000 !important;
+    font-weight: bold;
   }
   
   /* Checkout Progress Styles */
@@ -236,6 +239,59 @@
     .connector {
       min-width: 30px;
     }
+
+    .cart-item-img {
+      width: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+      
+    }
+    .cart-item-details {
+      flex: 1;
+      margin-left: 20px;
+    }
+    .quantity-controls .dbnovelo {
+      background: #474747;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      font-size: 10px;
+    }
+    
+    .quantity-controls .dbcsokkento {
+      background: #474747;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      font-size: 10px;
+    }
+    
+    .quantity-controls .dbszam {
+      background: #474747;
+      color: #ffffff;
+      padding: 5px;
+      font-size: 10px;
+      font-weight: bold;
+      text-align: center;
+      min-width: 40px;
+    }
+    .ar {
+      font-size: 15px;
+      padding-left: 10px;
+    }
+    .torles {
+      
+      font-size: 15px;
+      margin-left: 0;
+    }
   }
+
+
   
   
