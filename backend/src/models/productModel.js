@@ -68,9 +68,9 @@ export const createProduct = (productData, files) => {
       productData.leiras,
       productData.meret,
       productData.kategoria,
-      files["kep"] ? files["kep"][0].filename : null,
+      files["kep"] ? files["kep"][0].filename : "",
       productData.keszlet,
-      files["haromD"] ? files["haromD"][0].filename : null,
+      files["haromD"] ? files["haromD"][0].filename : "",
     ]
 
     db.query(sql, [values], (err, result) => {

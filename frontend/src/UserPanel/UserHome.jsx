@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import hatter from '../UserPanel/hatter.jpg';
 import './UserHome.css';
 import ekszerkeszites from '../UserPanel/ékszerkeszites.jpg';
+import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa"
 
 function UserHome() {
   const navigate = useNavigate();
@@ -42,13 +43,48 @@ function UserHome() {
       </section>
 
       <section className="ekszerkeszites position-relative text-center text-white" 
-        style={{ backgroundImage: `url(${ekszerkeszites})`, backgroundSize: 'cover', backgroundPosition: 'center center', height: '500px'}}>
+        style={{ backgroundImage: `url(${ekszerkeszites})`, backgroundSize: 'cover', backgroundPosition: 'center center', height: '250px'}}>
         <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
         <div className="position-absolute top-50 start-50 translate-middle">
           <h1 className="display-4 fw-bold">Egyedi, kézzel készült ékszerek</h1>
         </div>
       </section>
+       {/* Lábléc */}
+       <footer className="footer">
+        <div className="footer-links">
+          <a href="/rolunk">Rólunk</a>
+          <a href="/kapcsolat">Kapcsolat</a>
+          <a href="/adatvedelem">Adatvédelmi irányelvek</a>
+          <a href="/felhasznalasifeltetelek">Felhasználási feltételek</a>
+        </div>
+
+        <div className="contact-info">
+          <p><strong>Kapcsolat:</strong> info@crystalheaven.com</p>
+          <p><strong>Telefon:</strong> +36 1 234 5678</p>
+        </div>
+
+        <div className="social-media">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <FaFacebook />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <FaInstagram />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <FaTwitter />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+            <FaLinkedin />
+          </a>
+        </div>
+
+        <div className="footer-bottom">
+          <p>&copy; 2025 Crystal Heaven. Minden jog fenntartva.</p>
+        </div>
+      </footer>
     </div>
+
+    
   );
 }
 

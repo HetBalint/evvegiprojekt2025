@@ -66,3 +66,31 @@ export const getUserInfo = (req, res) => {
   })
 }
 
+
+
+
+
+// Módosított updateCurrentUser
+export const updateCurrentUser = async (req, res) => {
+  try {
+    // Az ID a JWT tokenből jön, tehát nincs szükség params-ban
+    const userId = req.id; // Az ID a middleware-ben van
+
+    // Ellenőrzés a beérkező adatokra
+    if (!req.body.nev || !req.body.email || !req.body.usertel) {
+      return res.status(400).json({ Message: "Hiányzó mezők az űrlapban!" });
+    }
+
+    // Hívás az adatbázis frissítésére
+    const result = await UserModel.updateCurrentUser(userId, req.body);
+
+    if (result.changedRows === 0) {
+      return res.status(400).json({ Message: "Nem történt változás." });
+    }
+
+    return res.json({ Message: "Sikeres frissítés!" });
+  } catch (err) {
+    console.error("Database error:", err);
+    return res.status(500).json({ Message: "Hiba van a szerverben!", Error: err });
+  }
+};

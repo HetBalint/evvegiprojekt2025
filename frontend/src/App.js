@@ -25,6 +25,11 @@ import RendelesiAdatok from './UserPanel/RendelesiAdatok.jsx';
 import LeadottRendeles from './UserPanel/LeadottRendeles.jsx';
 import Rendelesek from './UserPanel/Renedelesek.jsx';
 import RendelesKezelo from './AdminPanel/rendelés_kezelő/RendelesKezelo.jsx';
+import Fiok from './UserPanel/Fiók.jsx';
+import Rolunk from './UserPanel/Rolunk.jsx';
+import Felhasznalasifeltetelek from './UserPanel/Felhasznalasifeltetelek.jsx';
+import Kapcsolat from './UserPanel/Kapcsolat.jsx';
+import Adatvedelem from './UserPanel/Adatvedelem.jsx';
 
 
 
@@ -73,6 +78,11 @@ const App = () => {
           <Route index path="adatok" element={<RendelesiAdatok />} />
           <Route index path="leadva" element={<LeadottRendeles />} />
           <Route index path="rendelesek" element={<Rendelesek />} />
+          <Route index path="fiok" element={<Fiok />} />
+          <Route index path="rolunk" element={<Rolunk />} />
+          <Route index path="kapcsolat" element={<Kapcsolat />} />
+          <Route index path="adatvedelem" element={<Adatvedelem />} />
+          <Route index path="felhasznalasifeltetelek" element={<Felhasznalasifeltetelek />} />
           {/* Ide jönnek majd a user oldalak */}
         </Route>
       </Routes>

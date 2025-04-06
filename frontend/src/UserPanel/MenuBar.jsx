@@ -3,7 +3,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa"
+import { FaShoppingCart, FaUser, FaBars, FaTimes} from "react-icons/fa"
 import "./MenuBar.css"
 import UserLogin from "./UserLogin"
 import UserRegistration from "./UserRegistration"
@@ -93,7 +93,6 @@ function MenuBar() {
           </button>
 
           <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`} id="navbarNav">
-           
             <ul className="navbar-nav w-100">
               <li className="nav-item">
                 <Link to="/gyuru" onClick={handleNavLinkClick} className="mobile-nav-link">
@@ -117,7 +116,6 @@ function MenuBar() {
               </li>
             </ul>
 
-            {/* Mobile profile section in hamburger menu - moved fully left */}
             <div className="d-lg-none w-100 mt-3 border-top pt-3">
               <div className="user-mobile-section ps-0">
                 {auth ? (
@@ -130,7 +128,7 @@ function MenuBar() {
                       </div>
                     </div>
                     <div className="d-flex flex-column align-items-start">
-                      <Link to="#" className="mb-2 text-decoration-none mobile-profile-link" onClick={handleNavLinkClick}>
+                      <Link to="/fiok" className="mb-2 text-decoration-none mobile-profile-link" onClick={handleNavLinkClick}>
                         Fiók
                       </Link>
                       <Link to="/rendelesek" className="mb-2 text-decoration-none mobile-profile-link" onClick={handleNavLinkClick}>
@@ -169,22 +167,18 @@ function MenuBar() {
                       >
                         Regisztráció
                       </button>
-                      </div>
-                      
-                    
+                    </div>
                   </>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Desktop cart icon */}
           <Link to="/kosar" className="d-none d-lg-block me-3 text-dark position-relative">
             <FaShoppingCart size={24} />
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </Link>
 
-          {/* Desktop profile dropdown - hidden on mobile */}
           <div className="dropdown d-none d-lg-block">
             <div className="user dropbtn">
               <FaUser size={24} />
@@ -194,7 +188,7 @@ function MenuBar() {
                 <>
                   <p className="greeting">Üdv, {nev}!</p>
                   <p className="email">{email}</p>
-                  <Link to="#" onClick={handleNavLinkClick}>
+                  <Link to="/fiok" onClick={handleNavLinkClick}>
                     Fiók
                   </Link>
                   <Link to="/rendelesek" onClick={handleNavLinkClick}>
@@ -234,7 +228,6 @@ function MenuBar() {
         </nav>
       </header>
 
-      {/* Floating cart bubble - only visible on mobile and when NOT on the cart page */}
       {!isCartPage && (
         <div className="floating-cart d-lg-none">
           <Link to="/kosar" className="cart-bubble-link">
@@ -262,6 +255,8 @@ function MenuBar() {
           setShowLoginModal(true)
         }}
       />
+
+     
     </>
   )
 }

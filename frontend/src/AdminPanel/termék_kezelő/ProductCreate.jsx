@@ -41,12 +41,18 @@ function ProductCreate({ setShowModal }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (values[key] !== null) {
-        formData.append(key, values[key]);
+  
+    // Hozzáadjuk a mezőket a formData-hoz
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== null && value !== "" && !(value instanceof File && value.size === 0)) {
+        formData.append(key, value);
+      } else if (value === null || value === "") {
+        // Ha nincs fájl, akkor üres fájlt küldünk
+        formData.append(key, ""); 
       }
     });
-
+  
+    // Küldjük el a kérést
     axios
       .post("http://localhost:8081/admin/productlist/product", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -54,9 +60,11 @@ function ProductCreate({ setShowModal }) {
       .then(() => {
         setShowModal(false);
         navigate("/admin/productlist");
+        window.location.reload();
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Hiba a termék mentésekor:", err));
   };
+  
 
   return (
     <form className="row g-4">

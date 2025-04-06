@@ -25,6 +25,7 @@ function AdminCreate({ showModal, setShowModal }) {
         console.log(res);
         navigate(`/admin/adminlist`);
         setShowModal(false);
+        window.location.reload();
       })
       .catch((err) => console.error(err));
   };

@@ -33,14 +33,22 @@ function Product3D({ productId }) {
     useEffect(() => {
         axios.get(`http://localhost:8081/termek/${productId}/3d`)
             .then(response => {
-                if (response.data && response.data.haromD) {
-                    const fileName = response.data.haromD;
-                    const url = fileName.startsWith("http") ? fileName : `http://localhost:8081/3D/${fileName}`;
+                const fileName = response.data?.haromD;
+                if (fileName && fileName !== "null") {
+                    const url = fileName.startsWith("http") 
+                        ? fileName 
+                        : `http://localhost:8081/3D/${fileName}`;
                     setModelUrl(url);
+                } else {
+                    setModelUrl(null); // fontos: hogy ne próbáljon meg betölteni
                 }
             })
-            .catch(error => console.error("❌ Hiba a 3D fájl betöltésekor:", error));
+            .catch(error => {
+                console.error("Hiba a 3D fájl betöltésekor:", error);
+                setModelUrl(null); // hiba esetén se próbáljon meg betölteni
+            });
     }, [productId]);
+    
 
     const texture = useLoader(RGBELoader, "/hdr/3dhatter2.hdr");
     texture.mapping = THREE.EquirectangularReflectionMapping;

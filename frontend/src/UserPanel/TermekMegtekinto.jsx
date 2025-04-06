@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Product3D from "./Product3D";
 import "./TermekMegtekinto.css";
+import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 function TermekMegtekinto() {
     const { id } = useParams();
@@ -39,6 +40,7 @@ function TermekMegtekinto() {
     }
 
     return (
+        <div>
         <div className="termek-container">
             <div className="termek-tartalom">
                 <img className="termek-kep-box"
@@ -62,6 +64,41 @@ function TermekMegtekinto() {
             <div className="model-container">
                 <Product3D productId={id} />
             </div>
+           
+        </div>
+          {/* Lábléc */}
+                                            <footer className="footer">
+                                                                        <div className="footer-links">
+                                                                          <a href="/rolunk">Rólunk</a>
+                                                                          <a href="/kapcsolat">Kapcsolat</a>
+                                                                          <a href="/adatvedelem">Adatvédelmi irányelvek</a>
+                                                                          <a href="/felhasznalasifeltetelek">Felhasználási feltételek</a>
+                                                                        </div>
+                                                                
+                                                                        <div className="contact-info">
+                                                                          <p><strong>Kapcsolat:</strong> info@crystalheaven.com</p>
+                                                                          <p><strong>Telefon:</strong> +36 1 234 5678</p>
+                                                                        </div>
+                                                                
+                                                                        <div className="social-media">
+                                                                          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                                                                            <FaFacebook />
+                                                                          </a>
+                                                                          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                                                                            <FaInstagram />
+                                                                          </a>
+                                                                          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                                                                            <FaTwitter />
+                                                                          </a>
+                                                                          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                                                                            <FaLinkedin />
+                                                                          </a>
+                                                                        </div>
+                                                                
+                                                                        <div className="footer-bottom">
+                                                                          <p>&copy; 2025 Crystal Heaven. Minden jog fenntartva.</p>
+                                                                        </div>
+                                                                      </footer>
         </div>
     );
 }

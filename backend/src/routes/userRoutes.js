@@ -12,6 +12,8 @@ router.get("/user", verifyUser, UserController.getUserInfo)
 // User management routes (admin access)
 router.get("/admin/userlist", UserController.getAllUsers)
 router.post("/admin/userlist/user", UserController.createUser)
+router.get("/user/profile", verifyUser, UserController.getUserInfo)
+router.put("/user/update", verifyUser, UserController.updateCurrentUser)
 
 export default router
 

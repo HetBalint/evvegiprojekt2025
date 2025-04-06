@@ -64,6 +64,7 @@ function ProductUpdate({ id, setShowModal }) {
     })
     .then(() => {
       setShowModal(false);
+      window.location.reload();
     })
     .catch(err => console.log(err));
   };

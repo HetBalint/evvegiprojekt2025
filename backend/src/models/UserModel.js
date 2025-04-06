@@ -32,3 +32,22 @@ export const loginUser = (email, password) => {
   })
 }
 
+
+export const updateCurrentUser = (id, userData) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE vasarlok SET `nev`=?, `email`=?, `usertel`=? WHERE id=?";
+
+    db.query(
+      sql,
+      [userData.nev, userData.email, userData.usertel, id],
+      (err, result) => {
+        if (err) reject(err);
+
+        console.log("SQL eredmény:", result); // Az SQL eredményének kiírása
+        resolve(result);
+      }
+    );
+  });
+};
+
