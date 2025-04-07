@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
-import * as UserModel from "../models/userModel.js"
+import * as UserModel from "../models/userModel.js";
+
 
 export const getAllUsers = async (req, res) => {
   try {
