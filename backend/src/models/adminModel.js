@@ -72,20 +72,20 @@ export const updateAdmin = (id, adminData) => {
 export const deleteAdmin = (id) => {
   return new Promise((resolve, reject) => {
     const sql = "DELETE FROM admin WHERE id=?"
-    db.query(sql, [id], (err, result) => {
-      if (err) reject(err)
+    db.query(sql, [id], ( result) => {
+      if (err) reject()
       resolve(result)
     })
   })
 }
 
-export const loginAdmin = (email, password) => {
+export const loginAdmin = (email) => {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM admin WHERE `email` = ? AND `jelszo` = ?"
-    db.query(sql, [email, password], (err, data) => {
-      if (err) reject(err)
-      resolve(data)
-    })
-  })
-}
+    const sql = "SELECT * FROM admin WHERE email = ?";
+    db.query(sql, [email], (err, result) => {
+      if (err) reject(err);
+      resolve(result); // Visszaadjuk a lekérdezett adatokat (pl. jelszóval együtt)
+    });
+  });
+};
 

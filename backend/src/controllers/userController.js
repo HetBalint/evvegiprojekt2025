@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken"
-import * as UserModel from "../models/userModel.js";
+import * as UserModel from "../models/UserModel.js";
+import bcrypt from 'bcryptjs';
+
 
 
 export const getAllUsers = async (req, res) => {
@@ -13,36 +15,67 @@ export const getAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const result = await UserModel.createUser(req.body)
-    return res.json(result)
+    const { nev, email, jelszo, usertel } = req.body;
+
+    // Jelszó hash-elés
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(jelszo, salt);
+    
+
+
+    // Létrehozott objektum hash-elt jelszóval
+    const userData = {
+      nev,
+      email,
+      jelszo: hashedPassword,
+      usertel,
+    };
+
+    const result = await UserModel.createUser(userData);
+
+    return res.status(201).json({ Message: "Sikeres regisztráció!", result });
   } catch (err) {
-    console.error("SQL Hiba:", err)
-    return res.json(err)
+    console.error("Hiba a regisztrációnál:", err);
+    return res.status(500).json({ Message: "Hiba történt!" });
   }
-}
+};
 
 export const loginUser = async (req, res) => {
   try {
-    const data = await UserModel.loginUser(req.body.email, req.body.jelszo)
+    const { email, jelszo } = req.body;
+    
+    // Lekérdezzük a felhasználót az email alapján
+    const data = await UserModel.loginUser(email);
 
     if (data.length > 0) {
-      const { id, nev, email, usertel } = data[0]
-      const token = jwt.sign({ id, nev, email, usertel }, "userSecretKey", { expiresIn: "1d" })
+      const { id, nev, email, usertel, jelszo: storedHash } = data[0];
 
-      res.cookie("userToken", token, {
-        httpOnly: true,
-        secure: false, // Ha HTTPS-t használsz, állítsd true-ra
-        sameSite: "lax",
-      })
+      // Ellenőrizzük a jelszó helyességét a hash összehasonlításával
+      const isMatch = await bcrypt.compare(jelszo, storedHash);
 
-      return res.json({ Status: "Success" })
+      if (isMatch) {
+        const token = jwt.sign({ id, nev, email, usertel }, "userSecretKey", { expiresIn: "1d" });
+
+        res.cookie("userToken", token, {
+          httpOnly: true,
+          secure: false, // Ha HTTPS-t használsz, állítsd true-ra
+          sameSite: "lax",
+        });
+
+        return res.json({ Status: "Success" });
+      } else {
+        return res.status(401).json({ Status: "Failed", Message: "Hibás jelszó!" });
+      }
     } else {
-      return res.json("Failed")
+      return res.status(404).json({ Status: "Failed", Message: "Felhasználó nem található!" });
     }
   } catch (err) {
-    return res.json("Error")
+    console.error("Hiba a bejelentkezésnél:", err);
+    return res.status(500).json({ Status: "Error", Message: "Szerver hiba történt!" });
   }
-}
+};
+
+
 
 export const logoutUser = (req, res) => {
   res.cookie("userToken", "", {

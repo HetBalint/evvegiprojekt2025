@@ -32,7 +32,7 @@ function AdminList() {
             .then(() => {
                 setData(data.filter(user => user.id !== id));
             })
-            .catch((err) => console.log(err));
+            
     };
 
     const handleEditClick = (id) => {
@@ -77,7 +77,6 @@ function AdminList() {
                             <th>ID</th>
                             <th>Név</th>
                             <th>Email</th>
-                            <th>Jelszó</th>
                             <th>Születési idő</th>
                             <th>Lakhely</th>
                             <th>Cím</th>
@@ -92,8 +91,7 @@ function AdminList() {
                                 <tr key={admin.id}>
                                     <td>{admin.id}</td>
                                     <td>{admin.nev}</td>
-                                    <td>{admin.email}</td>
-                                    <td>{admin.jelszo}</td>
+                                    <td>{admin.email}</td>   
                                     <td>{formatDate(admin.szulev)}</td>
                                     <td>{admin.lakhely}</td>
                                     <td>{admin.cim}</td>

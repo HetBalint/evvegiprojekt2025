@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import * as AdminModel from "../models/adminModel.js"
+import bcrypt from 'bcryptjs';
 
 export const getAllAdmins = async (req, res) => {
   try {
@@ -24,74 +25,132 @@ export const getAdminById = async (req, res) => {
 
 export const createAdmin = async (req, res) => {
   try {
-    const result = await AdminModel.createAdmin(req.body)
-    return res.json(result)
+    // Jelszó hash-elése
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(req.body.jelszo, salt);
+
+    // Az admin adatok a titkosított jelszóval
+    const adminData = {
+      nev: req.body.nev,
+      email: req.body.email,
+      jelszo: hashedPassword,
+      szulev: req.body.szulev,
+      lakhely: req.body.lakhely,
+      cim: req.body.cim,
+      adoszam: req.body.adoszam,
+      telszam: req.body.telszam,
+    };
+
+    const result = await AdminModel.createAdmin(adminData);
+    return res.json(result);
   } catch (err) {
-    console.error("SQL Hiba:", err)
-    return res.json(err)
+    console.error("SQL Hiba:", err);
+    return res.json({ Message: "Hiba történt a regisztrációnál!", Error: err });
   }
-}
+};
+
 
 export const updateAdmin = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
 
     // Ellenőrzés a beérkező adatokra
     if (
       !req.body.nev ||
       !req.body.email ||
-      !req.body.jelszo ||
       !req.body.szulev ||
       !req.body.lakhely ||
       !req.body.cim ||
       !req.body.adoszam ||
       !req.body.telszam
     ) {
-      return res.status(400).json({ Message: "Hiányzó mezők az űrlapban!" })
+      return res.status(400).json({ Message: "Hiányzó mezők az űrlapban!" });
     }
 
-    const result = await AdminModel.updateAdmin(id, req.body)
-    return res.json({ Message: "Sikeres frissítés!", result })
+    let updatedData = {
+      nev: req.body.nev,
+      email: req.body.email,
+      szulev: new Date(req.body.szulev).toISOString().slice(0, 10), // Formázott dátum
+      lakhely: req.body.lakhely,
+      cim: req.body.cim,
+      adoszam: req.body.adoszam,
+      telszam: req.body.telszam,
+    };
+
+    // Ha új jelszót adtak meg, titkosítjuk
+    if (req.body.jelszo) {
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(req.body.jelszo, salt);
+      updatedData.jelszo = hashedPassword;
+    }
+
+    const result = await AdminModel.updateAdmin(id, updatedData);
+    return res.json({ Message: "Sikeres frissítés!", result });
   } catch (err) {
-    console.error("Database error:", err)
-    return res.status(500).json({ Message: "Hiba van a szerverben!", Error: err })
+    console.error("Database error:", err);
+    return res.status(500).json({ Message: "Hiba van a szerverben!", Error: err });
   }
-}
+};
+
 
 export const deleteAdmin = async (req, res) => {
   try {
-    const id = req.params.id
-    const result = await AdminModel.deleteAdmin(id)
-    return res.json(result)
+    const id = req.params.id;
+
+    // Lekérdezzük, hogy hány admin van a táblában
+    const admins = await AdminModel.getAllAdmins();
+
+    // Ha csak egy admin van, nem engedjük törölni
+    if (admins.length <= 1) {
+      return res.status(400); // Nem küldünk semmilyen JSON választ
+    }
+
+    // Ha több admin van, törölhetjük
+    await AdminModel.deleteAdmin(id);
+    return res.status(200).end(); // A sikeres törlés után semmilyen választ nem küldünk
   } catch (err) {
-    return res.json({ Message: "Hiba van a szerverben!" })
+    return res.status(500).end(); // Hibás esetben sem küldünk választ
   }
 }
+
+
 
 export const loginAdmin = async (req, res) => {
   try {
-    const data = await AdminModel.loginAdmin(req.body.email, req.body.jelszo)
+    // Lekérjük az admin adatokat az email alapján
+    const data = await AdminModel.loginAdmin(req.body.email);
 
     if (data.length > 0) {
-      const nev = data[0].nev
-      const token = jwt.sign({ nev }, "adminSecretKey", { expiresIn: "1d" })
+      // Az adatbázisban tárolt titkosított jelszó
+      const storedPassword = data[0].jelszo;
 
-      // Beállítjuk a HTTP-only JWT sütit adminok számára
-      res.cookie("adminToken", token, {
-        httpOnly: true,
-        secure: false, // Ha HTTPS-t használsz, állítsd true-ra
-        sameSite: "lax",
-        path: "/",
-      })
+      // A bcrypt compare metódussal ellenőrizzük a jelszót
+      const isPasswordValid = await bcrypt.compare(req.body.jelszo, storedPassword);
 
-      return res.json({ Status: "Success" })
+      if (isPasswordValid) {
+        const nev = data[0].nev;
+        const token = jwt.sign({ nev }, "adminSecretKey", { expiresIn: "1d" });
+
+        // HTTP-only JWT süti beállítása
+        res.cookie("adminToken", token, {
+          httpOnly: true,
+          secure: false, // Ha HTTPS-t használsz, állítsd true-ra
+          sameSite: "lax",
+          path: "/",
+        });
+
+        return res.json({ Status: "Success" });
+      } else {
+        return res.json({ Status: "Failed", Message: "Hibás jelszó!" });
+      }
     } else {
-      return res.json("Failed")
+      return res.json({ Status: "Failed", Message: "Nincs ilyen admin!" });
     }
   } catch (err) {
-    return res.json("Error")
+    return res.json({ Status: "Error", Message: "Hiba történt a bejelentkezésnél!", Error: err });
   }
-}
+};
+
 
 export const logoutAdmin = (req, res) => {
   res.cookie("adminToken", "", {

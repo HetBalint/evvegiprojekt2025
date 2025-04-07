@@ -58,7 +58,7 @@ function AdminUpdate({ showModal, setShowModal, adminId }) {
               </div>
               <div className="col-md-6">
                 <label htmlFor="jelszo" className="form-label">Jelszó</label>
-                <input type="password" id="jelszo" className="form-control" value={values.jelszo}
+                <input type="password" id="jelszo" className="form-control" value={values.jelszo} placeholder='Adj meg egy új jelszót ha elfelejtetted'
                   onChange={e => setValues({ ...values, jelszo: e.target.value })} />
               </div>
               <div className="col-md-6">

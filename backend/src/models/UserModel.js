@@ -22,15 +22,17 @@ export const createUser = (userData) => {
   })
 }
 
-export const loginUser = (email, password) => {
+// UserModel.js
+export const loginUser = (email) => {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT * FROM vasarlok WHERE `email` = ? AND `jelszo` = ?"
-    db.query(sql, [email, password], (err, data) => {
-      if (err) reject(err)
-      resolve(data)
-    })
-  })
-}
+    const sql = "SELECT * FROM vasarlok WHERE `email` = ?";
+    db.query(sql, [email], (err, data) => {
+      if (err) reject(err);
+      resolve(data);
+    });
+  });
+};
+
 
 
 export const updateCurrentUser = (id, userData) => {
