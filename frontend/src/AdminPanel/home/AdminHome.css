@@ -1,4 +1,4 @@
-/* Betűtípus hozzáadása */
+
 body {
     font-family: 'Roboto', sans-serif;
     margin-top: 0 !important;
@@ -119,9 +119,9 @@ body {
     border-radius: 5px;
     text-decoration: none;
     font-size: 20px;
-    width: 50%; /* vagy auto */
+    width: 50%; 
     font-weight: bold;
-    margin: 10px auto 0; /* ez hozza középre */
+    margin: 10px auto 0; 
 }
 
 

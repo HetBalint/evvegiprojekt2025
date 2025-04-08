@@ -1,11 +1,11 @@
-/* Az oldal tetejéhez rögzítjük a táblázatot */
+
 body {
     padding-top: 0 !important; 
 }
 .table-responsive {
     overflow-x: auto;
-    margin-top: 0; /* A lista kezdődhet az oldal tetejéről */
-    padding-top: 0; /* Elkerüljük a felső margót, hogy ne legyen hely a tetején */
+    margin-top: 0; 
+    padding-top: 0; 
     border-radius: 10px;
 }
 
@@ -20,7 +20,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 150px; /* Megakadályozza a túl hosszú szövegeket */
+    max-width: 150px; 
 }
 
 .table td:hover {

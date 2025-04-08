@@ -6,7 +6,7 @@ import './RendelesKezelo.css';
 function RendelesKezelo() {
     const [orders, setOrders] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [openOrderId, setOpenOrderId] = useState(null); // lenyílóhoz
+    const [openOrderId, setOpenOrderId] = useState(null); 
 
     useEffect(() => {
         axios

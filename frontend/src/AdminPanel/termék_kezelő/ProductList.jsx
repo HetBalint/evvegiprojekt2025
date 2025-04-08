@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ProductCreate from "./ProductCreate";
-import ProductUpdate from "./ProductUpdate"; // importáljuk az Update komponenst
+import ProductUpdate from "./ProductUpdate"; 
 import { Modal, Button } from "react-bootstrap";
 import "./ProductList.css";
 
@@ -13,8 +13,8 @@ function ProductList() {
     const [data, setData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [showUpdateModal, setShowUpdateModal] = useState(false); // az Update modál állapota
-    const [productIdToUpdate, setProductIdToUpdate] = useState(null); // tároljuk az aktuális termék id-ját
+    const [showUpdateModal, setShowUpdateModal] = useState(false); 
+    const [productIdToUpdate, setProductIdToUpdate] = useState(null); 
 
     useEffect(() => {
         axios.get("http://localhost:8081/admin/productlist/")
@@ -51,8 +51,8 @@ function ProductList() {
     );
 
     const handleEdit = (id) => {
-        setProductIdToUpdate(id); // beállítjuk az id-t az Update modálhoz
-        setShowUpdateModal(true); // megjelenítjük az Update modált
+        setProductIdToUpdate(id); 
+        setShowUpdateModal(true); 
     };
 
     return (
@@ -133,7 +133,7 @@ function ProductList() {
                 </table>
             </div>
 
-            {/* Create Product Modal */}
+          
             <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Új termék hozzáadása</Modal.Title>

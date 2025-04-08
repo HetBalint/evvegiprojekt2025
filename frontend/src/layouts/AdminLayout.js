@@ -5,7 +5,7 @@ import AdminHome from '../AdminPanel/home/AdminHome';
 const AdminLayout = () => {
   return (
     <div style={{ display: 'flex' }}>
-      <AdminHome /> {/* Sidebar */}
+      <AdminHome /> 
       <div style={{ marginLeft: '50px', padding: '20px', width: '100%' }}>
         <Outlet />
       </div>

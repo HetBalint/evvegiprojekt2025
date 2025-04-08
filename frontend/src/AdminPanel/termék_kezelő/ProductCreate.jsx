@@ -42,17 +42,17 @@ function ProductCreate({ setShowModal }) {
     e.preventDefault();
     const formData = new FormData();
   
-    // Hozzáadjuk a mezőket a formData-hoz
+   
     Object.entries(values).forEach(([key, value]) => {
       if (value !== null && value !== "" && !(value instanceof File && value.size === 0)) {
         formData.append(key, value);
       } else if (value === null || value === "") {
-        // Ha nincs fájl, akkor üres fájlt küldünk
+       
         formData.append(key, ""); 
       }
     });
   
-    // Küldjük el a kérést
+    
     axios
       .post("http://localhost:8081/admin/productlist/product", formData, {
         headers: { "Content-Type": "multipart/form-data" },

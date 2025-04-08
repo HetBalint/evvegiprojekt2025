@@ -29,7 +29,7 @@ function AdminUpdate({ showModal, setShowModal, adminId }) {
     event.preventDefault();
     try {
       await axios.put(`http://localhost:8081/admin/adminlist/update/${adminId}`, values);
-      setShowModal(false); // Bezárja a modált frissítés után
+      setShowModal(false); 
       window.location.reload();
     } catch (error) {
       console.error('Error updating admin:', error.response ? error.response.data : error.message);

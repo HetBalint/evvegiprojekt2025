@@ -9,7 +9,7 @@ function Fiok() {
     usertel: "",
   })
 
-  const [message, setMessage] = useState(""); // Hozzáadunk egy state-et az üzenethez
+  const [message, setMessage] = useState(""); 
 
   useEffect(() => {
     axios
@@ -24,13 +24,13 @@ function Fiok() {
 
   const handleUpdate = async (event) => {
     event.preventDefault()
-    console.log("Frissített adatok:", values); // Ellenőrizd, hogy a values megfelelő adatokat tartalmaz
+    console.log("Frissített adatok:", values); 
 
     try {
-      // A backend a JWT tokenből kinyeri a felhasználó ID-ját
+     
       await axios.put(`http://localhost:8081/user/update`, values, { withCredentials: true });
       
-      // Sikeres frissítés esetén
+      
       setMessage("Adatok sikeresen frissítve! Kérjük jelentkezzen be újra a frissített adatok megjelenítéséhez.");
     } catch (error) {
       console.error("Hiba történt a frissítés során:", error.response ? error.response.data : error.message);
@@ -43,7 +43,7 @@ function Fiok() {
       <div className="kosar-container">
         <h5 className="account-title">Felhasználó módosítása</h5>
         <div className="modal-body">
-          {message && <div className="alert alert-info">{message}</div>} {/* Üzenet megjelenítése */}
+          {message && <div className="alert alert-info">{message}</div>} 
 
           <form onSubmit={handleUpdate} className="row g-4">
             <div className="col-md-6">
