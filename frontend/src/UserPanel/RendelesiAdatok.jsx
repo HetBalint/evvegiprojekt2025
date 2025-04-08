@@ -62,28 +62,25 @@ function RendelesiAdatok() {
         <Link to="/rendeles" className="leadas-btn">Rendelés áttekintése</Link>
       </div>
 
-      {/* 🔽 Bejelentkezési modál */}
       <UserLogin
         show={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         onLoginSuccess={() => {
           setShowLoginModal(false);
-          fetchUserData(); // újratöltés login után
+          fetchUserData();
           window.location.reload();
         }}
       />
 
-      {/* 🔽 Regisztrációs modál */}
       <UserRegistration
         show={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
         onSuccess={() => {
           setShowRegisterModal(false);
-          setShowLoginModal(true); // reg után nyissa meg a login modált
+          setShowLoginModal(true);
         }}
       />
 
-      {/* Linkek a vendégeknek, ha közvetlenül látogatják az oldalt */}
       {!authChecked && (
         <div className="text-center mt-4">
           <p>Még nem vagy bejelentkezve!</p>

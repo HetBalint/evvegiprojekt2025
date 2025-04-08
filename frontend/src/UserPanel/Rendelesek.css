@@ -1,6 +1,4 @@
-
-  
-  .rendelesek-container {
+.rendelesek-container {
     max-width: 900px;
     margin: auto;
     margin-top: 20px;
@@ -32,12 +30,10 @@
     margin: 0;
   }
   
-  /* Általános státusz szöveg */
 .rendeles-statusz {
     font-weight: bold;
   }
   
-  /* Különböző státusz színek */
   .rendeles-statusz.feldolgozas {
     color: rgb(130, 130, 130);
     
@@ -62,7 +58,7 @@
     width: 100%;
     margin-top: 10px;
     border-collapse: separate;
-    border-spacing: 0 8px; /* ✅ térköz az oszlopok között */
+    border-spacing: 0 8px;
   }
   
   .rendeles-tetelek th,
@@ -124,4 +120,3 @@
     background-color: #b3b3b3;
     color: #000;
   }
-  

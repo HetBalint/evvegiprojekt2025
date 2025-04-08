@@ -7,7 +7,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     position: relative;
-    padding-bottom: 80px; /* Add space for the buttons */
+    padding-bottom: 80px;
 
   }
 
@@ -22,4 +22,3 @@
   font-size: 17px;
   color: rgb(94, 94, 94);
 }
-

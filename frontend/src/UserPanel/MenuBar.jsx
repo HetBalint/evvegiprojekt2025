@@ -1,5 +1,4 @@
 "use client"
-
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
@@ -18,9 +17,7 @@ function MenuBar() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
-  const location = useLocation() // Get current location
-
-  // Check if current page is the cart page
+  const location = useLocation() 
   const isCartPage = location.pathname === "/kosar"
 
   const getUserData = () => {

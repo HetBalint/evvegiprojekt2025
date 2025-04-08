@@ -1,4 +1,3 @@
-/* Checkout Progress Styles */
 .checkout-progress {
   display: flex;
   align-items: center;
@@ -62,7 +61,6 @@
   background-color: #e0e0e0;
 }
 
-/* Mobilon kisebb méret */
 @media (max-width: 600px) {
   .checkout-progress {
       padding: 10px;
@@ -83,7 +81,6 @@
   }
 }
 
-/* Kosár és rendelés tartalom */
 .rendeles-container {
   max-width: 900px;
   margin: auto;
@@ -94,10 +91,9 @@
   border-radius: 10px;
   text-align: center;
   position: relative;
-  padding-bottom: 80px; /* Extra hely a gomboknak */
+  padding-bottom: 80px;
 }
 
-/* Görgethető táblázat */
 .order-summary {
   overflow-x: auto;
   max-width: 100%;
@@ -107,7 +103,7 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  min-width: 600px; /* Görgethető marad mobilon */
+  min-width: 600px;
 }
 
 .order-table th,
@@ -121,7 +117,6 @@
   background-color: #f8f9fa;
 }
 
-/* Kisebb képek mobilon */
 .product-img {
   width: 50px;
   height: auto;
@@ -160,7 +155,6 @@
   }
 }
 
-/* Gombok */
 .leadas-btn,
 .kosar-btn {
   position: absolute;
@@ -191,7 +185,6 @@
   color: #000000;
 }
 
-/* Mobilon középre igazítás */
 @media (max-width: 768px) {
   .leadas-btn,
   .kosar-btn {

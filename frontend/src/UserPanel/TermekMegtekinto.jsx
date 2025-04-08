@@ -60,13 +60,11 @@ function TermekMegtekinto() {
                 </div>
             </div>
             
-            {/* Product3D megjelenítése a termékleírás alatt */}
             <div className="model-container">
                 <Product3D productId={id} />
             </div>
            
         </div>
-          {/* Lábléc */}
                                             <footer className="footer">
                                                                         <div className="footer-links">
                                                                           <a href="/rolunk">Rólunk</a>

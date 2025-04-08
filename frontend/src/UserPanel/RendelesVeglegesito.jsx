@@ -15,28 +15,25 @@ function RendelesVeglegesito() {
                     setCartItems(res.data);
                 }
             })
-            .catch(err => console.error("❌ Hiba a kosár lekérdezésekor:", err));
+            .catch(err => console.error(err));
     }, []);
 
     const totalPrice = cartItems.reduce((acc, product) => acc + product.dbszam * product.termekAr, 0);
 
     const handleOrderSubmit = async () => {
-        console.log("🟡 Rendelés gombra kattintottál!");
-        console.log("🛒 Kosár tartalma:", cartItems);
-
         try {
             const res = await axios.post("http://localhost:8081/rendeles", {
                 items: cartItems,
                 total: totalPrice
             }, { withCredentials: true });
 
-            console.log("✅ Rendelés siker:", res.data);
+            console.log(res.data);
 
             setCartItems([]);
             navigate("/leadva");
 
         } catch (err) {
-            console.error("❌ Rendelés hiba:", err?.response?.data || err.message || err);
+            console.error(err?.response?.data || err.message || err);
             alert("Hiba történt a rendelés közben.");
         }
     };

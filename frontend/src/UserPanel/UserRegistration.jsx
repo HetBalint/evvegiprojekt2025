@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import './UserLogin.css'; // ugyanaz a CSS, ami a wrapper-höz kell
+import './UserLogin.css';
 
 function UserRegistration({ show, onClose, onSuccess }) {
   const [values, setValues] = useState({

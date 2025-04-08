@@ -98,14 +98,13 @@ const UserLogin = ({ show, onClose, onLoginSuccess }) => {
         </div>
       </div>
 
-      {/* 🔽 MODÁL REGISZTRÁCIÓ */}
       <UserRegistration
         show={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
         onSuccess={() => {
           setShowRegisterModal(false);
           window.location.reload();
-          // regisztráció után maradunk a login modalban
+
         }}
       />
     </>

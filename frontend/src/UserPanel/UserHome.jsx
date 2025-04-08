@@ -11,7 +11,6 @@ function UserHome() {
 
   return (
     <div className="bg-light min-vh-100">
-      {/* Banner */}
       <section className="position-relative text-center text-white" 
         style={{ backgroundImage: `url(${hatter})`, backgroundSize: 'cover', backgroundPosition: 'center center', height: '250px' }}>
         <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
@@ -21,7 +20,6 @@ function UserHome() {
         </div>
       </section>
 
-      {/* Navigation Cards */}
       <section className="container my-5">
         <div className="row">
           {[{ name: "Gyűrűk", image: "/hatterkepek/gyuru.jpg", path: "gyuru" },
@@ -49,7 +47,6 @@ function UserHome() {
           <h1 className="display-4 fw-bold">Egyedi, kézzel készült ékszerek</h1>
         </div>
       </section>
-       {/* Lábléc */}
        <footer className="footer">
         <div className="footer-links">
           <a href="/rolunk">Rólunk</a>

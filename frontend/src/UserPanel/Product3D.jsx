@@ -40,12 +40,12 @@ function Product3D({ productId }) {
                         : `http://localhost:8081/3D/${fileName}`;
                     setModelUrl(url);
                 } else {
-                    setModelUrl(null); // fontos: hogy ne próbáljon meg betölteni
+                    setModelUrl(null);
                 }
             })
             .catch(error => {
                 console.error("Hiba a 3D fájl betöltésekor:", error);
-                setModelUrl(null); // hiba esetén se próbáljon meg betölteni
+                setModelUrl(null);
             });
     }, [productId]);
     

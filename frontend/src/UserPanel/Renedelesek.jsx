@@ -12,7 +12,7 @@ function Rendelesek() {
             .then(res => {
                 setRendelesek(res.data);
             })
-            .catch(err => console.error("❌ Hiba a rendelések lekérdezésekor:", err));
+            .catch(err => console.error(err));
     }, []);
 
     const toggleExpand = (id) => {

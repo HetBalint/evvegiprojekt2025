@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   mysql:
     image: mysql:latest
@@ -24,23 +23,21 @@ services:
       - mysql-network
     depends_on:
       - mysql
-      - frontend  # Ensure backend depends on frontend as well
+      - frontend 
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile  # Assuming you have a Dockerfile in the frontend directory
+      dockerfile: Dockerfile  
     container_name: frontend-container
     ports:
       - "3000:3000"
     networks:
       - mysql-network
     depends_on:
-      - mysql  # Ensure frontend depends on MySQL if necessary
-
+      - mysql  
 volumes:
   mysql-data:
-
 networks:
   mysql-network:
     driver: bridge
