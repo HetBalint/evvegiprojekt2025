@@ -1,16 +1,9 @@
-/**
- * @jest-environment node
- */
-
-// admin.test.js
 const jwt = require('jsonwebtoken');
 
-// Mock database module
 const mockDb = {
   query: jest.fn()
 };
 
-// Mock the modules manually
 const mockAdminModel = {
   getAllAdmins: jest.fn(),
   getAdminById: jest.fn(),
@@ -20,7 +13,7 @@ const mockAdminModel = {
   loginAdmin: jest.fn()
 };
 
-// Mock implementations for admin model functions
+
 mockAdminModel.getAllAdmins.mockImplementation(() => {
   return new Promise((resolve, reject) => {
     mockDb.query("SELECT * FROM adminok", (err, result) => {
@@ -102,7 +95,7 @@ mockAdminModel.loginAdmin.mockImplementation((email, password) => {
 
 jest.mock('jsonwebtoken');
 
-// Mock the controller with our manually mocked dependencies
+
 const adminController = {
   getAllAdmins: async (req, res) => {
     try {
@@ -215,25 +208,23 @@ describe('Adminisztrátor Controller Tests', () => {
   let req, res;
   
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks();
     
-    // Mock request and response objects
     req = {
       body: {
-        nev: 'Admin User',
-        email: 'admin@example.com',
+        nev: 'Admin',
+        email: 'admin@proba.com',
         jelszo: 'admin123',
         szulev: '1990',
         lakhely: 'Budapest',
-        cim: 'Example Street 123',
+        cim: 'Proba Utca 123',
         adoszam: '12345678-1-23',
         telszam: '06301234567'
       },
       params: {
         id: '1'
       },
-      nev: 'Admin User' // For middleware-authenticated routes
+      nev: 'Admin'
     };
     
     res = {
@@ -243,18 +234,14 @@ describe('Adminisztrátor Controller Tests', () => {
       clearCookie: jest.fn().mockReturnThis()
     };
     
-    // Mock console methods to prevent test output pollution
     console.error = jest.fn();
     
-    // Setup database query mock to simulate successful responses
     mockDb.query.mockImplementation((sql, params, callback) => {
-      // Check if callback is the second parameter (for queries without params)
       if (typeof params === 'function') {
         callback = params;
         params = [];
       }
       
-      // Different responses based on the SQL
       if (sql.includes("SELECT * FROM adminok") && !sql.includes("WHERE")) {
         callback(null, [
           { id: 1, nev: 'Admin 1', email: 'admin1@example.com' },
@@ -322,8 +309,7 @@ describe('Adminisztrátor Controller Tests', () => {
   });
 
   test('kötelező mezők kitöltése az adminisztrátor frissítéshez', async () => {
-    // Test with missing fields
-    req.body = { nev: 'Admin User' }; // Missing other required fields
+    req.body = { nev: 'Admin User' };
     
     await adminController.updateAdmin(req, res);
     
@@ -340,7 +326,7 @@ describe('Adminisztrátor Controller Tests', () => {
   });
 
   test('adatbázis-hibák kezelése az adminisztrátorok lekérésekor', async () => {
-    // Override the mock for this specific test
+
     mockDb.query.mockImplementationOnce((sql, callback) => {
       callback(new Error('Database error'), null);
     });
@@ -367,9 +353,8 @@ describe('Adminisztrátor Controller Tests', () => {
   });
 
   test('sikertelen adminisztrátori bejelentkezés kezelése', async () => {
-    // Override the mock for this test
     mockDb.query.mockImplementationOnce((sql, params, callback) => {
-      callback(null, []); // Empty result means no admin found
+      callback(null, []); 
     });
     
     await adminController.loginAdmin(req, res);

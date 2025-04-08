@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 const OrderModel = {
     createOrder: jest.fn(),
     addOrderItems: jest.fn(),
@@ -18,8 +14,6 @@ const OrderModel = {
   const ProductModel = {
     updateProductStock: jest.fn()
   }
-  
-  // Mockolt controllerek (beillesztve, mivel nincs require/import)
   const createOrder = async (req, res) => {
     try {
       const userID = req.id
@@ -97,7 +91,6 @@ const OrderModel = {
     }
   }
   
-  // TESZTEK
   describe("Rendelés Controller Tests", () => {
     let req, res
   

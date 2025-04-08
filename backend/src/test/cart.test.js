@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 const CartModel = {
     addToCart: jest.fn(),
     getCart: jest.fn(),

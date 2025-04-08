@@ -1,11 +1,6 @@
-/**
- * @jest-environment node
- */
 
-// user.test.js
 const jwt = require('jsonwebtoken');
 
-// Mock the modules manually instead of using jest.mock
 const mockUserModel = {
   getAllUsers: jest.fn(),
   createUser: jest.fn(),
@@ -15,7 +10,6 @@ const mockUserModel = {
 
 jest.mock('jsonwebtoken');
 
-// Mock the controller with our manually mocked dependencies
 const userController = {
   getAllUsers: async (req, res) => {
     try {
@@ -85,15 +79,13 @@ describe('Felhasználó Controller Tests', () => {
   let req, res;
   
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks();
     
-    // Mock request and response objects
     req = {
       body: {
-        nev: 'Test User',
-        email: 'test@example.com',
-        jelszo: 'password123',
+        nev: 'Teszt Felhasznalo',
+        email: 'teszt@pelda.com',
+        jelszo: 'jelszo123',
         usertel: '123456789'
       },
       id: 1
@@ -105,46 +97,37 @@ describe('Felhasználó Controller Tests', () => {
       cookie: jest.fn().mockReturnThis()
     };
     
-    // Mock console.error to prevent test output pollution
     console.error = jest.fn();
   });
 
   test('sikeresen regisztrált egy új felhasználót', async () => {
-    // Mock the createUser function from UserModel
     const mockResult = { insertId: 1, affectedRows: 1 };
     mockUserModel.createUser.mockResolvedValue(mockResult);
     
-    // Call the controller function
     await userController.createUser(req, res);
     
-    // Verify UserModel.createUser was called with correct data
     expect(mockUserModel.createUser).toHaveBeenCalledWith(req.body);
     
-    // Verify response was sent with expected result
+
     expect(res.json).toHaveBeenCalledWith(mockResult);
   });
 
   test('kezelnie kell a regisztrációs hibákat', async () => {
-    // Mock an error from the model
     const mockError = new Error('Database error');
     mockUserModel.createUser.mockRejectedValue(mockError);
     
-    // Call the controller function
     await userController.createUser(req, res);
     
-    // Verify error was logged
     expect(console.error).toHaveBeenCalledWith('SQL Hiba:', mockError);
     
-    // Verify error response was sent
     expect(res.json).toHaveBeenCalledWith(mockError);
   });
 
   test('sikeresen be jelentkezett a felhasználó', async () => {
-    // Mock successful login
     const userData = [{
       id: 1,
-      nev: 'Test User',
-      email: 'test@example.com',
+      nev: 'Teszt',
+      email: 'teszt@proba.com',
       usertel: '123456789'
     }];
     
@@ -160,8 +143,7 @@ describe('Felhasználó Controller Tests', () => {
   });
 
   test('érvényesítenie kell a kötelező mezőket a felhasználói frissítéshez', async () => {
-    // Test with missing fields
-    req.body = { nev: 'Test User' }; // Missing email and usertel
+    req.body = { nev: 'Test User' }; 
     
     await userController.updateCurrentUser(req, res);
     
