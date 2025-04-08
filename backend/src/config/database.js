@@ -7,8 +7,4 @@ const db = mysql.createConnection({
   database: "evvegiprojekt2025",
 });
 
-
-
-
-
 export default db
