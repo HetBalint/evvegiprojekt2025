@@ -162,7 +162,6 @@
     font-weight: bold;
   }
   
-  /* Checkout Progress Styles */
   .checkout-progress {
     display: flex;
     align-items: center;
@@ -290,8 +289,4 @@
       font-size: 15px;
       margin-left: 0;
     }
-  }
-
-
-  
-  
+}

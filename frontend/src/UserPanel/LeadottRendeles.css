@@ -7,13 +7,13 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   position: relative;
-  padding-bottom: 80px; /* Add space for the buttons */
+  padding-bottom: 80px;
 
   display: flex;
-  flex-direction: column; /* Az elemek egymás alá kerülnek */
-  align-items: center; /* Horizontálisan középre igazítás */
-  justify-content: center; /* Vertikálisan középre igazítás */
-  height: 70vh; /* A teljes képernyő magasságának a fele */
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
 }
 
 .leadva-box h1{

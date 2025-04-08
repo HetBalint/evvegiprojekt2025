@@ -26,7 +26,6 @@ function GyuruOldal() {
     
     return (
         <div className="gyuru-container bg-light min-vh-100">
-            {/* Banner */}
             <section className="gyuru-banner position-relative text-center text-white"
                  style={{ backgroundImage: `url(${gyuru_banner})` }}>
                 <div className="overlay position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
@@ -56,7 +55,6 @@ function GyuruOldal() {
                     )}
                 </div>
             </div>
-            {/* Lábléc */}
             <footer className="footer">
                                         <div className="footer-links">
                                           <a href="/rolunk">Rólunk</a>
