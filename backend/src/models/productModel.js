@@ -82,7 +82,6 @@ export const createProduct = (productData, files) => {
 
 export const updateProduct = (id, productData, files, oldFiles) => {
   return new Promise((resolve, reject) => {
-    // Új fájlok mentése (ha vannak), különben marad a régi
     const newKep = files["kep"] ? files["kep"][0].filename : productData.regikep
     const newHaromD = files["haromD"] ? files["haromD"][0].filename : productData.regiharomD
 
@@ -114,12 +113,11 @@ export const updateProduct = (id, productData, files, oldFiles) => {
 
 export const deleteProduct = (id) => {
   return new Promise((resolve, reject) => {
-    // Először lekérdezzük a fájl nevét
+
     const sqlSelect = "SELECT kep, haromD FROM termekek WHERE id = ?"
     db.query(sqlSelect, [id], (err, result) => {
       if (err) reject(err)
 
-      // Most töröljük az adatbázisból a rekordot
       const sqlDelete = "DELETE FROM termekek WHERE id=?"
       db.query(sqlDelete, [id], (err, deleteResult) => {
         if (err) reject(err)

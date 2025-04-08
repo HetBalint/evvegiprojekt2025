@@ -22,7 +22,6 @@ export const createUser = (userData) => {
   })
 }
 
-// UserModel.js
 export const loginUser = (email) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM vasarlok WHERE `email` = ?";
@@ -46,7 +45,7 @@ export const updateCurrentUser = (id, userData) => {
       (err, result) => {
         if (err) reject(err);
 
-        console.log("SQL eredmény:", result); // Az SQL eredményének kiírása
+        console.log("SQL eredmény:", result);
         resolve(result);
       }
     );
