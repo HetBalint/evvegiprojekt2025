@@ -84,7 +84,7 @@ export const loginAdmin = (email) => {
     const sql = "SELECT * FROM admin WHERE email = ?";
     db.query(sql, [email], (err, result) => {
       if (err) reject(err);
-      resolve(result); // Visszaadjuk a lekérdezett adatokat (pl. jelszóval együtt)
+      resolve(result); 
     });
   });
 };

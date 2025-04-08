@@ -5,21 +5,21 @@ export const addToCart = (cartItem) => {
     const { termekId, nev, meret, mennyiseg, ar, kep, anyag } = cartItem;
     const vegosszeg = ar * mennyiseg;
 
-    // Ellenőrizzük, hogy van-e már ilyen termék a kosárban
+    
     const checkSql = `SELECT dbszam FROM kosar WHERE termekID = ?`;
 
     db.query(checkSql, [termekId], (err, results) => {
       if (err) return reject(err);
 
       if (results.length > 0) {
-        // Ha már bent van, növeljük a dbszámot
+       
         const updateSql = `UPDATE kosar SET dbszam = dbszam + ?, vegosszeg = vegosszeg + ? WHERE termekID = ?`;
         db.query(updateSql, [mennyiseg, vegosszeg, termekId], (err, result) => {
           if (err) return reject(err);
           resolve(result);
         });
       } else {
-        // Ha nincs bent, újként adjuk hozzá
+       
         const insertSql = `
           INSERT INTO kosar (termekID, termekNev, termekMeret, dbszam, termekAr, termekKep, vegosszeg, termekAnyag) 
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
