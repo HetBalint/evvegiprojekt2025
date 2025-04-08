@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-// Admin authentication middleware
+
 export const verifyAdmin = (req, res, next) => {
   const token = req.cookies.adminToken
 
@@ -18,7 +18,6 @@ export const verifyAdmin = (req, res, next) => {
   })
 }
 
-// User authentication middleware
 export const verifyUser = (req, res, next) => {
   const token = req.cookies.userToken
 
