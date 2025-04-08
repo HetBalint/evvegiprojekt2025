@@ -104,7 +104,7 @@ npm test
 ## Linkek
 
 
-- **Dokumentáció**: [Dokumentáció Link]([https://github.com/felhasznalonev/crystal-heaven/wiki](https://github.com/HetBalint/evvegiprojekt2025/blob/main/Projektmunka%20dokument%C3%A1l%C3%A1sa.docx))
+- **Dokumentáció**: [Dokumentáció Link](https://github.com/HetBalint/evvegiprojekt2025/blob/main/Projektmunka%20dokument%C3%A1l%C3%A1sa.docx)
 
 ## Fejlesztők
 
