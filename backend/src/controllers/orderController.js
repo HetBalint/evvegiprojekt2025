@@ -14,12 +14,11 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ error: "A kosár üres!" })
     }
 
-    // Rendelés létrehozása
+    
     const orderResult = await OrderModel.createOrder(vasarloId, totalPrice)
     const rendelesId = orderResult.insertId
    
 
-    // Rendelési tételek létrehozása
     const orderItems = items.map((item) => [
       rendelesId,
       item.termekID,
@@ -30,14 +29,12 @@ export const createOrder = async (req, res) => {
 
     await OrderModel.addOrderItems(orderItems)
 
-    // Készlet frissítés minden termékre
     const frissitesek = items.map((item) => {
       return ProductModel.updateProductStock(item.termekID, item.dbszam)
     })
 
     await Promise.all(frissitesek)
 
-    // Kosár ürítése
     await CartModel.clearCart()
 
     console.log("Rendelés és készlet frissítve!")
@@ -52,21 +49,19 @@ export const getUserOrders = async (req, res) => {
   try {
     const vasarloId = req.id
 
-    // Rendelések lekérdezése
     const rendelesek = await OrderModel.getUserOrders(vasarloId)
 
-    // Ha nincs rendelés
+   
     if (rendelesek.length === 0) {
       return res.json([])
     }
 
-    // Rendelések ID-k kigyűjtése
     const rendelesIds = rendelesek.map((r) => r.id)
 
-    // Tételek lekérdezése
+   
     const tetelek = await OrderModel.getOrderItems(rendelesIds)
 
-    // Rendelésekhez hozzákapcsoljuk a tételeket
+    
     const rendelesekWithTetelek = rendelesek.map((r) => ({
       ...r,
       tetelek: tetelek.filter((t) => t.rendeles_id === r.id),
@@ -81,20 +76,18 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
-    // Rendelések lekérdezése
+    
     const rendelesek = await OrderModel.getAllOrders()
 
     if (rendelesek.length === 0) {
       return res.json([])
     }
 
-    // Rendelések ID-k kigyűjtése
+
     const rendelesIds = rendelesek.map((r) => r.id)
 
-    // Tételek lekérdezése
     const tetelek = await OrderModel.getOrderItems(rendelesIds)
 
-    // Rendelésekhez hozzákapcsoljuk a tételeket
     const rendelesekWithTetelek = rendelesek.map((r) => ({
       ...r,
       tetelek: tetelek.filter((t) => t.rendeles_id === r.id),
