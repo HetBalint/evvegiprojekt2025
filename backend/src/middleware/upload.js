@@ -4,15 +4,14 @@ import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Configure storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "kep") {
-      cb(null, path.join(__dirname, "../../kepek")) // Kép mentése a "kepek" mappába
+      cb(null, path.join(__dirname, "../../kepek"))
     } else if (file.fieldname === "haromD") {
-      cb(null, path.join(__dirname, "../../3D")) // 3D fájl mentése a "3D" mappába
+      cb(null, path.join(__dirname, "../../3D")) 
     } else {
-      cb(new Error("Invalid file fieldname")) // Hiba, ha más mezőnevet használ
+      cb(new Error("Invalid file fieldname")) 
     }
   },
   filename: (req, file, cb) => {
@@ -20,6 +19,5 @@ const storage = multer.diskStorage({
   },
 })
 
-// Create multer middleware
 export const upload = multer({ storage })
 
