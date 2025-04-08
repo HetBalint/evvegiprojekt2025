@@ -17,13 +17,11 @@ export const createUser = async (req, res) => {
   try {
     const { nev, email, jelszo, usertel } = req.body;
 
-    // Jelszó hash-elés
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(jelszo, salt);
     
 
 
-    // Létrehozott objektum hash-elt jelszóval
     const userData = {
       nev,
       email,
@@ -44,13 +42,11 @@ export const loginUser = async (req, res) => {
   try {
     const { email, jelszo } = req.body;
     
-    // Lekérdezzük a felhasználót az email alapján
     const data = await UserModel.loginUser(email);
 
     if (data.length > 0) {
       const { id, nev, email, usertel, jelszo: storedHash } = data[0];
 
-      // Ellenőrizzük a jelszó helyességét a hash összehasonlításával
       const isMatch = await bcrypt.compare(jelszo, storedHash);
 
       if (isMatch) {
@@ -58,7 +54,7 @@ export const loginUser = async (req, res) => {
 
         res.cookie("userToken", token, {
           httpOnly: true,
-          secure: false, // Ha HTTPS-t használsz, állítsd true-ra
+          secure: false, 
           sameSite: "lax",
         });
 
@@ -80,13 +76,13 @@ export const loginUser = async (req, res) => {
 export const logoutUser = (req, res) => {
   res.cookie("userToken", "", {
     httpOnly: true,
-    secure: false, // Ha HTTPS-t használsz, állítsd "true"-ra
+    secure: false, 
     sameSite: "lax",
-    expires: new Date(0), // A süti azonnali lejárata
+    expires: new Date(0), 
     path: "/",
   })
 
-  res.clearCookie("userToken") // A süti biztos törlése
+  res.clearCookie("userToken") 
   return res.json({ Status: "Success" })
 }
 
@@ -104,18 +100,18 @@ export const getUserInfo = (req, res) => {
 
 
 
-// Módosított updateCurrentUser
+
 export const updateCurrentUser = async (req, res) => {
   try {
-    // Az ID a JWT tokenből jön, tehát nincs szükség params-ban
-    const userId = req.id; // Az ID a middleware-ben van
+    
+    const userId = req.id; 
 
-    // Ellenőrzés a beérkező adatokra
+  
     if (!req.body.nev || !req.body.email || !req.body.usertel) {
       return res.status(400).json({ Message: "Hiányzó mezők az űrlapban!" });
     }
 
-    // Hívás az adatbázis frissítésére
+ 
     const result = await UserModel.updateCurrentUser(userId, req.body);
 
     if (result.changedRows === 0) {
