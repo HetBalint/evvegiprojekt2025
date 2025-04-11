@@ -72,7 +72,7 @@ A projekt MySQL adatbázist használ. Készítsen egy új adatbázist **evvegipr
 
 Az admin panel az adminisztrátorok számára van. Az adminisztrátori jogosultságokhoz az alábbi bejelentkezési információk szükségesek:
 
-- **Felhasználónév**: admin
+- **Email**: admin@gmail.com
 - **Jelszó**: admin1234
 
 A bejelentkezés után az admin panelen keresztül kezelhetei a termékeket, rendeléseket és felhasználókat.
