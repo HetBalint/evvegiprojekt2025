@@ -60,9 +60,9 @@ docker compose up
 A projekt MySQL adatbázist használ. Készítsen egy új adatbázist **evvegiprojekt2025** néven az adatbázis futtató környezetben majd importálja bele az alábbi adatbázist:
 [SQL adatbázis letöltése](https://github.com/HetBalint/evvegiprojekt2025/blob/main/evvegiprojekt2025%20(8).sql)
 
-Az adatbázis portja: 3306
-Felhasználónév: root
-Jelszó: root
+- Az adatbázis portja: 3306
+- Felhasználónév: root
+- Jelszó: root
 
 
 3.  **A webalkalmazás megjelenítése:**
