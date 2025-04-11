@@ -95,7 +95,7 @@ npm test
 ## Linkek
 
 
-- **Dokumentáció**: [Dokumentáció Link](https://github.com/HetBalint/evvegiprojekt2025/blob/main/Projektmunka%20dokument%C3%A1l%C3%A1sa.docx)
+- **Dokumentáció**: [Dokumentáció Link](https://github.com/HetBalint/evvegiprojekt2025/blob/main/Projektmunka%20dokumenta%CC%81cio%CC%81.pdf)
 
 ## Fejlesztők
 
