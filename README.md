@@ -58,7 +58,7 @@ docker compose up
 4.  **Állítsa be az adatbázist:**
 
 A projekt MySQL adatbázist használ. Készítsen egy új adatbázist **evvegiprojekt2025** néven az adatbázis futtató környezetben és konfigurálja a `config/database.js` fájlt az alábbi módon:
-[SQL adatbázis letöltése](./path/to/yourfile.sql)
+[SQL adatbázis letöltése](./path/to/evvegiprojek2025 (8).sql)
 
 
 ```javascript
