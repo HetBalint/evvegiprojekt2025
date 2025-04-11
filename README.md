@@ -57,22 +57,9 @@ docker compose up
 
 4.  **Állítsa be az adatbázist:**
 
-A projekt MySQL adatbázist használ. Készítsen egy új adatbázist **evvegiprojekt2025** néven az adatbázis futtató környezetben és konfigurálja a `config/database.js` fájlt az alábbi módon:
-[SQL adatbázis letöltése](./path/to/evvegiprojek2025 (8).sql)
+A projekt MySQL adatbázist használ. Készítsen egy új adatbázist **evvegiprojekt2025** néven az adatbázis futtató környezetben majd importálja bele az alábbi adatbázist:
+[SQL adatbázis letöltése](https://github.com/HetBalint/evvegiprojekt2025/blob/main/evvegiprojekt2025%20(8).sql)
 
-
-```javascript
-import mysql from "mysql2"
-
-const db = mysql.createConnection({
-  host: "mysql", 
-  user: "root",
-  password: "root",
-  database: "evvegiprojekt2025",
-});
-
-export default db
-```
 
 3.  **A webalkalmazás megjelenítése:**
 
@@ -90,6 +77,10 @@ Az admin panel az adminisztrátorok számára van. Az adminisztrátori jogosults
 
 A bejelentkezés után az admin panelen keresztül kezelhetei a termékeket, rendeléseket és felhasználókat.
 
+### 6. User Panel
+
+A user panel a felhasználók számára van. Az felhasználói felületen tud regisztrálni fiókot a felhasználó.
+A regisztráció után tud bejelentkezni a felhasználó a fiókjába.
 
 
 ### 7. Tesztelés
@@ -109,3 +100,4 @@ npm test
 ## Fejlesztők
 
 - **Fejlesztő**: [Bálint Hetényi](https://github.com/HetBalint)
+- **Fejlesztő**: [Kalugyer Kevin](https://github.com/Kaluszz)
